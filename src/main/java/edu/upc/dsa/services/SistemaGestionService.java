@@ -1,9 +1,7 @@
 package edu.upc.dsa.services;
 
-import edu.upc.dsa.SystemManager;
-import edu.upc.dsa.SystemManagerImpl;
+import edu.upc.dsa.GameManager;
 import edu.upc.dsa.models.Inventory;
-import edu.upc.dsa.models.Position;
 import edu.upc.dsa.models.User;
 import io.swagger.annotations.*;
 import io.swagger.jaxrs.PATCH;
@@ -20,7 +18,7 @@ public class SistemaGestionService {
     private SystemManager sistemaGestion;
 
     public SistemaGestionService() {
-        this.sistemaGestion = SystemManagerImpl.getInstance();
+        this.sistemaGestion = GameManager.getInstance();
 
         if (sistemaGestion.sizeUsers() == 0) {
             Position p = new Position(0.0, 0.0, "lake");

@@ -14,7 +14,7 @@ public class SistemaGestionTest {
 
     @Before
     public void setUp() {
-        this.sistemaGestion = SystemManagerImpl.getInstance();
+        this.sistemaGestion = GameManager.getInstance();
         this.sistemaGestion.clear();
 
         // ---- Creamos datos de prueba ----

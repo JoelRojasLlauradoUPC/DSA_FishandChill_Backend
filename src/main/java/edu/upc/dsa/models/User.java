@@ -1,29 +1,25 @@
 package edu.upc.dsa.models;
 
+import static java.util.UUID.randomUUID;
+
 public class User {
     String id;
     String username;
     String password;
     String email;
-    Position userPosition;
     Inventory userInventory;
+    int money;
 
     public User() {
     }
 
-    public User(String id, String username, Position userPosition, Inventory userInventory) {
-        this.id = id;
+    public User(String username, String password, String email, Inventory userInventory) {
+        this.id = randomUUID().toString();
         this.username = username;
-        this.userPosition = userPosition;
+        this.password = password;
+        this.email = email;
         this.userInventory = userInventory;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.money = 100;
     }
 
     public String getUsername() {
@@ -34,12 +30,12 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public Inventory getUserInventory() {
+        return userInventory;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserInventory(Inventory userInventory) {
+        this.userInventory = userInventory;
     }
 
     public String getEmail() {
@@ -50,20 +46,20 @@ public class User {
         this.email = email;
     }
 
-    public Position getUserPosition() {
-        return userPosition;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserPosition(Position userPosition) {
-        this.userPosition = userPosition;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public Inventory getUserInventory() {
-        return userInventory;
+    public String getId() {
+        return id;
     }
 
-    public void setUserInventory(Inventory userInventory) {
-        this.userInventory = userInventory;
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
@@ -71,7 +67,8 @@ public class User {
         return "User{" +
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
-                ", userPosition=" + userPosition +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 ", userInventory=" + userInventory +
                 '}';
     }

@@ -1,19 +1,21 @@
 package edu.upc.dsa.models;
 
+import static java.util.UUID.randomUUID;
+
 public class Fish {
     String id;      // uuid
-    String kind;    // especie
-    double depth;   // profundidad
-    double weight;  // peso
+    String speciesName;    // species name
+    int rarity;   // rarity level
+    double speciesWeight;  // standard weight of the species
 
     public Fish() {
     }
 
-    public Fish(String id, String kind, double depth, double weight) {
-        this.id = id;
-        this.kind = kind;
-        this.depth = depth;
-        this.weight = weight;
+    public Fish(String speciesName, int rarity, double speciesWeight) {
+        this.id = randomUUID().toString();
+        this.speciesName = speciesName;
+        this.rarity = rarity;
+        this.speciesWeight = speciesWeight;
     }
 
     public String getId() {
@@ -24,37 +26,37 @@ public class Fish {
         this.id = id;
     }
 
-    public String getKind() {
-        return kind;
+    public double getSpeciesWeight() {
+        return speciesWeight;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setSpeciesWeight(double speciesWeight) {
+        this.speciesWeight = speciesWeight;
     }
 
-    public double getDepth() {
-        return depth;
+    public int getRarity() {
+        return rarity;
     }
 
-    public void setDepth(double depth) {
-        this.depth = depth;
+    public void setRarity(int rarity) {
+        this.rarity = rarity;
     }
 
-    public double getWeight() {
-        return weight;
+    public String getSpeciesName() {
+        return speciesName;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public void setSpeciesName(String speciesName) {
+        this.speciesName = speciesName;
     }
 
     @Override
     public String toString() {
         return "Fish{" +
                 "id='" + id + '\'' +
-                ", kind='" + kind + '\'' +
-                ", depth=" + depth +
-                ", weight=" + weight +
+                ", speciesName='" + speciesName + '\'' +
+                ", rarity=" + rarity +
+                ", speciesWeight=" + speciesWeight +
                 '}';
     }
 }

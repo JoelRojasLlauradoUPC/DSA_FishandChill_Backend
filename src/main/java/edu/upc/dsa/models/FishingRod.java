@@ -1,17 +1,27 @@
 package edu.upc.dsa.models;
 
+import static java.util.UUID.randomUUID;
+
 public class FishingRod {
     String id;    // uuid
-    String kind;  // tipo de caña
-    int usage;    // número de usos
+    String name;  // name of the rod
+    double speed; // speed of reeling
+    double power; // power of the rod
+    int rarity;  // rarity level
+    int durability;    // total number of uses
+    int price;  // price in game currency
 
     public FishingRod() {
     }
 
-    public FishingRod(String id, String kind, int usage) {
-        this.id = id;
-        this.kind = kind;
-        this.usage = usage;
+    public FishingRod(String name, double speed, double power, int rarity, int durability, int price) {
+        this.id = randomUUID().toString();
+        this.name = name;
+        this.speed = speed;
+        this.power = power;
+        this.rarity = rarity;
+        this.durability = durability;
+        this.price = price;
     }
 
     public String getId() {
@@ -22,28 +32,64 @@ public class FishingRod {
         this.id = id;
     }
 
-    public String getKind() {
-        return kind;
+    public String getName() {
+        return name;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getUsage() {
-        return usage;
+    public double getSpeed() {
+        return speed;
     }
 
-    public void setUsage(int usage) {
-        this.usage = usage;
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public double getPower() {
+        return power;
+    }
+
+    public void setPower(double power) {
+        this.power = power;
+    }
+
+    public int getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(int rarity) {
+        this.rarity = rarity;
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    public void setDurability(int durability) {
+        this.durability = durability;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     @Override
     public String toString() {
         return "FishingRod{" +
                 "id='" + id + '\'' +
-                ", kind='" + kind + '\'' +
-                ", usage=" + usage +
+                ", name='" + name + '\'' +
+                ", speed=" + speed +
+                ", power=" + power +
+                ", rarity=" + rarity +
+                ", durability=" + durability +
+                ", price=" + price +
                 '}';
     }
 }

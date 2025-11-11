@@ -8,25 +8,25 @@ import org.apache.log4j.Logger;
 
 import java.util.*;
 
-public class SystemManagerImpl implements SystemManager {
+public class GameManager {
 
-    private static SystemManagerImpl instance;
+    private static GameManager instance;
 
     // MAPAS PRINCIPALES
     Map<String, User> users;                     // userId -> User
     Map<String, Fish> fishByKind;                // kind -> Fish
     Map<String, List<FishingRod>> rodsByUser;    // userId -> lista de cañas
 
-    final static Logger logger = Logger.getLogger(SystemManagerImpl.class);
+    final static Logger logger = Logger.getLogger(GameManager.class);
 
-    private SystemManagerImpl() {
+    private GameManager() {
         this.users = new HashMap<>();
         this.fishByKind = new HashMap<>();
         this.rodsByUser = new HashMap<>();
     }
 
     public static SystemManager getInstance() {
-        if (instance == null) instance = new SystemManagerImpl();
+        if (instance == null) instance = new GameManager();
         return instance;
     }
 
