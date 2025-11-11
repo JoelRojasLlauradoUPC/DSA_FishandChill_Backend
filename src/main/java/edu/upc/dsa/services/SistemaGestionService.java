@@ -106,4 +106,17 @@ public class SistemaGestionService {
         List<User> users = this.sistemaGestion.getAllUsers();
         return Response.status(200).entity(users).build();
     }
+
+    /*@POST
+    @ApiOperation(value = "Create a new user only giving essential parameters", notes = "Creates an user by only giving 3 parameters.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 500, message = "Validation error")
+    })
+    @Path("/user/create")
+    public Response createNewUser(@PathParam("name") String name, @PathParam("password") String password, @PathParam("email") String email) {
+
+
+
+    }*/
 }
