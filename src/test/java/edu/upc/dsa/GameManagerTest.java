@@ -141,6 +141,14 @@ public class GameManagerTest {
         assertEquals(90, gameManager.getUser("alice").getCoins());
     }
 
+    // ---------- SHOP ----------
+    @Test
+    public void loadFishingRods() {
+        // Prepare
+        gameManager.loadRodsDictionary();
+        assertEquals(gameManager.fishingRods.size(), 10);
+    }
+
     // ---------- CLEAR ----------
     @Test
     public void testClear_EmptiesAllData() {

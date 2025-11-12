@@ -3,6 +3,9 @@ package edu.upc.dsa;
 import edu.upc.dsa.models.*;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class GameManager {
@@ -134,6 +137,61 @@ public class GameManager {
         logger.info("User bought fishing rod: " + username + ", rodName=" + rod.getName());
         return 1; // Fishing rod added successfully
     }
+
+
+    // ---------- SHOP interactions ----------
+    public void loadRodsDictionary() {
+        logger.info("Loading rods from dictionary file...");
+
+        try (InputStream input = getClass().getResourceAsStream("/rodsDictionary.properties")) {
+
+            if (input == null) {
+                logger.error("Could not find rodsDictionary.properties in /resources folder!");
+                return;
+            }
+
+            logger.info("rodsDictionary.properties found. Reading data...");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            String line;
+            List<String> values = new ArrayList<>();
+
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+
+                // Ignore empty or commented lines
+                if (line.isEmpty() || line.startsWith("#")) continue;
+
+                values.add(line);
+
+                // Each rod has 7 values (id, name, speed, power, rarity, durability, price)
+                if (values.size() == 7) {
+                    String id = values.get(0);
+                    String name = values.get(1);
+                    double speed = Double.parseDouble(values.get(2));
+                    double power = Double.parseDouble(values.get(3));
+                    int rarity = Integer.parseInt(values.get(4));
+                    int durability = Integer.parseInt(values.get(5));
+                    int price = Integer.parseInt(values.get(6));
+
+                    FishingRod rod = new FishingRod(name, speed, power, rarity, durability, price);
+                    fishingRods.put(rod.getId(), rod);
+                    logger.info("Loaded rod: " + rod.getId() + " → " + name);
+
+                    values.clear(); // ready for next rod
+                }
+            }
+
+            logger.info("Successfully loaded " + fishingRods.size() + " fishing rods from dictionary.");
+
+        } catch (Exception e) {
+            logger.error("Error loading rods dictionary: " + e.getMessage(), e);
+        }
+    }
+
+    /*public List<FishingRod> filterNotBoughtRods(String userID){
+
+    }*/
 
     // ---------- Game Manager methods ----------
     public void clear() {
