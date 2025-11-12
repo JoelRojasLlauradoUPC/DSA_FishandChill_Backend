@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tienda</title>
+  <style>
+    body { font-family: sans-serif; }
+    .rod { border: 1px solid #ccc; padding: 8px; margin: 8px 0; }
+    .rod header { font-weight: bold; }
+    .actions { margin-top: 6px; }
+  </style>
+</head>
+<body>
+<h1>Tienda de cañas</h1>
+<p id="status"></p>
+<div id="rods"></div>
+
+<script>
+  const status = document.getElementById('status');
+  const rodsContainer = document.getElementById('rods');
+
+  const token = localStorage.getItem('authToken');
+  const username = localStorage.getItem('username');
+
+  if (!token) {
+    status.textContent = 'No tienes sesión iniciada. Redirigiendo a login...';
+    setTimeout(() => window.location.href = 'login.html', 1200);
+  } else {
+    status.textContent = username ? ('Sesión de ' + username) : 'Sesión iniciada';
+  }
+
+  async function loadRods() {
+    try {
+      const res = await fetch('/dsaApp/catalog/rods');
+      if (!res.ok) {
+        status.textContent = 'No se pudieron cargar las cañas';
+        return;
+      }
+      const rods = await res.json();
+      renderRods(rods);
+    } catch (e) {
+      console.error(e);
+      status.textContent = 'Error de conexión al cargar las cañas';
+    }
+  }
+
+  function renderRods(rods) {
+    rodsContainer.innerHTML = '';
+    rods.forEach(rod => {
+      const el = document.createElement('div');
+      el.className = 'rod';
+      el.innerHTML = `
+        <header>${rod.name}</header>
+        <div>Velocidad: ${rod.speed} | Potencia: ${rod.power} | Rareza: ${rod.rarity}</div>
+        <div>Durabilidad: ${rod.durability} | Precio: ${rod.price}</div>
+        <div class="actions">
+          <button data-id="${rod.id}">Comprar</button>
+        </div>
+      `;
+      el.querySelector('button').addEventListener('click', () => buyRod(rod.id));
+      rodsContainer.appendChild(el);
+    });
+  }
+
+  async function buyRod(rodId) {
+    const t = localStorage.getItem('authToken');
+    if (!t) {
+      alert('Debes iniciar sesión');
+      window.location.href = 'login.html';
+      return;
+    }
+    try {
+      const res = await fetch(`/dsaApp/shop/rods/${encodeURIComponent(rodId)}/buy`, {
+        method: 'POST',
+        headers: {
+          'Authorization': t
+        }
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        alert('No se pudo comprar: ' + text);
+        return;
+      }
+      const inv = await res.json();
+      console.log('Inventario tras compra:', inv);
+      alert('¡Compra realizada!');
+    } catch (e) {
+      console.error(e);
+      alert('Error de conexión al comprar');
+    }
+  }
+
+  loadRods();
+</script>
+</body>
+</html>
+

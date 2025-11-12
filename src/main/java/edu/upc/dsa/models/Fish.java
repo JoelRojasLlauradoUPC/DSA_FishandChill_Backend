@@ -1,12 +1,14 @@
 package edu.upc.dsa.models;
 
+import java.util.Objects;
+
 import static java.util.UUID.randomUUID;
 
 public class Fish {
-    String id;      // uuid
-    String speciesName;    // species name
-    int rarity;   // rarity level
-    double speciesWeight;  // standard weight of the species
+    private String id;      // uuid
+    private String speciesName;    // species name
+    private int rarity;   // rarity level
+    private double speciesWeight;  // standard weight of the species
 
     public Fish() {
     }
@@ -50,4 +52,26 @@ public class Fish {
         this.speciesName = speciesName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Fish fish = (Fish) o;
+        return Objects.equals(id, fish.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Fish{" +
+                "id='" + id + '\'' +
+                ", speciesName='" + speciesName + '\'' +
+                ", rarity=" + rarity +
+                ", speciesWeight=" + speciesWeight +
+                '}';
+    }
 }

@@ -14,13 +14,13 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class GameManagerTest {
+public class SystemManagerTest {
 
-    GameManager gameManager;
+    SystemManager gameManager;
 
     @Before
     public void setUp() {
-        this.gameManager = GameManager.getInstance();
+        this.gameManager = SystemManager.getInstance();
         // Ensure clean state before each test
         this.gameManager.clear();
     }
@@ -40,6 +40,17 @@ public class GameManagerTest {
         assertEquals("alice@example.com", alice.getEmail());
         assertEquals(100, alice.getCoins());
         assertNotNull(alice.getInventory());
+
+        // login token checks
+        String token = gameManager.login("alice", "pass");
+        assertNotNull("Token should be returned for valid credentials", token);
+        assertNotNull("Authenticate should return user for valid token", gameManager.authenticate(token));
+        assertEquals("alice", gameManager.authenticate(token).getUsername());
+
+        // wrong password should not issue a token
+        assertNull("Wrong password must not return a token", gameManager.login("alice", "wrong"));
+        // bogus token must not authenticate
+        assertNull("Invalid token must not authenticate", gameManager.authenticate("Bearer invalid-token"));
 
         // duplicates
         assertEquals(-1, gameManager.createUser("alice", "pass2", "alice2@example.com")); // duplicate username
@@ -128,7 +139,7 @@ public class GameManagerTest {
         // not enough money
         FishingRod luxury = new FishingRod("Luxury", 2.0, 3.0, 5, 300, 150);
         assertEquals(1, gameManager.addFishingRod(luxury));
-        assertEquals(-1, gameManager.boughtFishingRod("alice", luxury.getId()));
+        assertEquals(-3, gameManager.boughtFishingRod("alice", luxury.getId()));
         assertTrue(gameManager.getInventory("alice").getUserRods().isEmpty());
         assertEquals(100, gameManager.getUser("alice").getCoins());
         // success purchase
@@ -137,7 +148,7 @@ public class GameManagerTest {
         assertEquals(90, aliceAfterBuy.getCoins());
         assertTrue(aliceAfterBuy.getInventory().getUserRods().containsKey(starter.getId()));
         // already owned
-        assertEquals(-2, gameManager.boughtFishingRod("alice", starter.getId()));
+        assertEquals(-4, gameManager.boughtFishingRod("alice", starter.getId()));
         assertEquals(90, gameManager.getUser("alice").getCoins());
     }
 
