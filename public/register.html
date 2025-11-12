@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+</head>
+<body>
+<h1>Registro</h1>
+
+<form id="register-form">
+    <label>
+        Usuario:
+        <input name="username" required>
+    </label>
+    <br>
+    <label>
+        Email:
+        <input name="email" type="email">
+    </label>
+    <br>
+    <label>
+        Contraseña:
+        <input name="password" type="password" required>
+    </label>
+    <br>
+    <button type="submit">Registrarse</button>
+</form>
+
+<p id="message"></p>
+
+<p>
+    ¿Ya tienes cuenta?
+    <!-- Igual: solo login.html -->
+    <a href="login.html">Inicia sesión aquí</a>
+</p>
+
+<script>
+    const form = document.getElementById('register-form');
+    const message = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = form.username.value;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        try {
+            const res = await fetch('/dsaApp/auth/register', {   // API con /dsaApp
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                message.textContent = 'Error al registrar: ' + text;
+                return;
+            }
+
+            const user = await res.json();
+            console.log('Usuario creado:', user);
+            message.textContent = 'Usuario creado correctamente con id: ' + user.id;
+
+            // Opcional: redirigir a login
+            // window.location.href = 'login.html';
+        } catch (err) {
+            console.error(err);
+            message.textContent = 'Error de conexión con el servidor';
+        }
+    });
+</script>
+</body>
+</html>
