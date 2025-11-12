@@ -3,10 +3,10 @@ package edu.upc.dsa.models;
 import java.sql.Timestamp;
 
 public class CapturedFish {
-    String id;  // uuid
-    Fish speciesFish;  // fish species information
-    double weight;
-    Timestamp captureTime;  // time of capture
+    private String id;  // uuid
+    private Fish speciesFish;  // fish species information
+    private double weight;
+    private Timestamp captureTime;  // time of capture
 
     public CapturedFish() {
     }
@@ -16,6 +16,11 @@ public class CapturedFish {
         this.speciesFish = speciesFish;
         this.weight = weight;
         this.captureTime = captureTime;
+    }
+
+    // Convenience: capture with current time
+    public CapturedFish(Fish speciesFish, double weight) {
+        this(speciesFish, weight, new java.sql.Timestamp(System.currentTimeMillis()));
     }
 
     public String getId() { return id; }
@@ -46,4 +51,8 @@ public class CapturedFish {
         this.captureTime = captureTime;
     }
 
+    // Helper for API serialization
+    public String getSpeciesId() {
+        return this.speciesFish != null ? this.speciesFish.getId() : null;
+    }
 }

@@ -1,13 +1,11 @@
 package edu.upc.dsa.models;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Inventory {
-    Map<String, FishingRod> userRods;
-    Map<String, List<CapturedFish>> capturedFishes;
+    private Map<String, FishingRod> userRods;
+    private Map<String, List<CapturedFish>> capturedFishes;
+    private String equippedRodId; // nullable
 
     public Inventory() {
         // Initialize maps to avoid NullPointerExceptions during operations
@@ -21,7 +19,7 @@ public class Inventory {
     }
 
     public Map<String ,FishingRod> getUserRods() {
-        return userRods;
+        return Collections.unmodifiableMap(userRods);
     }
 
     public void setUserRods(Map<String, FishingRod> userRods) {
@@ -29,7 +27,7 @@ public class Inventory {
     }
 
     public Map<String, List<CapturedFish>> getCapturedFishes() {
-        return capturedFishes;
+        return Collections.unmodifiableMap(capturedFishes);
     }
 
     public void setCapturedFishes(HashMap<String, List<CapturedFish>> capturedFishes) {
@@ -44,6 +42,26 @@ public class Inventory {
 
     public void addFishingRod(FishingRod rod) {
         this.userRods.put(rod.getId(), rod);
+        if (this.equippedRodId == null) this.equippedRodId = rod.getId();
     }
 
+    // Helpers for game logic
+    public boolean hasRod(String rodId) {
+        return this.userRods.containsKey(rodId);
+    }
+
+    public int getTotalCapturesForSpecies(String speciesId) {
+        List<CapturedFish> list = this.capturedFishes.get(speciesId);
+        return list == null ? 0 : list.size();
+    }
+
+    public boolean equipRod(String rodId) {
+        if (!this.userRods.containsKey(rodId)) return false;
+        this.equippedRodId = rodId;
+        return true;
+    }
+
+    public String getEquippedRodId() {
+        return this.equippedRodId;
+    }
 }

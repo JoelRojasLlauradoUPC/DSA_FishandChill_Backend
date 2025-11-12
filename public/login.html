@@ -40,7 +40,8 @@
         const password = form.password.value;
 
         try {
-            const res = await fetch('/dsaApp/game/login', {   // API con /dsaApp
+            // Login against the Auth API (JSON body)
+            const res = await fetch('/dsaApp/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -52,13 +53,18 @@
                 return;
             }
 
-            const user = await res.json();
-            console.log('Usuario logueado:', user);
+            const { token } = await res.json();
+            if (!token) {
+                message.textContent = 'Error: respuesta sin token';
+                return;
+            }
 
-            localStorage.setItem('userId', user.id);
-            localStorage.setItem('username', user.username);
+            // Store token for subsequent requests (e.g., shop)
+            localStorage.setItem('authToken', token);
 
-            message.textContent = 'Bienvenido, ' + user.username;
+
+            // Redirigir a la tienda
+            setTimeout(() => { window.location.href = 'shop.html'; }, 400);
         } catch (err) {
             console.error(err);
             message.textContent = 'Error de conexión con el servidor';

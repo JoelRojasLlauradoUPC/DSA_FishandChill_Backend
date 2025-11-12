@@ -1,14 +1,16 @@
 package edu.upc.dsa.models;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import static java.util.UUID.randomUUID;
 
 public class User {
-    String id;
-    String username;
-    String password;
-    String email;
-    Inventory inventory;
-    int coins;
+    private String id;
+    private String username;
+    private String password;
+    private String email;
+    private Inventory inventory;
+    private int coins;
 
     public User() {
     }
@@ -48,6 +50,7 @@ public class User {
         this.email = email;
     }
 
+    @XmlTransient
     public String getPassword() {
         return password;
     }
@@ -62,6 +65,19 @@ public class User {
 
     public void setCoins(int coins) {
         this.coins = coins;
+    }
+
+    // Helpers for auth and economy
+    public boolean checkPassword(String candidate) {
+        return this.password != null && this.password.equals(candidate);
+    }
+
+    public void addCoins(int amount) { this.coins += amount; }
+
+    public boolean deductCoins(int amount) {
+        if (this.coins < amount) return false;
+        this.coins -= amount;
+        return true;
     }
 
     public int buyFishingRod(FishingRod fishingRod) {
