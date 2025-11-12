@@ -25,6 +25,15 @@ public class FishingRod {
         this.durability = durability;
         this.price = price;
     }
+    public FishingRod(String id, String name, double speed, double power, int rarity, int durability, int price) {
+        this.id = id;
+        this.name = name;
+        this.speed = speed;
+        this.power = power;
+        this.rarity = rarity;
+        this.durability = durability;
+        this.price = price;
+    }
 
     public String getId() {
         return id;

@@ -1,97 +1,227 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tienda</title>
-  <style>
-    body { font-family: sans-serif; }
-    .rod { border: 1px solid #ccc; padding: 8px; margin: 8px 0; }
-    .rod header { font-weight: bold; }
-    .actions { margin-top: 6px; }
-  </style>
+    <meta charset="UTF-8" />
+    <title>Fish & Chill Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --lake: #2e7d6e;
+          --lake2: #3c9d85;
+          --bg: #e9f4f4;
+          --ink: #243433;
+          --muted: #6d7a7a;
+        }
+        * { box-sizing: border-box; }
+        body {
+          margin: 0;
+          font-family: "Nunito", sans-serif;
+          background: radial-gradient(900px 500px at 20% -10%, #d9f2ee 0%, transparent 60%),
+                      radial-gradient(900px 500px at 120% 0%, #d6efe7 0%, transparent 60%),
+                      var(--bg);
+          color: var(--ink);
+        }
+
+        header {
+          background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.7));
+          padding: 14px 20px;
+          border-bottom: 1px solid rgba(46,125,110,.15);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: sticky; top: 0; z-index: 10;
+          backdrop-filter: blur(6px);
+        }
+        h1 { font-size: 22px; margin: 0; color: var(--lake); }
+        #user-info { font-weight: 600; color: var(--muted); }
+
+        main {
+          max-width: 900px;
+          margin: 20px auto;
+          padding: 0 20px;
+        }
+
+        .rod {
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          background: #fff;
+          border-radius: 16px;
+          padding: 16px;
+          margin-bottom: 16px;
+          box-shadow: 0 4px 20px rgba(0,0,0,.06);
+          transition: transform .2s ease, box-shadow .2s ease;
+          position: relative;
+          cursor: pointer;
+        }
+        .rod:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 28px rgba(0,0,0,.08);
+        }
+        .rod img {
+          width: 80px;
+          height: 80px;
+          border-radius: 12px;
+          object-fit: cover;
+          flex-shrink: 0;
+          background: #e9f4f4;
+        }
+        .rod-info {
+          flex: 1;
+        }
+        .rod-info header {
+          font-size: 18px;
+          font-weight: 800;
+          color: var(--lake);
+          margin-bottom: 6px;
+        }
+        .rod .stats {
+          font-size: 14px;
+          color: var(--muted);
+        }
+        .rod .price {
+          font-weight: 800;
+          color: var(--lake);
+          margin-top: 8px;
+        }
+        button.buy {
+          margin-top: 10px;
+          padding: 10px 14px;
+          background: linear-gradient(135deg, var(--lake), var(--lake2));
+          color: #fff;
+          border: none;
+          border-radius: 10px;
+          font-weight: 800;
+          cursor: pointer;
+          transition: transform .15s ease, opacity .15s ease;
+        }
+        button.buy:hover { opacity: 0.9; transform: scale(1.02); }
+
+        .float-msg {
+          position: absolute;
+          left: 50%; top: 40%;
+          transform: translate(-50%, 0);
+          background: rgba(255,255,255,.9);
+          padding: 8px 14px;
+          border-radius: 12px;
+          font-weight: 800;
+          animation: floatUp 1.2s ease forwards;
+          pointer-events: none;
+          box-shadow: 0 4px 10px rgba(0,0,0,.1);
+        }
+        .float-success { color: var(--lake); border: 1px solid rgba(46,125,110,.3); }
+        .float-error { color: #c44747; border: 1px solid rgba(200,70,70,.3); }
+        @keyframes floatUp {
+          0% { opacity: 0; transform: translate(-50%, 0) scale(.9); }
+          20% { opacity: 1; }
+          80% { opacity: 1; transform: translate(-50%, -40px) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, -60px) scale(1); }
+        }
+    </style>
 </head>
 <body>
-<h1>Tienda de cañas</h1>
-<p id="status"></p>
-<div id="rods"></div>
+<header>
+    <h1>Fishing Rod Shop</h1>
+    <p id="user-info">Loading session...</p>
+</header>
+
+<main>
+    <div id="rods"></div>
+</main>
 
 <script>
-  const status = document.getElementById('status');
-  const rodsContainer = document.getElementById('rods');
+    const info = document.getElementById('user-info');
+    const rodsContainer = document.getElementById('rods');
+    const token = localStorage.getItem('authToken');
+    const username = localStorage.getItem('username');
 
-  const token = localStorage.getItem('authToken');
-  const username = localStorage.getItem('username');
-
-  if (!token) {
-    status.textContent = 'No tienes sesión iniciada. Redirigiendo a login...';
-    setTimeout(() => window.location.href = 'login.html', 1200);
-  } else {
-    status.textContent = username ? ('Sesión de ' + username) : 'Sesión iniciada';
-  }
-
-  async function loadRods() {
-    try {
-      const res = await fetch('/dsaApp/catalog/rods');
-      if (!res.ok) {
-        status.textContent = 'No se pudieron cargar las cañas';
-        return;
-      }
-      const rods = await res.json();
-      renderRods(rods);
-    } catch (e) {
-      console.error(e);
-      status.textContent = 'Error de conexión al cargar las cañas';
+    if (!token) {
+      info.textContent = 'No session. Redirecting...';
+      setTimeout(() => window.location.href = 'login.html', 1200);
+    } else {
+      info.textContent = username ? `Session: ${username}` : 'Session active';
+      loadBalance();
+      initShop();
     }
-  }
 
-  function renderRods(rods) {
-    rodsContainer.innerHTML = '';
-    rods.forEach(rod => {
-      const el = document.createElement('div');
-      el.className = 'rod';
-      el.innerHTML = `
-        <header>${rod.name}</header>
-        <div>Velocidad: ${rod.speed} | Potencia: ${rod.power} | Rareza: ${rod.rarity}</div>
-        <div>Durabilidad: ${rod.durability} | Precio: ${rod.price}</div>
-        <div class="actions">
-          <button data-id="${rod.id}">Comprar</button>
-        </div>
-      `;
-      el.querySelector('button').addEventListener('click', () => buyRod(rod.id));
-      rodsContainer.appendChild(el);
-    });
-  }
-
-  async function buyRod(rodId) {
-    const t = localStorage.getItem('authToken');
-    if (!t) {
-      alert('Debes iniciar sesión');
-      window.location.href = 'login.html';
-      return;
-    }
-    try {
-      const res = await fetch(`/dsaApp/shop/rods/${encodeURIComponent(rodId)}/buy`, {
-        method: 'POST',
-        headers: {
-          'Authorization': t
+    async function loadBalance() {
+      try {
+        const res = await fetch('/dsaApp/user/balance', { headers: { 'Authorization': token }});
+        if (res.ok) {
+          const data = await res.json();
+          info.textContent = `${username} | 💰 ${data.balance} coins`;
         }
-      });
-      if (!res.ok) {
-        const text = await res.text();
-        alert('No se pudo comprar: ' + text);
-        return;
-      }
-      const inv = await res.json();
-      console.log('Inventario tras compra:', inv);
-      alert('¡Compra realizada!');
-    } catch (e) {
-      console.error(e);
-      alert('Error de conexión al comprar');
+      } catch(e){ console.error(e); }
     }
-  }
 
-  loadRods();
+    async function initShop() {
+      try {
+        await fetch('/dsaApp/catalog/rods/loadAll', { method: 'GET', headers: { 'Authorization': token }});
+        await loadRods();
+      } catch (e) { console.error(e); }
+    }
+
+    async function loadRods() {
+      try {
+        const res = await fetch('/dsaApp/catalog/rods', { headers: { 'Authorization': token }});
+        if (!res.ok) return;
+        const rods = await res.json();
+        renderRods(rods);
+      } catch (e) { console.error(e); }
+    }
+
+    function renderRods(rods) {
+      rodsContainer.innerHTML = '';
+      rods.forEach(rod => {
+        const el = document.createElement('div');
+        el.className = 'rod';
+        const imgSrc = rod.image || '/public/img/default-rod.png'; // optional image field
+        el.innerHTML = `
+          <img src="${imgSrc}" alt="${rod.name}">
+          <div class="rod-info">
+            <header>${rod.name}</header>
+            <div class="stats">
+              Speed: ${rod.speed} | Power: ${rod.power} | Rarity: ${rod.rarity}<br>
+              Durability: ${rod.durability}
+            </div>
+            <div class="price">💰 ${rod.price} coins</div>
+            <button class="buy">Buy</button>
+          </div>
+        `;
+        el.querySelector('button').addEventListener('click', () => buyRod(rod.id, rod.name, rod.price, el));
+        rodsContainer.appendChild(el);
+      });
+    }
+
+    function showFloatMsg(parent, text, success=true) {
+      const msg = document.createElement('div');
+      msg.className = 'float-msg ' + (success ? 'float-success' : 'float-error');
+      msg.textContent = text;
+      parent.appendChild(msg);
+      setTimeout(() => msg.remove(), 1200);
+    }
+
+    async function buyRod(rodId, rodName, price, parentEl) {
+      try {
+        const res = await fetch(`/dsaApp/shop/rods/${encodeURIComponent(rodId)}/buy`, {
+          method: 'POST',
+          headers: { 'Authorization': token }
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          showFloatMsg(parentEl, '❌ ' + text, false);
+          return;
+        }
+        const inv = await res.json();
+        showFloatMsg(parentEl, `✅ You bought ${rodName} for ${price} coins!`, true);
+        loadBalance();
+      } catch (e) {
+        console.error(e);
+        showFloatMsg(parentEl, '❌ Connection error', false);
+      }
+    }
 </script>
 </body>
 </html>
-

@@ -7,6 +7,11 @@ import edu.upc.dsa.util.shop.ShopManager;
 import edu.upc.dsa.util.user.UserManager;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class SystemManager {
@@ -86,7 +91,55 @@ public class SystemManager {
     }
 
     public Map<String, FishingRod> getAllFishingRods() {
+        logger.info("Obtaining all fishing rods...");
         return catalogManager.getRodsMap();
+    }
+
+    public int loadRodsDictionary() {
+        logger.info("Loading rods from dictionary file...");
+
+        try (InputStream input = getClass().getResourceAsStream("/rodsDictionary.properties")) {
+
+            if (input == null) {
+                logger.error("Could not find rodsDictionary.properties in /resources folder!");
+                return -1;
+            }
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            String line;
+            List<String> values = new ArrayList<>();
+            int numberOfAddedRods = 0;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+
+                if (line.isEmpty() || line.startsWith("#")) continue;
+
+                values.add(line);
+
+                if (values.size() == 7) {
+                    String id = values.get(0);
+                    String name = values.get(1);
+                    double speed = Double.parseDouble(values.get(2));
+                    double power = Double.parseDouble(values.get(3));
+                    int rarity = Integer.parseInt(values.get(4));
+                    int durability = Integer.parseInt(values.get(5));
+                    int price = Integer.parseInt(values.get(6));
+
+                    FishingRod rod = new FishingRod(id, name, speed, power, rarity, durability, price);
+                    addFishingRod(rod);
+
+                    values.clear();
+                    numberOfAddedRods ++;
+                }
+            }
+
+            logger.info("Finished loading " + numberOfAddedRods + " rods.");
+            return 1;
+
+        } catch (Exception e) {
+            logger.error("Error loading rods dictionary: " + e.getMessage(), e);
+            return -1;
+        }
     }
 
     // ---------- SHOP ----------
@@ -105,16 +158,16 @@ public class SystemManager {
         int res = shopManager.buyRod(user, rod);
         switch (res) {
             case 1:
-                logger.info("User bought fishing rod: username=" + username + ", rodId=" + rodId);
+                logger.info("User bought fishing rod: username=" + username + ", rodId=" + rodId+", userCoins = "+user.getCoins());
                 return 1;
             case -3:
-                logger.warn("User has not enough coins: username=" + username + ", rodId=" + rodId);
+                logger.warn("User has not enough coins: username=" + username + ", rodId=" + rodId+", userCoins = "+user.getCoins());
                 return -3;
             case -4:
-                logger.warn("User already owns fishing rod: username=" + username + ", rodId=" + rodId);
+                logger.warn("User already owns fishing rod: username=" + username + ", rodId=" + rodId+", userCoins = "+user.getCoins());
                 return -4;
             default:
-                logger.warn("Unknown error buying rod for username=" + username + ", rodId=" + rodId);
+                logger.warn("Unknown error buying rod for username=" + username + ", rodId=" + rodId+", userCoins = "+user.getCoins());
                 return 0;
         }
     }

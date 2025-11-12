@@ -157,7 +157,7 @@ public class SystemManagerTest {
     public void loadFishingRods() {
         // Prepare
         gameManager.loadRodsDictionary();
-        assertEquals(gameManager.fishingRods.size(), 10);
+        assertEquals(gameManager.getAllFishingRods().size(), 10);
     }
 
     // ---------- CLEAR ----------

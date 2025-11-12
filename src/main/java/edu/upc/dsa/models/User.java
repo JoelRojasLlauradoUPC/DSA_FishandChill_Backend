@@ -21,7 +21,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.inventory = new Inventory();
-        this.coins = 100;
+        this.coins = 1000;
     }
 
     public String getId() { return id;   }

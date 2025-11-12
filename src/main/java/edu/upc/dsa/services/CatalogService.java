@@ -6,9 +6,12 @@ import edu.upc.dsa.models.FishingRod;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Api(value = "/catalog", description = "Catalog endpoints")
 @Path("/catalog")
@@ -30,14 +33,16 @@ public class CatalogService {
 
     @GET
     @Path("/rods")
+    @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "List all fishing rods")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = FishingRod.class, responseContainer = "List")
     })
     public Response listRods() {
-        Collection<FishingRod> values = gm.getAllFishingRods().values();
-        return Response.ok(values).build();
+        List<FishingRod> rods = new ArrayList<>(gm.getAllFishingRods().values());
+        return Response.ok(new GenericEntity<List<FishingRod>>(rods) {}).build();
     }
+
 
     @POST
     @Path("/species/add")
@@ -70,4 +75,17 @@ public class CatalogService {
         if (res == -1) return Response.status(Response.Status.CONFLICT).entity("Rod already exists").build();
         return Response.status(Response.Status.CREATED).entity(rod).build();
     }
+
+    @GET
+    @Path("/rods/loadAll")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response loadDictionaryGet() {
+        int res = gm.loadRodsDictionary();
+        if (res == -1) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity("Not possible to load rod dictionary").build();
+        }
+        return Response.ok("Rod dictionary loaded").build(); // 200 OK
+    }
+
 }

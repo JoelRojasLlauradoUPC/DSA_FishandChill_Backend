@@ -1,44 +1,42 @@
-/*package edu.upc.dsa.services;
+package edu.upc.dsa.services;
 
 import edu.upc.dsa.SystemManager;
-import edu.upc.dsa.SystemManagerImpl;
-import edu.upc.dsa.models.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.jaxrs.PATCH;
+import edu.upc.dsa.models.Inventory;
+import edu.upc.dsa.models.User;
+import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
-import java.util.UUID;
 
-@Api(value = "/shop", description = "Shop Service")
+@Api(value = "/shop", description = "Shop endpoints")
 @Path("/shop")
-public class shopService {
+@Produces(MediaType.APPLICATION_JSON)
+public class ShopService {
 
-    private final SystemManager sm = SystemManagerImpl.getInstance();
+    private final SystemManager gm = SystemManager.getInstance();
 
-    @GET
-    @Path("/load")
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Load user information into the shop", notes = "Get user coins and items that the user has not already bought.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Coins and items loaded"),
-            @ApiResponse(code = 404, message = "User not found")
+    @POST
+    @Path("/rods/{rodId}/buy")
+    @ApiOperation(value = "Buy a fishing rod")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Bought", response = Inventory.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Rod not found"),
+            @ApiResponse(code = 409, message = "Already owned or not enough coins")
     })
-    public Response loadUserData(@PathParam("id") String userId) {
-        User userShopping = sm.getUser(userId);
-        if (userShopping == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
-        }
-        else{
-            List<FishingRod> rodsToShop = filterNotBoughtRods(userID);
-        }
+    public Response buy(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth,
+                        @PathParam("rodId") String rodId) {
+        User u = gm.authenticate(auth);
+        if (u == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        int res = gm.boughtFishingRod(u.getUsername(), rodId);
+        if (res == -2) return Response.status(Response.Status.NOT_FOUND).entity("Rod not found").build();
+        if (res == -3) return Response.status(Response.Status.CONFLICT).entity("Not enough coins").build();
+        if (res == -4) return Response.status(Response.Status.CONFLICT).entity("Already owned").build();
+        if (res != 1) return Response.status(Response.Status.BAD_REQUEST).entity("Unknown error").build();
+        return Response.ok(u.getInventory()).build();
     }
 
 
-}*/
+}

@@ -42,4 +42,18 @@ public class MeService {
         Inventory inv = u.getInventory();
         return Response.ok(inv).build();
     }
+
+    @GET
+    @Path("/balance")
+    @ApiOperation(value = "Get my current coin balance")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = Integer.class),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
+    public Response balance(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
+        User u = gm.authenticate(auth);
+        if (u == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+
+        return Response.ok(u.getCoins()).build();
+    }
 }
