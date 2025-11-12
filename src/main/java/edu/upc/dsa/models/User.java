@@ -1,30 +1,28 @@
 package edu.upc.dsa.models;
 
+import static java.util.UUID.randomUUID;
+
 public class User {
     String id;
     String username;
     String password;
     String email;
-    Position userPosition;
-    Inventory userInventory;
+    Inventory inventory;
+    int coins;
 
     public User() {
     }
 
-    public User(String id, String username, Position userPosition, Inventory userInventory) {
-        this.id = id;
+    public User(String username, String password, String email) {
+        this.id = randomUUID().toString();
         this.username = username;
-        this.userPosition = userPosition;
-        this.userInventory = userInventory;
+        this.password = password;
+        this.email = email;
+        this.inventory = new Inventory();
+        this.coins = 100;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getId() { return id;   }
 
     public String getUsername() {
         return username;
@@ -34,12 +32,12 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public Inventory getInventory() {
+        return inventory;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public String getEmail() {
@@ -50,29 +48,37 @@ public class User {
         this.email = email;
     }
 
-    public Position getUserPosition() {
-        return userPosition;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserPosition(Position userPosition) {
-        this.userPosition = userPosition;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public Inventory getUserInventory() {
-        return userInventory;
+    public int getCoins() {
+        return coins;
     }
 
-    public void setUserInventory(Inventory userInventory) {
-        this.userInventory = userInventory;
+    public void setCoins(int coins) {
+        this.coins = coins;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", userPosition=" + userPosition +
-                ", userInventory=" + userInventory +
-                '}';
+    public int buyFishingRod(FishingRod fishingRod) {
+        //check if user has enough money
+        if (this.coins < fishingRod.getPrice()) {
+            return -1; // Not enough money
+        } else if (this.inventory.getUserRods().containsKey(fishingRod.getId())) {
+            return -2; // Fishing rod already owned
+        } else {
+            this.coins -= fishingRod.getPrice();
+            this.inventory.addFishingRod(fishingRod);
+            return 1; // Fishing rod bought successfully
+        }
+    }
+
+    public void captureFish(Fish fish, double weight) {
+        CapturedFish capturedFish = new CapturedFish(fish, weight, new java.sql.Timestamp(System.currentTimeMillis()));
+        this.inventory.addCapturedFish(capturedFish);
     }
 }

@@ -1,53 +1,49 @@
 package edu.upc.dsa.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Inventory {
-    String id;
-    List<FishingRod> availableRods;
-    List<Fish> availableFish;
+    Map<String, FishingRod> userRods;
+    Map<String, List<CapturedFish>> capturedFishes;
 
     public Inventory() {
-        this.availableRods = new ArrayList<>();
-        this.availableFish = new ArrayList<>();
+        // Initialize maps to avoid NullPointerExceptions during operations
+        this.userRods = new HashMap<>();
+        this.capturedFishes = new HashMap<>();
     }
 
-    public Inventory(String id) {
-        this();
-        this.id = id;
+    public Inventory(Map<String ,FishingRod> userRods, HashMap<String, List<CapturedFish>> capturedFishes) {
+        this.userRods = userRods;
+        this.capturedFishes = capturedFishes;
     }
 
-    public String getId() {
-        return id;
+    public Map<String ,FishingRod> getUserRods() {
+        return userRods;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserRods(Map<String, FishingRod> userRods) {
+        this.userRods = userRods;
     }
 
-    public List<FishingRod> getAvailableRods() {
-        return availableRods;
+    public Map<String, List<CapturedFish>> getCapturedFishes() {
+        return capturedFishes;
     }
 
-    public void setAvailableRods(List<FishingRod> availableRods) {
-        this.availableRods = availableRods;
+    public void setCapturedFishes(HashMap<String, List<CapturedFish>> capturedFishes) {
+        this.capturedFishes = capturedFishes;
     }
 
-    public List<Fish> getAvailableFish() {
-        return availableFish;
+    public void addCapturedFish(CapturedFish fish) {
+        String speciesId = fish.getSpeciesFish().getId();
+        this.capturedFishes.putIfAbsent(speciesId, new ArrayList<>());
+        this.capturedFishes.get(speciesId).add(fish);
     }
 
-    public void setAvailableFish(List<Fish> availableFish) {
-        this.availableFish = availableFish;
+    public void addFishingRod(FishingRod rod) {
+        this.userRods.put(rod.getId(), rod);
     }
 
-    @Override
-    public String toString() {
-        return "Inventory{" +
-                "id='" + id + '\'' +
-                ", availableRods=" + availableRods +
-                ", availableFish=" + availableFish +
-                '}';
-    }
 }
