@@ -1,9 +1,6 @@
 package edu.upc.dsa;
 
-import edu.upc.dsa.models.Fish;
-import edu.upc.dsa.models.FishingRod;
-import edu.upc.dsa.models.Inventory;
-import edu.upc.dsa.models.User;
+import edu.upc.dsa.models.*;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -11,208 +8,138 @@ import java.util.*;
 public class GameManager {
 
     private static GameManager instance;
-
-    // MAPAS PRINCIPALES
-    Map<String, User> users;                     // userId -> User
-    Map<String, Fish> fishByKind;                // kind -> Fish
-    Map<String, List<FishingRod>> rodsByUser;    // userId -> lista de cañas
-
     final static Logger logger = Logger.getLogger(GameManager.class);
+
+    // MAIN DATA STRUCTURES
+    Map<String, User> users;                     // username -> User
+    Map<String, Fish> fishSpecies;                // fishId -> Fish
+    Map<String, FishingRod> fishingRods;    // rodId -> FishingRod
+
+
 
     private GameManager() {
         this.users = new HashMap<>();
-        this.fishByKind = new HashMap<>();
-        this.rodsByUser = new HashMap<>();
+        this.fishSpecies = new HashMap<>();
+        this.fishingRods = new HashMap<>();
     }
 
-    public static SystemManager getInstance() {
+    public static GameManager getInstance() {
         if (instance == null) instance = new GameManager();
         return instance;
     }
 
-    // ---------- USERS ----------
-
-    @Override
-    public User createUser(User user) {
-        logger.info("createUser: id=" + user.getId());
-
-        if (user.getUserInventory() == null) {
-            // inventario básico por defecto
-            user.setUserInventory(new Inventory("inv-" + user.getId()));
+    // ---------- USERS declaration ----------
+    public int createUser(String username, String password, String email) {
+        //check if username or email already exists
+        for (User u : users.values()) {
+            if (u.getUsername().equals(username) || u.getEmail().equals(email)) {
+                logger.warn("User already exists: " + username + " / " + email);
+                return -1; // User already exists
+            }
         }
-
-        users.put(user.getId(), user);
-        // inicializamos también su lista de cañas
-        rodsByUser.put(user.getId(), new ArrayList<>());
-
-        logger.info("User añadido: " + user);
-        return user;
+        User newUser = new User(username, password, email);
+        users.put(username, newUser);
+        logger.info("User created: " + username);
+        return 1; // User created successfully
     }
 
-    @Override
-    public User getUser(String userId) {
-        logger.info("getUser: id=" + userId);
-        return users.get(userId);
+    public User getUser(String username) {
+        logger.info("getUser: username=" + username);
+        return users.get(username);
     }
 
-    @Override
-    public User updateUser(String userId, User user) {
-        logger.info("updateUser: id=" + userId);
+// ---------- FISH ----------
 
-        User existing = users.get(userId);
-        if (existing == null) {
-            logger.warn("User no encontrado: " + userId);
-            return null;
+    public int  addFishSpecies(Fish fish) {
+        logger.info("addFishSpecies: fishId=" + fish.getId());
+        if (fishSpecies.containsKey(fish.getId())) {
+            logger.warn("Fish species already exists: " + fish.getId());
+            return -1; // Fish species already exists
         }
+        fishSpecies.put(fish.getId(), fish);
+        logger.info("Fish species added: " + fish);
+        return 1; // Fish species added successfully
+    }
 
-        if (user.getUsername() != null) {
-            existing.setUsername(user.getUsername());
+    public Map<String, Fish> getAllFishSpecies() {
+        logger.info("getAllFishSpecies");
+        return fishSpecies;
+    }
+
+// ---------- RODS ----------
+
+    public int addFishingRod(FishingRod rod) {
+        logger.info("addFishingRod: rodId=" + rod.getId());
+        if (fishingRods.containsKey(rod.getId())) {
+            logger.warn("Fishing rod already exists: " + rod.getId());
+            return -1; // Fishing rod already exists
         }
-        if (user.getUserPosition() != null) {
-            existing.setUserPosition(user.getUserPosition());
+        fishingRods.put(rod.getId(), rod);
+        logger.info("Fishing rod added: " + rod);
+        return 1; // Fishing rod added successfully
+    }
+
+    public Map<String, FishingRod> getAllFishingRods() {
+        logger.info("getAllFishingRods");
+        return fishingRods;
+    }
+
+    // ---------- USER interactions ----------
+
+    public Inventory getInventory(String username) {
+        logger.info("getUserInventory: username=" + username);
+        User user = users.get(username);
+        if (user == null) {
+            logger.warn("User not found: " + username);
+            return null; // User not found
         }
-        if (user.getUserInventory() != null) {
-            existing.setUserInventory(user.getUserInventory());
+        return user.getInventory();
+    }
+
+    public int capturedFish(String username, String fishId, double weight) {
+        logger.info("addCapturedFishToUserInventory: username=" + username + ", fishId=" + fishId);
+        User user = users.get(username);
+        if (user == null) {
+            logger.warn("User not found: " + username);
+            return -1; // User not found
+        } else if (!fishSpecies.containsKey(fishId)) {
+            logger.warn("Fish species not found: " + fishId);
+            return -2; // Fish species not found
         }
-
-        logger.info("User actualizado: " + existing);
-        return existing;
+        Fish fish = fishSpecies.get(fishId);
+        user.captureFish(fish, weight);
+        logger.info("Captured fish added to user inventory: " + fish.getSpeciesName() + ", weight=" + weight);
+        return 1; // Captured fish added successfully
     }
 
-    @Override
-    public void deleteUser(String userId) {
-        logger.info("deleteUser: id=" + userId);
-        users.remove(userId);
-        rodsByUser.remove(userId);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        logger.info("getAllUsers");
-        return new ArrayList<>(users.values());
-    }
-
-    // ---------- FISH ----------
-
-    @Override
-    public List<Fish> getAllFish() {
-        logger.info("getAllFish");
-        return new ArrayList<>(fishByKind.values());
-    }
-
-    @Override
-    public Fish addFish(Fish fish) {
-        logger.info("addFish: kind=" + fish.getKind());
-        fishByKind.put(fish.getKind(), fish);
-        return fish;
-    }
-
-    @Override
-    public Fish getFishByKind(String kind) {
-        logger.info("getFishByKind: kind=" + kind);
-        return fishByKind.get(kind);
-    }
-
-    @Override
-    public Fish updateFish(String kind, Fish fish) {
-        logger.info("updateFish: kind=" + kind);
-
-        Fish existing = fishByKind.get(kind);
-        if (existing == null) {
-            logger.warn("Fish no encontrado: " + kind);
-            return null;
+    public int boughtFishingRod(String username, String rodId) {
+        logger.info("addRodToUserInventory: username=" + username + ", rodId=" + rodId);
+        User user = users.get(username);
+        FishingRod rod = fishingRods.get(rodId);
+        if (user == null) {
+            logger.warn("User not found: " + username);
+            return -1; // User not found
+        } else if (rod == null) {
+            logger.warn("Fishing rod not found: " + rodId);
+            return -2; // Fishing rod not found
         }
-
-        if (fish.getDepth() != 0.0) {
-            existing.setDepth(fish.getDepth());
+        int buyResult = user.buyFishingRod(rod);
+        if (buyResult == -1) {
+            logger.warn("Not enough money for user: " + username + ", rodName=" + rod.getName());
+            return buyResult; // Propagate error code from buyFishingRod
+        } else if (buyResult == -2) {
+            logger.warn("Fishing rod already owned by user: " + username + ", rodName=" + rod.getName());
+            return -2; // Fishing rod already owned
         }
-        if (fish.getWeight() != 0.0) {
-            existing.setWeight(fish.getWeight());
-        }
-
-        logger.info("Fish actualizado: " + existing);
-        return existing;
+        logger.info("User bought fishing rod: " + username + ", rodName=" + rod.getName());
+        return 1; // Fishing rod added successfully
     }
 
-    @Override
-    public void deleteFish(String kind) {
-        logger.info("deleteFish: kind=" + kind);
-        fishByKind.remove(kind);
-    }
-
-    // ---------- RODS (INVENTARIO USUARIO) ----------
-
-    @Override
-    public List<FishingRod> getUserRods(String userId) {
-        logger.info("getUserRods: userId=" + userId);
-        return rodsByUser.getOrDefault(userId, new ArrayList<>());
-    }
-
-    @Override
-    public FishingRod addUserRod(String userId, FishingRod rod) {
-        logger.info("addUserRod: userId=" + userId + ", rodId=" + rod.getId());
-
-        List<FishingRod> rods = rodsByUser.computeIfAbsent(userId, k -> new ArrayList<>());
-        rods.add(rod);
-        return rod;
-    }
-
-    @Override
-    public FishingRod getUserRod(String userId, String rodId) {
-        logger.info("getUserRod: userId=" + userId + ", rodId=" + rodId);
-
-        List<FishingRod> rods = rodsByUser.get(userId);
-        if (rods == null) return null;
-
-        return rods.stream()
-                .filter(r -> r.getId().equals(rodId))
-                .findFirst()
-                .orElse(null);
-    }
-
-    @Override
-    public FishingRod updateUserRod(String userId, String rodId, FishingRod rod) {
-        logger.info("updateUserRod: userId=" + userId + ", rodId=" + rodId);
-
-        FishingRod existing = getUserRod(userId, rodId);
-        if (existing == null) {
-            logger.warn("Rod no encontrada para user " + userId + " con id " + rodId);
-            return null;
-        }
-
-        if (rod.getKind() != null) {
-            existing.setKind(rod.getKind());
-        }
-        if (rod.getUsage() != 0) {
-            existing.setUsage(rod.getUsage());
-        }
-
-        logger.info("Rod actualizada: " + existing);
-        return existing;
-    }
-
-    @Override
-    public void deleteUserRod(String userId, String rodId) {
-        logger.info("deleteUserRod: userId=" + userId + ", rodId=" + rodId);
-
-        List<FishingRod> rods = rodsByUser.get(userId);
-        if (rods == null) return;
-
-        rods.removeIf(r -> r.getId().equals(rodId));
-    }
-
-    // ---------- UTIL ----------
-
-    @Override
+    // ---------- Game Manager methods ----------
     public void clear() {
-        logger.info("clear SistemaGestion");
-        users.clear();
-        fishByKind.clear();
-        rodsByUser.clear();
-    }
-
-    @Override
-    public int sizeUsers() {
-        return users.size();
+        this.users.clear();
+        this.fishSpecies.clear();
+        this.fishingRods.clear();
+        logger.info("GameManager cleared all data.");
     }
 }

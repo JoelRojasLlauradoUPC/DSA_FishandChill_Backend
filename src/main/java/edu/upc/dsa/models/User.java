@@ -7,20 +7,22 @@ public class User {
     String username;
     String password;
     String email;
-    Inventory userInventory;
-    int money;
+    Inventory inventory;
+    int coins;
 
     public User() {
     }
 
-    public User(String username, String password, String email, Inventory userInventory) {
+    public User(String username, String password, String email) {
         this.id = randomUUID().toString();
         this.username = username;
         this.password = password;
         this.email = email;
-        this.userInventory = userInventory;
-        this.money = 100;
+        this.inventory = new Inventory();
+        this.coins = 100;
     }
+
+    public String getId() { return id;   }
 
     public String getUsername() {
         return username;
@@ -30,12 +32,12 @@ public class User {
         this.username = username;
     }
 
-    public Inventory getUserInventory() {
-        return userInventory;
+    public Inventory getInventory() {
+        return inventory;
     }
 
-    public void setUserInventory(Inventory userInventory) {
-        this.userInventory = userInventory;
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public String getEmail() {
@@ -54,22 +56,29 @@ public class User {
         this.password = password;
     }
 
-    public String getId() {
-        return id;
+    public int getCoins() {
+        return coins;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCoins(int coins) {
+        this.coins = coins;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", userInventory=" + userInventory +
-                '}';
+    public int buyFishingRod(FishingRod fishingRod) {
+        //check if user has enough money
+        if (this.coins < fishingRod.getPrice()) {
+            return -1; // Not enough money
+        } else if (this.inventory.getUserRods().containsKey(fishingRod.getId())) {
+            return -2; // Fishing rod already owned
+        } else {
+            this.coins -= fishingRod.getPrice();
+            this.inventory.addFishingRod(fishingRod);
+            return 1; // Fishing rod bought successfully
+        }
+    }
+
+    public void captureFish(Fish fish, double weight) {
+        CapturedFish capturedFish = new CapturedFish(fish, weight, new java.sql.Timestamp(System.currentTimeMillis()));
+        this.inventory.addCapturedFish(capturedFish);
     }
 }

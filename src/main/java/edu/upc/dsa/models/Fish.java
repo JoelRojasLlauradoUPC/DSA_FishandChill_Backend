@@ -50,13 +50,4 @@ public class Fish {
         this.speciesName = speciesName;
     }
 
-    @Override
-    public String toString() {
-        return "Fish{" +
-                "id='" + id + '\'' +
-                ", speciesName='" + speciesName + '\'' +
-                ", rarity=" + rarity +
-                ", speciesWeight=" + speciesWeight +
-                '}';
-    }
 }

@@ -80,16 +80,4 @@ public class FishingRod {
         this.price = price;
     }
 
-    @Override
-    public String toString() {
-        return "FishingRod{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", speed=" + speed +
-                ", power=" + power +
-                ", rarity=" + rarity +
-                ", durability=" + durability +
-                ", price=" + price +
-                '}';
-    }
 }
