@@ -145,6 +145,18 @@
                     </div>
                 </div>
 
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Repite la contraseña</label>
+                    <input
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            class="form-control"
+                            placeholder="Vuelve a escribir la contraseña"
+                            required
+                    >
+                </div>
+
                 <button type="submit" class="btn btn-fish w-100 mt-2">
                     Registrarse
                 </button>
@@ -171,6 +183,7 @@
     const registerMessage = document.getElementById('message');
     const togglePasswordRegister = document.getElementById('togglePasswordRegister');
     const passwordInputRegister = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
 
     togglePasswordRegister.addEventListener('click', () => {
         const type = passwordInputRegister.type === 'password' ? 'text' : 'password';
@@ -179,6 +192,9 @@
         const icon = togglePasswordRegister.querySelector('i');
         icon.classList.toggle('bi-eye');
         icon.classList.toggle('bi-eye-slash');
+
+        // Opcional: mostrar/ocultar también el de confirmación
+        confirmPasswordInput.type = type;
     });
 
     registerForm.addEventListener('submit', async (e) => {
@@ -187,9 +203,17 @@
         const username = registerForm.username.value;
         const email = registerForm.email.value;
         const password = registerForm.password.value;
+        const confirmPassword = registerForm.confirmPassword.value;
 
         registerMessage.textContent = '';
         registerMessage.className = 'fc-message mt-3 small';
+
+
+        if (password !== confirmPassword) {
+            registerMessage.textContent = 'Las contraseñas no coinciden';
+            registerMessage.classList.add('alert', 'alert-danger');
+            return;
+        }
 
         try {
             const res = await fetch('/dsaApp/auth/register', {
