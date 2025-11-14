@@ -37,6 +37,4 @@ public class ShopService {
         if (res != 1) return Response.status(Response.Status.BAD_REQUEST).entity("Unknown error").build();
         return Response.ok(u.getInventory()).build();
     }
-
-
 }
