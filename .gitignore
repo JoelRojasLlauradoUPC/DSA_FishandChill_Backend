@@ -25,7 +25,7 @@ hs_err_pid*
 # IntelliJ IDEA
 # =========================
 
-.idea
+.idea/
 
 # JIRA plugin
 atlassian-ide-plugin.xml
