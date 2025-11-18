@@ -11,47 +11,47 @@
 
     <style>
         :root {
-          --ink: #e9f4f4;
-          --muted: #6d7a7a;
-          --button: #2a86c7;
-          --button-hover: #2476ad;
+            --ink: #e9f4f4;
+            --muted: #6d7a7a;
+            --button: #2a86c7;
+            --button-hover: #2476ad;
         }
 
         * {
-          box-sizing: border-box;
-          user-select: none;
+            box-sizing: border-box;
+            user-select: none;
         }
 
         /* FONDO SUBMARINO */
         body {
-          margin: 0;
-          font-family: "Nunito", sans-serif;
-          background:
-            radial-gradient(1200px 800px at 20% -10%, rgba(5, 25, 50, 0.6), transparent 70%),
-            radial-gradient(1200px 800px at 120% 0%, rgba(10, 40, 70, 0.6), transparent 70%),
-            #0b2239;
-          color: var(--ink);
-          overflow-x: hidden;
+            margin: 0;
+            font-family: "Nunito", sans-serif;
+            background:
+                    radial-gradient(1200px 800px at 20% -10%, rgba(5, 25, 50, 0.6), transparent 70%),
+                    radial-gradient(1200px 800px at 120% 0%, rgba(10, 40, 70, 0.6), transparent 70%),
+                    #0b2239;
+            color: var(--ink);
+            overflow-x: hidden;
         }
 
         /* CAPA DE ANIMACIÓN DETRÁS */
         .bg-anim {
-          position: fixed;
-          inset: 0;
-          overflow: hidden;
-          pointer-events: none;
-          z-index: -1;
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
         }
 
         /* BURBUJAS */
         .bubbles span {
-          position: absolute;
-          bottom: -80px;
-          display: block;
-          border-radius: 50%;
-          border: 2px solid rgba(255,255,255,0.6);
-          box-shadow: 0 0 8px rgba(255,255,255,0.9);
-          animation: rise 12s linear infinite;
+            position: absolute;
+            bottom: -80px;
+            display: block;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.6);
+            box-shadow: 0 0 8px rgba(255,255,255,0.9);
+            animation: rise 12s linear infinite;
         }
 
         /* 18 burbujas */
@@ -75,171 +75,183 @@
         .bubbles span:nth-child(18) { left: 32%; width: 6px;  height: 6px; animation-duration: 7s; }
 
         @keyframes rise {
-          0% { transform: translateY(0) scale(.9); opacity: 0; }
-          10%,80% { opacity: 1; }
-          100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+            0% { transform: translateY(0) scale(.9); opacity: 0; }
+            10%,80% { opacity: 1; }
+            100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
         }
 
         /* PECES */
         .fishes .fish {
-          position: absolute;
-          width: 60px;
-          height: 28px;
-          border-radius: 999px;
-          box-shadow: 0 0 8px rgba(0,0,0,0.25);
-          animation-timing-function: linear;
-          animation-iteration-count: infinite;
+            position: absolute;
+            width: 60px;
+            height: 28px;
+            border-radius: 999px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.25);
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
         }
 
         .fish::before {
-          content: "";
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 18px;
-          height: 20px;
-          border-radius: 4px;
-          left: var(--tail-x);
-          background: var(--tail-color);
+            content: "";
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 20px;
+            border-radius: 4px;
+            left: var(--tail-x);
+            background: var(--tail-color);
         }
 
         .fish::after {
-          content: "";
-          position: absolute;
-          top: 9px;
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: white;
-          box-shadow: 2px 0 0 #000 inset;
-          left: var(--eye-x);
+            content: "";
+            position: absolute;
+            top: 9px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 2px 0 0 #000 inset;
+            left: var(--eye-x);
         }
 
         @keyframes swim-right {
-          0%   { transform: translateX(-120px); }
-          100% { transform: translateX(110vw); }
+            0%   { transform: translateX(-120px); }
+            100% { transform: translateX(110vw); }
         }
 
         @keyframes swim-left {
-          0%   { transform: translateX(110vw); }
-          100% { transform: translateX(-120px); }
+            0%   { transform: translateX(110vw); }
+            100% { transform: translateX(-120px); }
         }
 
         /* HEADER */
         header {
-          background: rgba(255,255,255,0.15);
-          backdrop-filter: blur(6px);
-          padding: 16px 20px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          position: sticky;
-          top: 0;
-          z-index: 10;
-          color: white;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(6px);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            color: white;
         }
 
         h1 {
-          margin: 0;
-          font-size: 24px;
-          text-shadow: 0 2px 4px rgba(0,0,0,.4);
+            margin: 0;
+            font-size: 24px;
+            text-shadow: 0 2px 4px rgba(0,0,0,.4);
         }
-        h1 { font-size: 22px; margin: 0; color: var(--lake); }
-        #user-info { font-weight: 600; color: var(--muted); }
+
+        #user-info {
+            background: rgba(255,255,255,0.4);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
 
         main {
-          max-width: 900px;
-          margin: 20px auto;
-          padding: 0 20px;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
         }
 
+        /* CONTENEDOR DE CAÑAS EN GRID */
+        #rods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        /* TARJETAS DE CAÑAS */
         .rod {
-          display: flex;
-          align-items: center;
-          gap: 18px;
-          background: rgba(255,255,255,0.92);
-          border-radius: 16px;
-          padding: 16px;
-          box-shadow: 0 4px 20px rgba(0,0,0,.2);
-          position: relative;
+            display: flex;
+            gap: 18px;
+            background: rgba(255,255,255,0.92);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.2);
+            position: relative;
         }
         .rod:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 8px 28px rgba(0,0,0,.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0,0,0,.3);
         }
 
         .rod img {
-          width: 80px;
-          height: 80px;
-          border-radius: 12px;
-          object-fit: cover;
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
         }
 
         .rod-info header {
-          font-size: 18px;
-          font-weight: 800;
-          color: var(--button);
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--button);
         }
 
         .stats {
-          font-size: 14px;
-          color: var(--muted);
+            font-size: 14px;
+            color: var(--muted);
         }
 
         .price {
-          font-weight: 800;
-          margin-top: 8px;
-          color: var(--button);
+            font-weight: 800;
+            margin-top: 8px;
+            color: var(--button);
         }
 
         /* BOTÓN */
         button.buy {
-          margin-top: 10px;
-          padding: 10px 16px;
-          background: var(--button);
-          color: white;
-          border: none;
-          border-radius: 10px;
-          font-weight: 800;
-          cursor: pointer;
-          transition: .15s;
+            margin-top: 10px;
+            padding: 10px 16px;
+            background: var(--button);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .15s;
         }
         button.buy:hover {
-          background: var(--button-hover);
-          transform: scale(1.03);
+            background: var(--button-hover);
+            transform: scale(1.03);
         }
 
         /* MENSAJE FLOTANTE */
         .float-msg {
-          position: absolute;
-          left: 50%;
-          top: -5px;
-          transform: translateX(-50%);
-          padding: 10px 16px;
-          border-radius: 10px;
-          font-weight: 800;
-          background: rgba(255,255,255,0.95);
-          animation: floatUp 1.2s ease forwards;
-          pointer-events: none;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-          z-index: 20;
+            position: absolute;
+            left: 50%;
+            top: -5px;
+            transform: translateX(-50%);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            background: rgba(255,255,255,0.95);
+            animation: floatUp 1.2s ease forwards;
+            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            z-index: 20;
         }
 
         .float-success {
-          color: #2a9d6f;
-          border: 2px solid rgba(42,157,111,0.4);
+            color: #2a9d6f;
+            border: 2px solid rgba(42,157,111,0.4);
         }
 
         .float-error {
-          color: #c44747;
-          border: 2px solid rgba(200,70,70,0.4);
+            color: #c44747;
+            border: 2px solid rgba(200,70,70,0.4);
         }
 
         @keyframes floatUp {
-          0%   { opacity: 0; transform: translate(-50%, 10px) scale(0.9); }
-          10%  { opacity: 1; }
-          85%  { opacity: 1; transform: translate(-50%, -20px) scale(1); }
-          100% { opacity: 0; transform: translate(-50%, -40px); }
+            0%   { opacity: 0; transform: translate(-50%, 10px) scale(0.9); }
+            10%  { opacity: 1; }
+            85%  { opacity: 1; transform: translate(-50%, -20px) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -40px); }
         }
 
     </style>
@@ -332,90 +344,60 @@
         const token = localStorage.getItem('authToken');
 
         async function init() {
-          await loadMe();
-          await initShop();
+            await loadMe();
+            await initShop();
         }
 
-    if (!token) {
-      info.textContent = 'No session. Redirecting...';
-      setTimeout(() => window.location.href = '/', 1200);
-    } else {
-      info.textContent = username ? `Session: ${username}` : 'Session active';
-      loadBalance();
-      initShop();
-    }
         if (!token) {
-          info.textContent = 'No session — Redirecting...';
-          setTimeout(() => window.location.href = 'login.html', 1200);
+            info.textContent = 'No session — Redirecting...';
+            setTimeout(() => window.location.href = 'login.html', 1200);
         } else {
-          init();
+            init();
         }
 
-    async function loadBalance() {
-      try {
-        const res = await fetch('/api/user/balance', { headers: { 'Authorization': token }});
-        if (res.ok) {
-          const data = await res.json();
-          info.textContent = `${username} | 💰 ${data.balance} coins`;
         async function loadMe() {
-          const res = await fetch('/dsaApp/me', {
-            headers: { 'Authorization': token }
-          });
+            const res = await fetch('/api/me', {
+                headers: { 'Authorization': token }
+            });
 
-          if (!res.ok) return;
+            if (!res.ok) return;
 
-          const user = await res.json();
-          const name = user.username || "Player";
-          const coins = user.coins ?? user.balance ?? 0;
+            const user = await res.json();
+            const name = user.username || "Player";
+            const coins = user.coins ?? user.balance ?? 0;
 
-          info.textContent = `${name} | 💰 ${coins} coins`;
+            info.textContent = `${name} | 💰 ${coins} coins`;
         }
-      } catch(e){ console.error(e); }
-    }
 
-    async function initShop() {
-      try {
-        await fetch('/api/catalog/rods/loadAll', { method: 'GET', headers: { 'Authorization': token }});
-        await loadRods();
-      } catch (e) { console.error(e); }
-    }
         async function initShop() {
-          await fetch('/dsaApp/catalog/rods/loadAll', {
-            headers: { 'Authorization': token }
-          });
+            await fetch('/api/catalog/rods/loadAll', {
+                headers: { 'Authorization': token }
+            });
 
-          await loadRods();
+            await loadRods();
         }
 
-    async function loadRods() {
-      try {
-        const res = await fetch('/api/catalog/rods', { headers: { 'Authorization': token }});
-        if (!res.ok) return;
-        const rods = await res.json();
-        renderRods(rods);
-      } catch (e) { console.error(e); }
-    }
         async function loadRods() {
-          const res = await fetch('/dsaApp/catalog/rods', {
-            headers: { 'Authorization': token }
-          });
+            const res = await fetch('/api/catalog/rods', {
+                headers: { 'Authorization': token }
+            });
 
-          if (!res.ok) return;
+            if (!res.ok) return;
 
-          const rods = await res.json();
-          renderRods(rods);
+            const rods = await res.json();
+            renderRods(rods);
         }
 
         function renderRods(rods) {
-          rodsContainer.innerHTML = '';
-          rods.forEach(rod => {
-            const el = document.createElement('div');
-            el.className = 'rod';
+            rodsContainer.innerHTML = '';
+            rods.forEach(rod => {
+                const el = document.createElement('div');
+                el.className = 'rod';
 
-            // 👇 Aquí usamos directamente el link que viene del backend
-            const imgSrc = rod.image || rod.imageUrl || rod.img || rod.link || 'https://via.placeholder.com/80';
+                // 👇 Aquí usamos directamente el link que viene del backend
+                const imgSrc = rod.image || rod.imageUrl || rod.img || rod.link || 'https://via.placeholder.com/80';
 
-            el.innerHTML = `
+                el.innerHTML = `
               <img src="${imgSrc}" alt="${rod.name}">
               <div class="rod-info">
                 <header>${rod.name}</header>
@@ -428,45 +410,43 @@
               </div>
             `;
 
-            el.querySelector('.buy').addEventListener('click', () =>
-              buyRod(rod.id, rod.name, rod.price, el)
-            );
+                el.querySelector('.buy').addEventListener('click', () =>
+                    buyRod(rod.id, rod.name, rod.price, el)
+                );
 
-            rodsContainer.appendChild(el);
-          });
+                rodsContainer.appendChild(el);
+            });
         }
 
         /* MENSAJE FLOTANTE */
         function showFloatMsg(parentEl, text, ok = true) {
-          parentEl.style.position = "relative";
+            parentEl.style.position = "relative";
 
-          const msg = document.createElement("div");
-          msg.className = "float-msg " + (ok ? "float-success" : "float-error");
-          msg.textContent = text;
+            const msg = document.createElement("div");
+            msg.className = "float-msg " + (ok ? "float-success" : "float-error");
+            msg.textContent = text;
 
-          parentEl.appendChild(msg);
-          setTimeout(() => msg.remove(), 1300);
+            parentEl.appendChild(msg);
+            setTimeout(() => msg.remove(), 1300);
         }
 
-    async function buyRod(rodId, rodName, price, parentEl) {
-      try {
-        const res = await fetch(`/api/shop/rods/${encodeURIComponent(rodId)}/buy`, {
-          method: 'POST',
-          headers: { 'Authorization': token }
-        });
-        if (!res.ok) {
-          const text = await res.text();
-          showFloatMsg(parentEl, '❌ ' + text, false);
-          return;
+        async function buyRod(id, name, price, parentEl) {
+            const res = await fetch(`/api/shop/rods/${encodeURIComponent(id)}/buy`, {
+                method: 'POST',
+                headers: { 'Authorization': token }
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                showFloatMsg(parentEl, "❌ " + text, false);
+                return;
+            }
+
+            showFloatMsg(parentEl, `✅ You bought ${name} for ${price} coins!`, true);
+            await loadMe();
         }
-        const inv = await res.json();
-        showFloatMsg(parentEl, `✅ You bought ${rodName} for ${price} coins!`, true);
-        loadBalance();
-      } catch (e) {
-        console.error(e);
-        showFloatMsg(parentEl, '❌ Connection error', false);
-      }
-    }
+
+    })();
 </script>
 
 </body>

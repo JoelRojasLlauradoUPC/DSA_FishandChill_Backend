@@ -17,7 +17,7 @@ import java.net.URI;
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
     public static final String BASE_URI = "http://localhost:8080/api/";
-    //public static final String BASE_URI = "http://10.4.120.101/api/";
+    //public static final String BASE_URI = "https://192.168.10.92:8080/api/";
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
      * @return Grizzly HTTP server.
@@ -33,7 +33,7 @@ public class Main {
         BeanConfig beanConfig = new BeanConfig();
 
         beanConfig.setHost("localhost:8080");
-        //beanConfig.setHost("10.4.120.101");
+        //beanConfig.setHost("dsa1.upc.edu");
         beanConfig.setBasePath("/api");
         beanConfig.setContact("support@example.com");
         beanConfig.setDescription("REST API for Tracks Manager");
