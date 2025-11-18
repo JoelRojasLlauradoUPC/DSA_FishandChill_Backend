@@ -144,13 +144,8 @@
           font-size: 24px;
           text-shadow: 0 2px 4px rgba(0,0,0,.4);
         }
-
-        #user-info {
-          background: rgba(255,255,255,0.4);
-          padding: 6px 12px;
-          border-radius: 12px;
-          font-weight: 700;
-        }
+        h1 { font-size: 22px; margin: 0; color: var(--lake); }
+        #user-info { font-weight: 600; color: var(--muted); }
 
         main {
           max-width: 900px;
@@ -158,16 +153,9 @@
           padding: 0 20px;
         }
 
-        /* CONTENEDOR DE CAÑAS EN GRID */
-        #rods {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-          gap: 18px;
-        }
-
-        /* TARJETAS DE CAÑAS */
         .rod {
           display: flex;
+          align-items: center;
           gap: 18px;
           background: rgba(255,255,255,0.92);
           border-radius: 16px;
@@ -348,6 +336,14 @@
           await initShop();
         }
 
+    if (!token) {
+      info.textContent = 'No session. Redirecting...';
+      setTimeout(() => window.location.href = '/', 1200);
+    } else {
+      info.textContent = username ? `Session: ${username}` : 'Session active';
+      loadBalance();
+      initShop();
+    }
         if (!token) {
           info.textContent = 'No session — Redirecting...';
           setTimeout(() => window.location.href = 'login.html', 1200);
@@ -355,6 +351,12 @@
           init();
         }
 
+    async function loadBalance() {
+      try {
+        const res = await fetch('/api/user/balance', { headers: { 'Authorization': token }});
+        if (res.ok) {
+          const data = await res.json();
+          info.textContent = `${username} | 💰 ${data.balance} coins`;
         async function loadMe() {
           const res = await fetch('/dsaApp/me', {
             headers: { 'Authorization': token }
@@ -368,7 +370,15 @@
 
           info.textContent = `${name} | 💰 ${coins} coins`;
         }
+      } catch(e){ console.error(e); }
+    }
 
+    async function initShop() {
+      try {
+        await fetch('/api/catalog/rods/loadAll', { method: 'GET', headers: { 'Authorization': token }});
+        await loadRods();
+      } catch (e) { console.error(e); }
+    }
         async function initShop() {
           await fetch('/dsaApp/catalog/rods/loadAll', {
             headers: { 'Authorization': token }
@@ -377,6 +387,14 @@
           await loadRods();
         }
 
+    async function loadRods() {
+      try {
+        const res = await fetch('/api/catalog/rods', { headers: { 'Authorization': token }});
+        if (!res.ok) return;
+        const rods = await res.json();
+        renderRods(rods);
+      } catch (e) { console.error(e); }
+    }
         async function loadRods() {
           const res = await fetch('/dsaApp/catalog/rods', {
             headers: { 'Authorization': token }
@@ -430,23 +448,25 @@
           setTimeout(() => msg.remove(), 1300);
         }
 
-        async function buyRod(id, name, price, parentEl) {
-          const res = await fetch(`/dsaApp/shop/rods/${encodeURIComponent(id)}/buy`, {
-            method: 'POST',
-            headers: { 'Authorization': token }
-          });
-
-          if (!res.ok) {
-            const text = await res.text();
-            showFloatMsg(parentEl, "❌ " + text, false);
-            return;
-          }
-
-          showFloatMsg(parentEl, `✅ You bought ${name} for ${price} coins!`, true);
-          await loadMe();
+    async function buyRod(rodId, rodName, price, parentEl) {
+      try {
+        const res = await fetch(`/api/shop/rods/${encodeURIComponent(rodId)}/buy`, {
+          method: 'POST',
+          headers: { 'Authorization': token }
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          showFloatMsg(parentEl, '❌ ' + text, false);
+          return;
         }
-
-    })();
+        const inv = await res.json();
+        showFloatMsg(parentEl, `✅ You bought ${rodName} for ${price} coins!`, true);
+        loadBalance();
+      } catch (e) {
+        console.error(e);
+        showFloatMsg(parentEl, '❌ Connection error', false);
+      }
+    }
 </script>
 
 </body>
