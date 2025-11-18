@@ -1,4 +1,4 @@
-package edu.upc.dsa.util.user;
+package edu.upc.dsa.managers.user;
 
 import edu.upc.dsa.models.User;
 

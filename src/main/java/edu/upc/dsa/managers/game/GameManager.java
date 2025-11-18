@@ -1,9 +1,9 @@
-package edu.upc.dsa.util.game;
+package edu.upc.dsa.managers.game;
 
 import edu.upc.dsa.models.Fish;
 import edu.upc.dsa.models.User;
 
-public class GameActions {
+public class GameManager {
 
     // returns: 1 ok, -1 user not found, -2 species unknown
     public int captureFish(User user, Fish fish, double weight) {

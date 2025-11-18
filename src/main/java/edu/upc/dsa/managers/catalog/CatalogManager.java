@@ -1,4 +1,4 @@
-package edu.upc.dsa.util.catalog;
+package edu.upc.dsa.managers.catalog;
 
 import edu.upc.dsa.models.Fish;
 import edu.upc.dsa.models.FishingRod;

@@ -1,10 +1,10 @@
 package edu.upc.dsa;
 
 import edu.upc.dsa.models.*;
-import edu.upc.dsa.util.catalog.CatalogManager;
-import edu.upc.dsa.util.game.GameActions;
-import edu.upc.dsa.util.shop.ShopManager;
-import edu.upc.dsa.util.user.UserManager;
+import edu.upc.dsa.managers.catalog.CatalogManager;
+import edu.upc.dsa.managers.game.GameManager;
+import edu.upc.dsa.managers.shop.ShopManager;
+import edu.upc.dsa.managers.user.UserManager;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -23,13 +23,13 @@ public class SystemManager {
     private final UserManager userManager;
     private final CatalogManager catalogManager;
     private final ShopManager shopManager;
-    private final GameActions gameActions;
+    private final GameManager gameActions;
 
     private SystemManager() {
         this.catalogManager = new CatalogManager();
         this.userManager = new UserManager();
         this.shopManager = new ShopManager();
-        this.gameActions = new GameActions();
+        this.gameActions = new GameManager();
     }
 
     public static SystemManager getInstance() {

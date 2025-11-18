@@ -1,8 +1,7 @@
 package edu.upc.dsa.services;
 
 import edu.upc.dsa.SystemManager;
-import edu.upc.dsa.models.Inventory;
-import edu.upc.dsa.models.User;
+import edu.upc.dsa.models.*;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;

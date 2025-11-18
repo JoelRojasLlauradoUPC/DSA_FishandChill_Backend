@@ -8,11 +8,6 @@
 # Log files
 *.log
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
 # Package Files #
 *.jar
@@ -30,29 +25,7 @@ hs_err_pid*
 # IntelliJ IDEA
 # =========================
 
-# User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf/
-
-# Sensitive or machine-specific files
-.idea/**/gradle.xml
-.idea/**/libraries
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
-
-# Editor-based HTTP Client requests
-.idea/httpRequests/
-
-# IntelliJ local history
-.idea/localHistory/
+.idea
 
 # JIRA plugin
 atlassian-ide-plugin.xml
@@ -78,50 +51,4 @@ gradle-app.setting
 # Maven
 # =========================
 
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-
-# =========================
-# Eclipse (por si alguien usa ambos)
-# =========================
-
-.classpath
-.project
-.settings/
-
-# =========================
-# OS-specific files
-# =========================
-
-# macOS
-.DS_Store
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# Linux
-*~
-
-# =========================
-# Misc
-# =========================
-
-# IntelliJ build output
-out/
-
-# JetBrains IDEs cache
-.idea/caches/
-.idea/modules.xml
-
-# Logs and temporary files
-*.tmp
-*.bak
-*.swp
-*.swo
-
+target

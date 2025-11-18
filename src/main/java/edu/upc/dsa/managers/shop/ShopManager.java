@@ -1,4 +1,4 @@
-package edu.upc.dsa.util.shop;
+package edu.upc.dsa.managers.shop;
 
 import edu.upc.dsa.models.FishingRod;
 import edu.upc.dsa.models.User;
