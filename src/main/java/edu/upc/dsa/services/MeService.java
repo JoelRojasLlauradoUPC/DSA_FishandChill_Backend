@@ -8,6 +8,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 @Api(value = "/me", description = "Self endpoints")
 @Path("/me")
@@ -42,17 +44,5 @@ public class MeService {
         return Response.ok(inv).build();
     }
 
-    @GET
-    @Path("/balance")
-    @ApiOperation(value = "Get my current coin balance")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "OK", response = Integer.class),
-            @ApiResponse(code = 401, message = "Unauthorized")
-    })
-    public Response balance(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
-        User u = gm.authenticate(auth);
-        if (u == null) return Response.status(Response.Status.UNAUTHORIZED).build();
 
-        return Response.ok(u.getCoins()).build();
-    }
 }

@@ -116,7 +116,7 @@ public class SystemManager {
 
                 values.add(line);
 
-                if (values.size() == 7) {
+                if (values.size() == 8) {
                     String id = values.get(0);
                     String name = values.get(1);
                     double speed = Double.parseDouble(values.get(2));
@@ -124,8 +124,9 @@ public class SystemManager {
                     int rarity = Integer.parseInt(values.get(4));
                     int durability = Integer.parseInt(values.get(5));
                     int price = Integer.parseInt(values.get(6));
+                    String url =  values.get(7);
 
-                    FishingRod rod = new FishingRod(id, name, speed, power, rarity, durability, price);
+                    FishingRod rod = new FishingRod(id, name, speed, power, rarity, durability, price, url);
                     addFishingRod(rod);
 
                     values.clear();

@@ -12,6 +12,7 @@ public class FishingRod {
     private int rarity;  // rarity level
     private int durability;    // total number of uses
     private int price;  // price in game currency
+    private String image;
 
     public FishingRod() {
     }
@@ -24,8 +25,9 @@ public class FishingRod {
         this.rarity = rarity;
         this.durability = durability;
         this.price = price;
+
     }
-    public FishingRod(String id, String name, double speed, double power, int rarity, int durability, int price) {
+    public FishingRod(String id, String name, double speed, double power, int rarity, int durability, int price, String image) {
         this.id = id;
         this.name = name;
         this.speed = speed;
@@ -33,6 +35,7 @@ public class FishingRod {
         this.rarity = rarity;
         this.durability = durability;
         this.price = price;
+        this.image = image;
     }
 
     public String getId() {
@@ -89,6 +92,14 @@ public class FishingRod {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getImage() {
+        return this.image;
+    }
+
+    public void setImage(String url) {
+        this.image = url;
     }
 
     @Override

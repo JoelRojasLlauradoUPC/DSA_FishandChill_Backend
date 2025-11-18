@@ -3,39 +3,154 @@
 <head>
     <meta charset="UTF-8" />
     <title>Fish & Chill Shop</title>
+
+    <!-- FUENTE -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-          --lake: #2e7d6e;
-          --lake2: #3c9d85;
-          --bg: #e9f4f4;
-          --ink: #243433;
+          --ink: #e9f4f4;
           --muted: #6d7a7a;
+          --button: #2a86c7;
+          --button-hover: #2476ad;
         }
-        * { box-sizing: border-box; }
+
+        * {
+          box-sizing: border-box;
+          user-select: none;
+        }
+
+        /* FONDO SUBMARINO */
         body {
           margin: 0;
           font-family: "Nunito", sans-serif;
-          background: radial-gradient(900px 500px at 20% -10%, #d9f2ee 0%, transparent 60%),
-                      radial-gradient(900px 500px at 120% 0%, #d6efe7 0%, transparent 60%),
-                      var(--bg);
+          background:
+            radial-gradient(1200px 800px at 20% -10%, rgba(5, 25, 50, 0.6), transparent 70%),
+            radial-gradient(1200px 800px at 120% 0%, rgba(10, 40, 70, 0.6), transparent 70%),
+            #0b2239;
           color: var(--ink);
+          overflow-x: hidden;
         }
 
+        /* CAPA DE ANIMACIÓN DETRÁS */
+        .bg-anim {
+          position: fixed;
+          inset: 0;
+          overflow: hidden;
+          pointer-events: none;
+          z-index: -1;
+        }
+
+        /* BURBUJAS */
+        .bubbles span {
+          position: absolute;
+          bottom: -80px;
+          display: block;
+          border-radius: 50%;
+          border: 2px solid rgba(255,255,255,0.6);
+          box-shadow: 0 0 8px rgba(255,255,255,0.9);
+          animation: rise 12s linear infinite;
+        }
+
+        /* 18 burbujas */
+        .bubbles span:nth-child(1)  { left: 5%;  width: 12px; height: 12px; animation-duration: 11s; }
+        .bubbles span:nth-child(2)  { left: 15%; width: 18px; height: 18px; animation-duration: 14s; }
+        .bubbles span:nth-child(3)  { left: 22%; width: 10px; height: 10px; animation-duration: 10s; }
+        .bubbles span:nth-child(4)  { left: 30%; width: 8px;  height: 8px;  animation-duration: 9s; }
+        .bubbles span:nth-child(5)  { left: 38%; width: 16px; height: 16px; animation-duration: 13s; }
+        .bubbles span:nth-child(6)  { left: 45%; width: 14px; height: 14px; animation-duration: 12s; }
+        .bubbles span:nth-child(7)  { left: 50%; width: 7px;  height: 7px;  animation-duration: 9s; }
+        .bubbles span:nth-child(8)  { left: 58%; width: 20px; height: 20px; animation-duration: 16s; }
+        .bubbles span:nth-child(9)  { left: 63%; width: 9px;  height: 9px; animation-duration: 11s; }
+        .bubbles span:nth-child(10) { left: 70%; width: 13px; height: 13px; animation-duration: 10s; }
+        .bubbles span:nth-child(11) { left: 75%; width: 17px; height: 17px; animation-duration: 14s; }
+        .bubbles span:nth-child(12) { left: 80%; width: 11px; height: 11px; animation-duration: 12s; }
+        .bubbles span:nth-child(13) { left: 85%; width: 15px; height: 15px; animation-duration: 15s; }
+        .bubbles span:nth-child(14) { left: 88%; width: 7px;  height: 7px;  animation-duration: 9s; }
+        .bubbles span:nth-child(15) { left: 92%; width: 18px; height: 18px; animation-duration: 16s; }
+        .bubbles span:nth-child(16) { left: 96%; width: 10px; height: 10px; animation-duration: 8s; }
+        .bubbles span:nth-child(17) { left: 50%; width: 22px; height: 22px; animation-duration: 18s; }
+        .bubbles span:nth-child(18) { left: 32%; width: 6px;  height: 6px; animation-duration: 7s; }
+
+        @keyframes rise {
+          0% { transform: translateY(0) scale(.9); opacity: 0; }
+          10%,80% { opacity: 1; }
+          100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+        }
+
+        /* PECES */
+        .fishes .fish {
+          position: absolute;
+          width: 60px;
+          height: 28px;
+          border-radius: 999px;
+          box-shadow: 0 0 8px rgba(0,0,0,0.25);
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+        }
+
+        .fish::before {
+          content: "";
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 18px;
+          height: 20px;
+          border-radius: 4px;
+          left: var(--tail-x);
+          background: var(--tail-color);
+        }
+
+        .fish::after {
+          content: "";
+          position: absolute;
+          top: 9px;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: white;
+          box-shadow: 2px 0 0 #000 inset;
+          left: var(--eye-x);
+        }
+
+        @keyframes swim-right {
+          0%   { transform: translateX(-120px); }
+          100% { transform: translateX(110vw); }
+        }
+
+        @keyframes swim-left {
+          0%   { transform: translateX(110vw); }
+          100% { transform: translateX(-120px); }
+        }
+
+        /* HEADER */
         header {
-          background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.7));
-          padding: 14px 20px;
-          border-bottom: 1px solid rgba(46,125,110,.15);
+          background: rgba(255,255,255,0.15);
+          backdrop-filter: blur(6px);
+          padding: 16px 20px;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          position: sticky; top: 0; z-index: 10;
-          backdrop-filter: blur(6px);
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          color: white;
         }
-        h1 { font-size: 22px; margin: 0; color: var(--lake); }
-        #user-info { font-weight: 600; color: var(--muted); }
+
+        h1 {
+          margin: 0;
+          font-size: 24px;
+          text-shadow: 0 2px 4px rgba(0,0,0,.4);
+        }
+
+        #user-info {
+          background: rgba(255,255,255,0.4);
+          padding: 6px 12px;
+          border-radius: 12px;
+          font-weight: 700;
+        }
 
         main {
           max-width: 900px;
@@ -43,88 +158,128 @@
           padding: 0 20px;
         }
 
+        /* CONTENEDOR DE CAÑAS EN GRID */
+        #rods {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 18px;
+        }
+
+        /* TARJETAS DE CAÑAS */
         .rod {
           display: flex;
-          align-items: center;
           gap: 18px;
-          background: #fff;
+          background: rgba(255,255,255,0.92);
           border-radius: 16px;
           padding: 16px;
-          margin-bottom: 16px;
-          box-shadow: 0 4px 20px rgba(0,0,0,.06);
-          transition: transform .2s ease, box-shadow .2s ease;
+          box-shadow: 0 4px 20px rgba(0,0,0,.2);
           position: relative;
-          cursor: pointer;
         }
         .rod:hover {
           transform: translateY(-3px);
-          box-shadow: 0 8px 28px rgba(0,0,0,.08);
+          box-shadow: 0 8px 28px rgba(0,0,0,.3);
         }
+
         .rod img {
           width: 80px;
           height: 80px;
           border-radius: 12px;
           object-fit: cover;
-          flex-shrink: 0;
-          background: #e9f4f4;
         }
-        .rod-info {
-          flex: 1;
-        }
+
         .rod-info header {
           font-size: 18px;
           font-weight: 800;
-          color: var(--lake);
-          margin-bottom: 6px;
+          color: var(--button);
         }
-        .rod .stats {
+
+        .stats {
           font-size: 14px;
           color: var(--muted);
         }
-        .rod .price {
+
+        .price {
           font-weight: 800;
-          color: var(--lake);
           margin-top: 8px;
+          color: var(--button);
         }
+
+        /* BOTÓN */
         button.buy {
           margin-top: 10px;
-          padding: 10px 14px;
-          background: linear-gradient(135deg, var(--lake), var(--lake2));
-          color: #fff;
+          padding: 10px 16px;
+          background: var(--button);
+          color: white;
           border: none;
           border-radius: 10px;
           font-weight: 800;
           cursor: pointer;
-          transition: transform .15s ease, opacity .15s ease;
+          transition: .15s;
         }
-        button.buy:hover { opacity: 0.9; transform: scale(1.02); }
+        button.buy:hover {
+          background: var(--button-hover);
+          transform: scale(1.03);
+        }
 
+        /* MENSAJE FLOTANTE */
         .float-msg {
           position: absolute;
-          left: 50%; top: 40%;
-          transform: translate(-50%, 0);
-          background: rgba(255,255,255,.9);
-          padding: 8px 14px;
-          border-radius: 12px;
+          left: 50%;
+          top: -5px;
+          transform: translateX(-50%);
+          padding: 10px 16px;
+          border-radius: 10px;
           font-weight: 800;
+          background: rgba(255,255,255,0.95);
           animation: floatUp 1.2s ease forwards;
           pointer-events: none;
-          box-shadow: 0 4px 10px rgba(0,0,0,.1);
+          box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+          z-index: 20;
         }
-        .float-success { color: var(--lake); border: 1px solid rgba(46,125,110,.3); }
-        .float-error { color: #c44747; border: 1px solid rgba(200,70,70,.3); }
+
+        .float-success {
+          color: #2a9d6f;
+          border: 2px solid rgba(42,157,111,0.4);
+        }
+
+        .float-error {
+          color: #c44747;
+          border: 2px solid rgba(200,70,70,0.4);
+        }
+
         @keyframes floatUp {
-          0% { opacity: 0; transform: translate(-50%, 0) scale(.9); }
-          20% { opacity: 1; }
-          80% { opacity: 1; transform: translate(-50%, -40px) scale(1); }
-          100% { opacity: 0; transform: translate(-50%, -60px) scale(1); }
+          0%   { opacity: 0; transform: translate(-50%, 10px) scale(0.9); }
+          10%  { opacity: 1; }
+          85%  { opacity: 1; transform: translate(-50%, -20px) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, -40px); }
         }
+
     </style>
 </head>
+
 <body>
+
+<!-- PECES Y BURBUJAS -->
+<div class="bg-anim">
+    <div class="bubbles">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="fishes">
+        <div class="fish f1"></div>
+        <div class="fish f2"></div>
+        <div class="fish f3"></div>
+        <div class="fish f4"></div>
+        <div class="fish f5"></div>
+        <div class="fish f6"></div>
+    </div>
+</div>
+
 <header>
-    <h1>Fishing Rod Shop</h1>
-    <p id="user-info">Loading session...</p>
+    <h1>🎣 Fishing Rod Shop</h1>
+    <p id="user-info">Loading...</p>
 </header>
 
 <main>
@@ -132,96 +287,167 @@
 </main>
 
 <script>
-    const info = document.getElementById('user-info');
-    const rodsContainer = document.getElementById('rods');
-    const token = localStorage.getItem('authToken');
-    const username = localStorage.getItem('username');
+    /* ===================================== */
+    /* PECES CON ORIENTACIÓN     */
+    /* ===================================== */
 
-    if (!token) {
-      info.textContent = 'No session. Redirecting...';
-      setTimeout(() => window.location.href = 'login.html', 1200);
-    } else {
-      info.textContent = username ? `Session: ${username}` : 'Session active';
-      loadBalance();
-      initShop();
+    function randomColor() {
+        const colors = [
+            ["#ff6b6b", "#ffb347"],
+            ["#6b8cff", "#4661ff"],
+            ["#6bff95", "#20c659"],
+            ["#ff6bf3", "#d446ff"],
+            ["#ffd36b", "#ffb200"],
+            ["#6bfff1", "#2ed8cc"],
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    async function loadBalance() {
-      try {
-        const res = await fetch('/dsaApp/user/balance', { headers: { 'Authorization': token }});
-        if (res.ok) {
-          const data = await res.json();
-          info.textContent = `${username} | 💰 ${data.balance} coins`;
+    function randomFishBehavior(fish, index) {
+        const top = 10 + index * 13 + Math.random() * 10;
+        fish.style.top = top + "%";
+
+        const duration = 18 + Math.random() * 10;
+        fish.style.animationDuration = duration + "s";
+
+        const goLeft = Math.random() < 0.5;
+
+        if (goLeft) {
+            fish.style.animationName = "swim-left";
+            fish.style.setProperty("--tail-x", "calc(100% - 4px)");
+            fish.style.setProperty("--eye-x", "8px");
+        } else {
+            fish.style.animationName = "swim-right";
+            fish.style.setProperty("--tail-x", "-18px");
+            fish.style.setProperty("--eye-x", "calc(100% - 16px)");
         }
-      } catch(e){ console.error(e); }
+
+        const [c1, c2] = randomColor();
+        fish.style.background = `linear-gradient(90deg, ${c1}, ${c2})`;
+        fish.style.setProperty("--tail-color", c1);
     }
 
-    async function initShop() {
-      try {
-        await fetch('/dsaApp/catalog/rods/loadAll', { method: 'GET', headers: { 'Authorization': token }});
-        await loadRods();
-      } catch (e) { console.error(e); }
-    }
-
-    async function loadRods() {
-      try {
-        const res = await fetch('/dsaApp/catalog/rods', { headers: { 'Authorization': token }});
-        if (!res.ok) return;
-        const rods = await res.json();
-        renderRods(rods);
-      } catch (e) { console.error(e); }
-    }
-
-    function renderRods(rods) {
-      rodsContainer.innerHTML = '';
-      rods.forEach(rod => {
-        const el = document.createElement('div');
-        el.className = 'rod';
-        const imgSrc = rod.image || '/public/img/default-rod.png'; // optional image field
-        el.innerHTML = `
-          <img src="${imgSrc}" alt="${rod.name}">
-          <div class="rod-info">
-            <header>${rod.name}</header>
-            <div class="stats">
-              Speed: ${rod.speed} | Power: ${rod.power} | Rarity: ${rod.rarity}<br>
-              Durability: ${rod.durability}
-            </div>
-            <div class="price">💰 ${rod.price} coins</div>
-            <button class="buy">Buy</button>
-          </div>
-        `;
-        el.querySelector('button').addEventListener('click', () => buyRod(rod.id, rod.name, rod.price, el));
-        rodsContainer.appendChild(el);
-      });
-    }
-
-    function showFloatMsg(parent, text, success=true) {
-      const msg = document.createElement('div');
-      msg.className = 'float-msg ' + (success ? 'float-success' : 'float-error');
-      msg.textContent = text;
-      parent.appendChild(msg);
-      setTimeout(() => msg.remove(), 1200);
-    }
-
-    async function buyRod(rodId, rodName, price, parentEl) {
-      try {
-        const res = await fetch(`/dsaApp/shop/rods/${encodeURIComponent(rodId)}/buy`, {
-          method: 'POST',
-          headers: { 'Authorization': token }
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".fish").forEach((fish, i) => {
+            randomFishBehavior(fish, i);
         });
-        if (!res.ok) {
-          const text = await res.text();
-          showFloatMsg(parentEl, '❌ ' + text, false);
-          return;
+    });
+
+
+    /* ===================================== */
+    /*  LÓGICA DE LA SHOP                  */
+    /* ===================================== */
+
+    (function () {
+        const info = document.getElementById('user-info');
+        const rodsContainer = document.getElementById('rods');
+        const token = localStorage.getItem('authToken');
+
+        async function init() {
+          await loadMe();
+          await initShop();
         }
-        const inv = await res.json();
-        showFloatMsg(parentEl, `✅ You bought ${rodName} for ${price} coins!`, true);
-        loadBalance();
-      } catch (e) {
-        console.error(e);
-        showFloatMsg(parentEl, '❌ Connection error', false);
-      }
-    }
+
+        if (!token) {
+          info.textContent = 'No session — Redirecting...';
+          setTimeout(() => window.location.href = 'login.html', 1200);
+        } else {
+          init();
+        }
+
+        async function loadMe() {
+          const res = await fetch('/dsaApp/me', {
+            headers: { 'Authorization': token }
+          });
+
+          if (!res.ok) return;
+
+          const user = await res.json();
+          const name = user.username || "Player";
+          const coins = user.coins ?? user.balance ?? 0;
+
+          info.textContent = `${name} | 💰 ${coins} coins`;
+        }
+
+        async function initShop() {
+          await fetch('/dsaApp/catalog/rods/loadAll', {
+            headers: { 'Authorization': token }
+          });
+
+          await loadRods();
+        }
+
+        async function loadRods() {
+          const res = await fetch('/dsaApp/catalog/rods', {
+            headers: { 'Authorization': token }
+          });
+
+          if (!res.ok) return;
+
+          const rods = await res.json();
+          renderRods(rods);
+        }
+
+        function renderRods(rods) {
+          rodsContainer.innerHTML = '';
+          rods.forEach(rod => {
+            const el = document.createElement('div');
+            el.className = 'rod';
+
+            // 👇 Aquí usamos directamente el link que viene del backend
+            const imgSrc = rod.image || rod.imageUrl || rod.img || rod.link || 'https://via.placeholder.com/80';
+
+            el.innerHTML = `
+              <img src="${imgSrc}" alt="${rod.name}">
+              <div class="rod-info">
+                <header>${rod.name}</header>
+                <div class="stats">
+                  Speed: ${rod.speed} | Power: ${rod.power} | Rarity: ${rod.rarity}<br>
+                  Durability: ${rod.durability}
+                </div>
+                <div class="price">💰 ${rod.price} coins</div>
+                <button class="buy">Buy</button>
+              </div>
+            `;
+
+            el.querySelector('.buy').addEventListener('click', () =>
+              buyRod(rod.id, rod.name, rod.price, el)
+            );
+
+            rodsContainer.appendChild(el);
+          });
+        }
+
+        /* MENSAJE FLOTANTE */
+        function showFloatMsg(parentEl, text, ok = true) {
+          parentEl.style.position = "relative";
+
+          const msg = document.createElement("div");
+          msg.className = "float-msg " + (ok ? "float-success" : "float-error");
+          msg.textContent = text;
+
+          parentEl.appendChild(msg);
+          setTimeout(() => msg.remove(), 1300);
+        }
+
+        async function buyRod(id, name, price, parentEl) {
+          const res = await fetch(`/dsaApp/shop/rods/${encodeURIComponent(id)}/buy`, {
+            method: 'POST',
+            headers: { 'Authorization': token }
+          });
+
+          if (!res.ok) {
+            const text = await res.text();
+            showFloatMsg(parentEl, "❌ " + text, false);
+            return;
+          }
+
+          showFloatMsg(parentEl, `✅ You bought ${name} for ${price} coins!`, true);
+          await loadMe();
+        }
+
+    })();
 </script>
+
 </body>
 </html>
