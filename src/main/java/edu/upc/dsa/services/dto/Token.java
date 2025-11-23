@@ -1,4 +1,4 @@
-package edu.upc.dsa.models.dto;
+package edu.upc.dsa.services.dto;
 
 public class Token {
     private String token;

@@ -16,7 +16,7 @@ public class FactorySession {
 
     public static Connection getConnection() {
         String db = "fish_and_chill";
-        String host = "root";
+        String host = "127.0.0.1";
         String port = "3306";
         String user = "root";
         String pass = "4282";

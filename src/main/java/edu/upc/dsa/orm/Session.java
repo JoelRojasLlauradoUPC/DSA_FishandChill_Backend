@@ -1,15 +1,16 @@
 package edu.upc.dsa.orm;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
 public interface Session {
     void save(Object entity);                                           // Crud
+    List<Object> get(Class theClass, HashMap params);                   // cRud
+    void update(Object entity);                                         // crUd
+    void delete(Object entity);                                         // cruD
+
     void close();
-    Object get(Class theClass, Object ID);                                 // cRud
-    void update(Object object);                                         // crUd
-    void delete(Object object);                                         // cruD
-    List<Object> findAll(Class theClass);                               // cR
-    List<Object> findAll(Class theClass, HashMap params);
-    List<Object> query(String query, Class theClass, HashMap params);
+//    List<Object> findAll(Class theClass, HashMap params) throws SQLException, InstantiationException, IllegalAccessException;
+//    List<Object> query(String query, Class theClass, HashMap params);
 }

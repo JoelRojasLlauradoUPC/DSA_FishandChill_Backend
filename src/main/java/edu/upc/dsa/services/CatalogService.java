@@ -1,7 +1,9 @@
 package edu.upc.dsa.services;
 
 import edu.upc.dsa.SystemManager;
-import edu.upc.dsa.models.*;
+import edu.upc.dsa.services.dto.CapturedFish;
+import edu.upc.dsa.services.dto.Fish;
+import edu.upc.dsa.services.dto.FishingRod;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -20,71 +22,64 @@ public class CatalogService {
     private final SystemManager gm = SystemManager.getInstance();
 
     @GET
-    @Path("/species")
+    @Path("/fishes")
     @ApiOperation(value = "List all fish species")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = Fish.class, responseContainer = "List")
     })
-    public Response listSpecies() {
-        Collection<Fish> values = gm.getAllFishSpecies().values();
-        return Response.ok(values).build();
+    public Response getAllFishes() {
+        List<edu.upc.dsa.models.Fish> allFishes = gm.getAllFishes();
+        List<Fish> resAllFishes = new ArrayList<>();
+        for (edu.upc.dsa.models.Fish f : allFishes) {
+            resAllFishes.add(new Fish(f));
+        }
+        return Response.ok(new GenericEntity<List<Fish>> (resAllFishes) {}).build();
     }
 
     @GET
-    @Path("/rods")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/fishes/{species_name}")
+    @ApiOperation(value = "Get fish species by name")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = Fish.class),
+            @ApiResponse(code = 404, message = "Species not found")
+    })
+    public Response getFish(@PathParam("species_name") String speciesName) {
+        edu.upc.dsa.models.Fish fish = gm.getFish(speciesName);
+        if (fish == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Species not found").build();
+        }
+        Fish resFish = new Fish(fish);
+        return Response.ok(resFish).build();
+    }
+
+    @GET
+    @Path("/fishing_rods")
     @ApiOperation(value = "List all fishing rods")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = FishingRod.class, responseContainer = "List")
     })
-    public Response listRods() {
-        List<FishingRod> rods = new ArrayList<>(gm.getAllFishingRods().values());
-        return Response.ok(new GenericEntity<List<FishingRod>>(rods) {}).build();
-    }
-
-
-    @POST
-    @Path("/species/add")
-    @ApiOperation(value = "Add a fish species")
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Fish created", response = Fish.class),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 409, message = "Fish already exists")
-    })
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addSpecies(Fish fish) {
-        if (fish == null) return Response.status(Response.Status.BAD_REQUEST).entity("Fish body required").build();
-        int res = gm.addFishSpecies(fish);
-        if (res == -1) return Response.status(Response.Status.CONFLICT).entity("Fish already exists").build();
-        return Response.status(Response.Status.CREATED).entity(fish).build();
-    }
-
-    @POST
-    @Path("/rods/add")
-    @ApiOperation(value = "Add a fishing rod")
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Rod created", response = FishingRod.class),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 409, message = "Rod already exists")
-    })
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addRod(FishingRod rod) {
-        if (rod == null) return Response.status(Response.Status.BAD_REQUEST).entity("Rod body required").build();
-        int res = gm.addFishingRod(rod);
-        if (res == -1) return Response.status(Response.Status.CONFLICT).entity("Rod already exists").build();
-        return Response.status(Response.Status.CREATED).entity(rod).build();
+    public Response getAllFishingRods() {
+        List<edu.upc.dsa.models.FishingRod> allFishingRods = gm.getAllFishingRods();
+        List<FishingRod> resAllFishingRods = new ArrayList<>();
+        for (edu.upc.dsa.models.FishingRod r : allFishingRods) {
+            resAllFishingRods.add(new FishingRod(r));
+        }
+        return Response.ok(new GenericEntity<List<FishingRod>> (resAllFishingRods) {}).build();
     }
 
     @GET
-    @Path("/rods/loadAll")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response loadDictionaryGet() {
-        int res = gm.loadRodsDictionary();
-        if (res == -1) {
-            return Response.status(Response.Status.CONFLICT)
-                    .entity("Not possible to load rod dictionary").build();
+    @Path("/fishing_rods/{fishing_rod_name}")
+    @ApiOperation(value = "Get fishing rod by name")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = FishingRod.class),
+            @ApiResponse(code = 404, message = "Fishing rod not found")
+    })
+    public Response getFishingRod(@PathParam("fishing_rod_name") String fishingRodName) {
+        edu.upc.dsa.models.FishingRod rod = gm.getFishingRod(fishingRodName);
+        if (rod == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Fishing rod not found").build();
         }
-        return Response.ok("Rod dictionary loaded").build(); // 200 OK
+        FishingRod resRod = new FishingRod(rod);
+        return Response.ok(resRod).build();
     }
-
 }
