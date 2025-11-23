@@ -12,9 +12,7 @@ import java.util.List;
 
 public class GameManager {
 
-    public GameManager() {  }
-
-    public List<edu.upc.dsa.models.CapturedFish> getCapturedFishes(User user, List<Fish> allFishes) {
+    public static List<edu.upc.dsa.models.CapturedFish> getCapturedFishes(User user, List<Fish> allFishes) {
         Session session = FactorySession.openSession();
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("userId", user.getId());
@@ -39,7 +37,7 @@ public class GameManager {
         return capturedFishes;
     }
 
-    public void captureFish(User user, Fish fish, double weight) {
+    public static void captureFish(User user, Fish fish, double weight) {
 
         Timestamp captureTime = new Timestamp(System.currentTimeMillis());
         CapturedFish capturedFish = new CapturedFish( user.getId(), fish.getId(), weight, captureTime);

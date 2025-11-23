@@ -19,7 +19,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class CatalogService {
 
-    private final SystemManager gm = SystemManager.getInstance();
+//    private final SystemManager gm = SystemManager.getInstance();
 
     @GET
     @Path("/fishes")
@@ -28,7 +28,7 @@ public class CatalogService {
             @ApiResponse(code = 200, message = "OK", response = Fish.class, responseContainer = "List")
     })
     public Response getAllFishes() {
-        List<edu.upc.dsa.models.Fish> allFishes = gm.getAllFishes();
+        List<edu.upc.dsa.models.Fish> allFishes = SystemManager.getAllFishes();
         List<Fish> resAllFishes = new ArrayList<>();
         for (edu.upc.dsa.models.Fish f : allFishes) {
             resAllFishes.add(new Fish(f));
@@ -44,7 +44,7 @@ public class CatalogService {
             @ApiResponse(code = 404, message = "Species not found")
     })
     public Response getFish(@PathParam("species_name") String speciesName) {
-        edu.upc.dsa.models.Fish fish = gm.getFish(speciesName);
+        edu.upc.dsa.models.Fish fish = SystemManager.getFish(speciesName);
         if (fish == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("Species not found").build();
         }
@@ -59,7 +59,7 @@ public class CatalogService {
             @ApiResponse(code = 200, message = "OK", response = FishingRod.class, responseContainer = "List")
     })
     public Response getAllFishingRods() {
-        List<edu.upc.dsa.models.FishingRod> allFishingRods = gm.getAllFishingRods();
+        List<edu.upc.dsa.models.FishingRod> allFishingRods = SystemManager.getAllFishingRods();
         List<FishingRod> resAllFishingRods = new ArrayList<>();
         for (edu.upc.dsa.models.FishingRod r : allFishingRods) {
             resAllFishingRods.add(new FishingRod(r));
@@ -75,7 +75,7 @@ public class CatalogService {
             @ApiResponse(code = 404, message = "Fishing rod not found")
     })
     public Response getFishingRod(@PathParam("fishing_rod_name") String fishingRodName) {
-        edu.upc.dsa.models.FishingRod rod = gm.getFishingRod(fishingRodName);
+        edu.upc.dsa.models.FishingRod rod = SystemManager.getFishingRod(fishingRodName);
         if (rod == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("Fishing rod not found").build();
         }

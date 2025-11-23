@@ -22,7 +22,7 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 public class MeService {
 
-    private final SystemManager gm = SystemManager.getInstance();
+//    private final SystemManager gm = SystemManager.getInstance();
 
     @GET
     @ApiOperation(value = "Get my profile")
@@ -31,7 +31,7 @@ public class MeService {
             @ApiResponse(code = 401, message = "Unauthorized")
     })
     public Response me(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
-        User u = gm.authenticate(auth);
+        User u = SystemManager.authenticate(auth);
         if (u == null) return Response.status(Response.Status.UNAUTHORIZED).build();
         return Response.ok(u).build();
     }
@@ -44,9 +44,9 @@ public class MeService {
             @ApiResponse(code = 401, message = "Unauthorized")
     })
     public Response getMyCapturedFishes(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
-        User user = gm.authenticate(auth);
+        User user = SystemManager.authenticate(auth);
         if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        List<edu.upc.dsa.models.CapturedFish> capturedFishes = gm.getCapturedFishes(user);
+        List<edu.upc.dsa.models.CapturedFish> capturedFishes = SystemManager.getCapturedFishes(user);
         List<CapturedFish> resCapturedFishes = new ArrayList<CapturedFish>();
         for (edu.upc.dsa.models.CapturedFish cf : capturedFishes) {
             resCapturedFishes.add(new CapturedFish(cf.getFishSpecies(), cf.getWeight(), cf.getCaptureTime()));
@@ -63,9 +63,9 @@ public class MeService {
             @ApiResponse(code = 401, message = "Unauthorized")
     })
     public Response getMyOwnedFishingRods(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
-        User user = gm.authenticate(auth);
+        User user = SystemManager.authenticate(auth);
         if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        List<edu.upc.dsa.models.FishingRod> ownedFishingRods = gm.getOwnedFishingRods(user);
+        List<edu.upc.dsa.models.FishingRod> ownedFishingRods = SystemManager.getOwnedFishingRods(user);
         List<FishingRod> resOwnedFishingRods= new ArrayList<FishingRod>();
         for (edu.upc.dsa.models.FishingRod fr : ownedFishingRods) {
             resOwnedFishingRods.add(new FishingRod(fr));

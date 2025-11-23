@@ -13,7 +13,7 @@ public class ShopManager {
     public ShopManager() {
     }
 
-    public List<FishingRod> getBoughtFishingRods(User user, List<FishingRod> allFishingRods) {
+    public static List<FishingRod> getBoughtFishingRods(User user, List<FishingRod> allFishingRods) {
         Session session = FactorySession.openSession();
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("userId", user.getId());
@@ -34,7 +34,7 @@ public class ShopManager {
     }
 
 
-    public int buyFishingRod(User user, FishingRod fishingRod) {
+    public static int buyFishingRod(User user, FishingRod fishingRod) {
         if (fishingRod.getId() > user.getCoins()) {
             return -1; // not enough coins
         }

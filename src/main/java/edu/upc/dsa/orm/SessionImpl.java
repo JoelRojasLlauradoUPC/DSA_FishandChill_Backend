@@ -93,6 +93,7 @@ public class SessionImpl implements Session {
         try {
             PreparedStatement pstm = conn.prepareStatement(sql);
 
+
             int i = 1;
             for (String field: ObjectHelper.getFields(entity)) {
                 if (field.equals("id")) continue;
@@ -100,7 +101,7 @@ public class SessionImpl implements Session {
                 i++;
             }
             pstm.setObject(i, ObjectHelper.getter(entity, "id") );
-
+            String query = pstm.toString();
             // Ejecuta UPDATE
             pstm.executeUpdate();
 

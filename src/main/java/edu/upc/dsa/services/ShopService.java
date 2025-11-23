@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class ShopService {
 
-    private final SystemManager gm = SystemManager.getInstance();
+//    private final SystemManager gm = SystemManager.getInstance();
 
     @POST
     @Path("/fishing_rods/{fishing_rod_name}/buy")
@@ -29,11 +29,11 @@ public class ShopService {
     public Response buyFishingRod(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth,
                                     @PathParam("fishing_rod_name") String fishingRodName) {
 
-        User user = gm.authenticate(auth);
+        User user = SystemManager.authenticate(auth);
         if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        FishingRod fishingRod = gm.getFishingRod(fishingRodName);
+        FishingRod fishingRod = SystemManager.getFishingRod(fishingRodName);
         if (fishingRod == null) return Response.status(Response.Status.NOT_FOUND).entity("Fishing rod not found").build();
-        int res = gm.buyFishingRod(user, fishingRod);
+        int res = SystemManager.buyFishingRod(user, fishingRod);
         if (res == -1) return Response.status(Response.Status.CONFLICT).entity("Fishing rod already owned").build();
         else if (res == -2) return Response.status(Response.Status.CONFLICT).entity("Not enough coins").build();
         return Response.status(Response.Status.OK).build();

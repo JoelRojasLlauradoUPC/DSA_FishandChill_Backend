@@ -60,7 +60,7 @@ public class QueryHelper {
         String[] fields = ObjectHelper.getFields(theClass);
 
         for (String field: fields) {
-            if (!field.equals("id")) sb.append(field).append("= ?, ").append(field);
+            if (!field.equals("id")) sb.append(field).append("= ?, ");
         }
         sb.delete(sb.length()-2, sb.length()); // remove last ", "
 

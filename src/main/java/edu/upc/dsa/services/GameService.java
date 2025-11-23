@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 @Path("/game")
 @Produces(MediaType.APPLICATION_JSON)
 public class GameService {
-    private final SystemManager gm = SystemManager.getInstance();
+//    private final SystemManager gm = SystemManager.getInstance();
 
     public static class CaptureRequest {
         public String fishId;
@@ -33,11 +33,11 @@ public class GameService {
     })
     @Consumes(MediaType.APPLICATION_JSON)
     public Response capture(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth, RequestCapturedFish req) {
-        User user = gm.authenticate(auth);
+        User user = SystemManager.authenticate(auth);
         if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        edu.upc.dsa.models.Fish fish = gm.getFish(req.getSpeciesName());
+        edu.upc.dsa.models.Fish fish = SystemManager.getFish(req.getSpeciesName());
         if (fish == null) return Response.status(Response.Status.NOT_FOUND).entity("Fish species not found").build();
-        gm.captureFish(user, fish, req.getWeight());
+        SystemManager.captureFish(user, fish, req.getWeight());
         return Response.ok().build();
     }
 }
