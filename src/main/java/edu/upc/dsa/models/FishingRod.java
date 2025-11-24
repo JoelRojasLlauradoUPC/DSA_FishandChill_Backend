@@ -5,44 +5,32 @@ import java.util.Objects;
 import static java.util.UUID.randomUUID;
 
 public class FishingRod {
-    private String id;    // uuid
+    private int id;    // uuid
     private String name;  // name of the rod
     private double speed; // speed of reeling
     private double power; // power of the rod
     private int rarity;  // rarity level
     private int durability;    // total number of uses
     private int price;  // price in game currency
-    private String image;
 
     public FishingRod() {
     }
 
     public FishingRod(String name, double speed, double power, int rarity, int durability, int price) {
-        this.id = randomUUID().toString();
+        this.id = 0;
         this.name = name;
         this.speed = speed;
         this.power = power;
         this.rarity = rarity;
         this.durability = durability;
         this.price = price;
-
-    }
-    public FishingRod(String id, String name, double speed, double power, int rarity, int durability, int price, String image) {
-        this.id = id;
-        this.name = name;
-        this.speed = speed;
-        this.power = power;
-        this.rarity = rarity;
-        this.durability = durability;
-        this.price = price;
-        this.image = image;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -92,14 +80,6 @@ public class FishingRod {
 
     public void setPrice(int price) {
         this.price = price;
-    }
-
-    public String getImage() {
-        return this.image;
-    }
-
-    public void setImage(String url) {
-        this.image = url;
     }
 
     @Override

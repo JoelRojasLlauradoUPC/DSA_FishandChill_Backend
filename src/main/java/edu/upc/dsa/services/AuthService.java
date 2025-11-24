@@ -2,9 +2,9 @@ package edu.upc.dsa.services;
 
 import edu.upc.dsa.SystemManager;
 import edu.upc.dsa.models.User;
-import edu.upc.dsa.models.dto.UserLogin;
-import edu.upc.dsa.models.dto.UserRegister;
-import edu.upc.dsa.models.dto.Token;
+import edu.upc.dsa.services.dto.Login;
+import edu.upc.dsa.services.dto.Register;
+import edu.upc.dsa.services.dto.Token;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthService {
 
-    private final SystemManager gameManager = SystemManager.getInstance();
+//    private final SystemManager gameManager = SystemManager.getInstance();
 
     @POST
     @Path("/register")
@@ -27,7 +27,7 @@ public class AuthService {
             @ApiResponse(code = 400, message = "Missing fields")
     })
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response register(UserRegister req) {
+    public Response register(Register req) {
         if (req == null) return Response.status(Response.Status.BAD_REQUEST).entity("Body required").build();
         String username = req.getUsername();
         String password = req.getPassword();
@@ -36,9 +36,10 @@ public class AuthService {
                 || username.trim().isEmpty() || password.trim().isEmpty() || email.trim().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).entity("username, password, email are required").build();
         }
-        int res = gameManager.createUser(username, password, email);
-        if (res == -1) return Response.status(Response.Status.CONFLICT).entity("User already exists").build();
-        User u = gameManager.getUser(username);
+        int res = SystemManager.createUser(username, password, email);
+        if (res == -1) return Response.status(Response.Status.CONFLICT).entity("Username already exists").build();
+        else if (res == -2) return Response.status(Response.Status.CONFLICT).entity("Email already used").build();
+        User u = SystemManager.getUser(username);
         return Response.status(Response.Status.CREATED).entity(u).build();
     }
 
@@ -51,13 +52,13 @@ public class AuthService {
     })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(UserLogin req) {
+    public Response login(Login req) {
         if (req == null) return Response.status(Response.Status.BAD_REQUEST).entity("Body required").build();
         String username = req.getUsername();
         String password = req.getPassword();
         if (username == null || password == null || username.trim().isEmpty() || password.trim().isEmpty())
             return Response.status(Response.Status.BAD_REQUEST).entity("username and password required").build();
-        String token = gameManager.login(username, password);
+        String token = SystemManager.login(username, password);
         if (token == null)
             return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid credentials").build();
         return Response.ok(new Token(token)).build();

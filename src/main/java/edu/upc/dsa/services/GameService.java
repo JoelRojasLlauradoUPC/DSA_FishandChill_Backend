@@ -1,8 +1,8 @@
 package edu.upc.dsa.services;
 
 import edu.upc.dsa.SystemManager;
-import edu.upc.dsa.models.Inventory;
 import edu.upc.dsa.models.User;
+import edu.upc.dsa.services.dto.RequestCapturedFish;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 @Path("/game")
 @Produces(MediaType.APPLICATION_JSON)
 public class GameService {
-    private final SystemManager gm = SystemManager.getInstance();
+//    private final SystemManager gm = SystemManager.getInstance();
 
     public static class CaptureRequest {
         public String fishId;
@@ -23,22 +23,21 @@ public class GameService {
     }
 
     @POST
-    @Path("/capture")
+    @Path("/captured")
     @ApiOperation(value = "Capture a fish in-game")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Fish captured", response = Inventory.class),
+            @ApiResponse(code = 200, message = "Fish captured"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 404, message = "Fish or User not found")
     })
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response capture(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth, CaptureRequest req) {
-        User u = gm.authenticate(auth);
-        if (u == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        if (req == null || req.fishId == null) return Response.status(Response.Status.BAD_REQUEST).build();
-        int res = gm.capturedFish(u.getUsername(), req.fishId, req.weight);
-        if (res == -2) return Response.status(Response.Status.NOT_FOUND).entity("Fish not found").build();
-        if (res == -1) return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
-        return Response.ok(u.getInventory()).build();
+    public Response capture(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth, RequestCapturedFish req) {
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        edu.upc.dsa.models.Fish fish = SystemManager.getFish(req.getSpeciesName());
+        if (fish == null) return Response.status(Response.Status.NOT_FOUND).entity("Fish species not found").build();
+        SystemManager.captureFish(user, fish, req.getWeight());
+        return Response.ok().build();
     }
 }

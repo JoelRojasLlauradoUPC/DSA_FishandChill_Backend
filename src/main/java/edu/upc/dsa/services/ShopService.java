@@ -1,7 +1,7 @@
 package edu.upc.dsa.services;
 
 import edu.upc.dsa.SystemManager;
-import edu.upc.dsa.models.Inventory;
+import edu.upc.dsa.models.FishingRod;
 import edu.upc.dsa.models.User;
 import io.swagger.annotations.*;
 
@@ -15,26 +15,27 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class ShopService {
 
-    private final SystemManager gm = SystemManager.getInstance();
+//    private final SystemManager gm = SystemManager.getInstance();
 
     @POST
-    @Path("/rods/{rodId}/buy")
+    @Path("/fishing_rods/{fishing_rod_name}/buy")
     @ApiOperation(value = "Buy a fishing rod")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Bought", response = Inventory.class),
+            @ApiResponse(code = 200, message = "Fishing rod bought"),
             @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 404, message = "Rod not found"),
-            @ApiResponse(code = 409, message = "Already owned or not enough coins")
+            @ApiResponse(code = 404, message = "Fishing rod not found"),
+            @ApiResponse(code = 409, message = "Fishing rod already owned or not enough coins")
     })
-    public Response buy(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth,
-                        @PathParam("rodId") String rodId) {
-        User u = gm.authenticate(auth);
-        if (u == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        int res = gm.boughtFishingRod(u.getUsername(), rodId);
-        if (res == -2) return Response.status(Response.Status.NOT_FOUND).entity("Rod not found").build();
-        if (res == -3) return Response.status(Response.Status.CONFLICT).entity("Not enough coins").build();
-        if (res == -4) return Response.status(Response.Status.CONFLICT).entity("Already owned").build();
-        if (res != 1) return Response.status(Response.Status.BAD_REQUEST).entity("Unknown error").build();
-        return Response.ok(u.getInventory()).build();
+    public Response buyFishingRod(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth,
+                                    @PathParam("fishing_rod_name") String fishingRodName) {
+
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        FishingRod fishingRod = SystemManager.getFishingRod(fishingRodName);
+        if (fishingRod == null) return Response.status(Response.Status.NOT_FOUND).entity("Fishing rod not found").build();
+        int res = SystemManager.buyFishingRod(user, fishingRod);
+        if (res == -1) return Response.status(Response.Status.CONFLICT).entity("Fishing rod already owned").build();
+        else if (res == -2) return Response.status(Response.Status.CONFLICT).entity("Not enough coins").build();
+        return Response.status(Response.Status.OK).build();
     }
 }

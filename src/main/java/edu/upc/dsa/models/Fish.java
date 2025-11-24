@@ -5,7 +5,7 @@ import java.util.Objects;
 import static java.util.UUID.randomUUID;
 
 public class Fish {
-    private String id;      // uuid
+    private int id;      // uuid
     private String speciesName;    // species name
     private int rarity;   // rarity level
     private double speciesWeight;  // standard weight of the species
@@ -14,17 +14,17 @@ public class Fish {
     }
 
     public Fish(String speciesName, int rarity, double speciesWeight) {
-        this.id = randomUUID().toString();
+        this.id = 0;
         this.speciesName = speciesName;
         this.rarity = rarity;
         this.speciesWeight = speciesWeight;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

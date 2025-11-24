@@ -16,195 +16,127 @@ import java.util.Map;
 
 public class SystemManager {
 
-    private static SystemManager instance;
+//    private static SystemManager instance;
     final static Logger logger = Logger.getLogger(SystemManager.class);
 
-    // Delegated managers
-    private final UserManager userManager;
-    private final CatalogManager catalogManager;
-    private final ShopManager shopManager;
-    private final GameManager gameActions;
+//
+//    public static SystemManager getInstance() {
+//        if (instance == null) instance = new SystemManager();
+//        return instance;
+//    }
 
-    private SystemManager() {
-        this.catalogManager = new CatalogManager();
-        this.userManager = new UserManager();
-        this.shopManager = new ShopManager();
-        this.gameActions = new GameManager();
-    }
+    // ---------- USERS ----------
 
-    public static SystemManager getInstance() {
-        if (instance == null) instance = new SystemManager();
-        return instance;
-    }
-
-    // ---------- USERS declaration ----------
-    public int createUser(String username, String password, String email) {
-        int res = userManager.createUser(username, password, email);
-        if (res == -1) logger.warn("User already exists: " + username + " / " + email);
-        else logger.info("User created: " + username);
+    //AUTHENTICATION
+    public static int createUser(String username, String password, String email) {
+        int res = UserManager.createUser(username, password, email);
+        if (res == -1) logger.warn("Username already exists: " + username );
+        if (res == -2) logger.warn("Email already exists: " + email);
+        else logger.info("User created: " + username + ", email: " + email);
         return res;
     }
 
-    public User getUser(String username) {
+    public static User getUser(String username) {
         logger.info("getUser: username=" + username);
-        return userManager.getUser(username);
+        return UserManager.getUser(username);
     }
 
-    public Inventory getInventory(String username) {
-        User user = userManager.getUser(username);
-        if (user == null) return null;
-        return user.getInventory();
-    }
-
-    public String login(String username, String password) {
+    public static String login(String username, String password) {
         logger.info("login: username=" + username);
-        String token = userManager.login(username, password);
+        String token = UserManager.login(username, password);
         if (token == null) logger.warn("Login failed for user: " + username);
         else logger.info("Login ok: " + username);
         return token;
     }
 
-    public User authenticate(String token) {
-        return userManager.authenticate(token);
+    public static User authenticate(String token) {
+        User user = UserManager.authenticate(token);
+        if (user == null) logger.warn("Authentication failed for token: " + token);
+        else logger.info("Authentication ok: username=" + user.getUsername());
+        return user;
     }
+
+
+    // INVENTORY
+    public static List<FishingRod> getOwnedFishingRods(User user) {
+        List<FishingRod> allFishingRods = CatalogManager.getAllFishingRods();
+        logger.info("Get owned fishing rods for user: username=" + user.getUsername() + ", totalRodsCount=" + allFishingRods.size());
+        return ShopManager.getBoughtFishingRods(user, allFishingRods);
+    }
+
+    public static List<CapturedFish> getCapturedFishes(User user) {
+        List<Fish> allFishes = getAllFishes();
+        List<CapturedFish> capturedFishes = GameManager.getCapturedFishes(user, allFishes);
+        logger.info("Get captured fishes for user: username=" + user.getUsername() + ", capturedFishesCount=" + capturedFishes.size());
+        return capturedFishes;
+    }
+
+
 
 
     // ---------- CATALOG declaration ----------
-    // ---------- FISH ----------
-    public int addFishSpecies(Fish fish) {
-        int res = catalogManager.addFish(fish);
-        if (res == -1) logger.warn("Fish species already exists: " + fish.getId());
-        else logger.info("Fish species added: " + fish);
-        return res;
-    }
-
-    public Map<String, Fish> getAllFishSpecies() {
-        return catalogManager.getFishMap();
-    }
-
-    // ---------- RODS ----------
-    public int addFishingRod(FishingRod rod) {
-        int res = catalogManager.addRod(rod);
-        if (res == -1) logger.warn("Fishing rod already exists: " + rod.getId());
-        else logger.info("Fishing rod added: " + rod);
-        return res;
-    }
-
-    public Map<String, FishingRod> getAllFishingRods() {
-        logger.info("Obtaining all fishing rods...");
-        return catalogManager.getRodsMap();
-    }
-
-    public int loadRodsDictionary() {
-        logger.info("Loading rods from dictionary file...");
-
-        try (InputStream input = getClass().getResourceAsStream("/rodsDictionary.properties")) {
-
-            if (input == null) {
-                logger.error("Could not find rodsDictionary.properties in /resources folder!");
-                return -1;
-            }
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            String line;
-            List<String> values = new ArrayList<>();
-            int numberOfAddedRods = 0;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-
-                if (line.isEmpty() || line.startsWith("#")) continue;
-
-                values.add(line);
-
-                if (values.size() == 8) {
-                    String id = values.get(0);
-                    String name = values.get(1);
-                    double speed = Double.parseDouble(values.get(2));
-                    double power = Double.parseDouble(values.get(3));
-                    int rarity = Integer.parseInt(values.get(4));
-                    int durability = Integer.parseInt(values.get(5));
-                    int price = Integer.parseInt(values.get(6));
-                    String url =  values.get(7);
-
-                    FishingRod rod = new FishingRod(id, name, speed, power, rarity, durability, price, url);
-                    addFishingRod(rod);
-
-                    values.clear();
-                    numberOfAddedRods ++;
-                }
-            }
-
-            logger.info("Finished loading " + numberOfAddedRods + " rods.");
-            return 1;
-
-        } catch (Exception e) {
-            logger.error("Error loading rods dictionary: " + e.getMessage(), e);
-            return -1;
+    // FISH
+    public static Fish getFish(String fishSpeciesName) {
+        Fish fish = CatalogManager.getFish(fishSpeciesName);
+        if (fish == null) {
+            logger.warn("Fish species not found: " + fishSpeciesName);
+            return null;
         }
+        return fish;
     }
+
+    public static List<Fish> getAllFishes() {
+        List<Fish> allFishes = CatalogManager.getAllFishes();
+        logger.info("getAllFishes: all fishes count=" + allFishes.size());
+        return allFishes;
+    }
+
+    // FISHING RODS
+    public static FishingRod getFishingRod(String fishingRodName) {
+        FishingRod rod = CatalogManager.getFishingRod(fishingRodName);
+        if (rod == null) {
+            logger.warn("Fishing rod not found: " + fishingRodName);
+            return null;
+        }
+        logger.info("getFishingRod: " + fishingRodName);
+        return rod;
+    }
+
+    public static List<FishingRod> getAllFishingRods() {
+        List<FishingRod> allFishingRods = CatalogManager.getAllFishingRods();
+        logger.info("getAllFishingRods: all rods count=" + allFishingRods.size());
+        return allFishingRods;
+    }
+
 
     // ---------- SHOP ----------
+    public static int buyFishingRod(User user, FishingRod fishingRod) {
 
-    public int boughtFishingRod(String username, String rodId) {
-        User user = userManager.getUser(username);
-        if (user == null) {
-            logger.warn("User not found: " + username);
-            return -1; // user not found
+        List<FishingRod> ownedFishingRods = getOwnedFishingRods(user);
+        for (FishingRod r : ownedFishingRods) {
+            if (r.getName().equals(fishingRod.getName())) {
+                logger.warn("Fishing rod already owned: " + fishingRod.getName());
+                return -1; // already owns the rod
+            }
         }
-        FishingRod rod = catalogManager.getRodsMap().get(rodId);
-        if (rod == null) {
-            logger.warn("Fishing rod not found: " + rodId);
-            return -2; // rod not found
+        int res = ShopManager.buyFishingRod(user, fishingRod);
+        if (res == -1) {
+            logger.warn("User has not enough coins: username=" + user.getUsername() + ", rodName=" + fishingRod.getName()+", userCoins = "+user.getCoins());
+            return -2; // not enough coins
         }
-        int res = shopManager.buyRod(user, rod);
-        switch (res) {
-            case 1:
-                logger.info("User bought fishing rod: username=" + username + ", rodId=" + rodId+", userCoins = "+user.getCoins());
-                return 1;
-            case -3:
-                logger.warn("User has not enough coins: username=" + username + ", rodId=" + rodId+", userCoins = "+user.getCoins());
-                return -3;
-            case -4:
-                logger.warn("User already owns fishing rod: username=" + username + ", rodId=" + rodId+", userCoins = "+user.getCoins());
-                return -4;
-            default:
-                logger.warn("Unknown error buying rod for username=" + username + ", rodId=" + rodId+", userCoins = "+user.getCoins());
-                return 0;
-        }
+
+        logger.info("User bought fishing rod: username=" + user.getUsername() + ", rodName=" + fishingRod.getName()+", userCoins = "+user.getCoins());
+        return 1; // rod bought successfully
     }
 
 
-    // ---------- USER interactions ----------
+    // ---------- GAME ----------
 
-    // New: capture with resolved objects (checks can be done by API layer)
-    public int capture(User user, Fish fish, double weight) {
-        int res = gameActions.captureFish(user, fish, weight);
-        if (res == 1) logger.info("Captured fish added to user inventory: username=" + (user!=null?user.getUsername():"null") + ", fishId=" + (fish!=null?fish.getId():"null") + ", weight=" + weight);
-        return res;
-    }
 
-    public int capturedFish(String username, String fishId, double weight) {
-        User user = userManager.getUser(username);
-        if (user == null) {
-            logger.warn("User not found: " + username);
-            return -1;
-        }
-        Fish fish = catalogManager.getFishMap().get(fishId);
-        if (fish == null) {
-            logger.warn("Fish species not found: " + fishId);
-            return -2;
-        }
-        int res = gameActions.captureFish(user, fish, weight);
-        if (res == 1) logger.info("Captured fish added to user inventory: username=" + username + ", fishId=" + fishId + ", weight=" + weight);
-        return res;
+    public static void captureFish(User user, Fish fish, double weight) {
+        GameManager.captureFish(user, fish, weight);
+        logger.info("User captured fish: username=" + user.getUsername() + ", fishSpecies=" + fish.getSpeciesName() + ", weight=" + weight);
     }
 
 
-    // ---------- Game Manager methods ----------
-    public void clear() {
-        this.userManager.clear();
-        this.catalogManager.getFishMap().clear();
-        this.catalogManager.getRodsMap().clear();
-        logger.info("GameManager cleared all data.");
-    }
 }

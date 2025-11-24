@@ -1,36 +1,27 @@
-package edu.upc.dsa.models;
+package edu.upc.dsa.services.dto;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 public class CapturedFish {
-    private int id;  // uuid¡
     private Fish fishSpecies;
     private double weight;
-    private Timestamp captureTime;  // time of capture
+    private Timestamp captureTime;
 
     public CapturedFish() {
     }
 
-    public CapturedFish(Fish fishSpecies, double weight, Timestamp captureTime) {
-        this.id = 0;
-        this.fishSpecies = fishSpecies;
+    public CapturedFish(edu.upc.dsa.models.Fish fishSpecies, double weight, Timestamp captureTime) {
+        this.fishSpecies = new Fish(fishSpecies);
         this.weight = weight;
         this.captureTime = captureTime;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Fish getFishSpecies() {
         return fishSpecies;
     }
 
-    public void setFishId(Fish fishSpecies) {
+    public void setFishSpecies(Fish fishSpecies) {
         this.fishSpecies = fishSpecies;
     }
 

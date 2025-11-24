@@ -1,19 +1,21 @@
-package edu.upc.dsa.models;
+package edu.upc.dsa.managers.game;
 
 import java.sql.Timestamp;
 
 public class CapturedFish {
-    private int id;  // uuid¡
-    private Fish fishSpecies;
-    private double weight;
-    private Timestamp captureTime;  // time of capture
+    int id;
+    int userId;
+    int fishId;
+    double weight;
+    Timestamp captureTime;
 
     public CapturedFish() {
     }
 
-    public CapturedFish(Fish fishSpecies, double weight, Timestamp captureTime) {
+    public CapturedFish(int userId, int fishId, double weight, Timestamp captureTime) {
         this.id = 0;
-        this.fishSpecies = fishSpecies;
+        this.userId = userId;
+        this.fishId = fishId;
         this.weight = weight;
         this.captureTime = captureTime;
     }
@@ -26,12 +28,20 @@ public class CapturedFish {
         this.id = id;
     }
 
-    public Fish getFishSpecies() {
-        return fishSpecies;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setFishId(Fish fishSpecies) {
-        this.fishSpecies = fishSpecies;
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getFishId() {
+        return fishId;
+    }
+
+    public void setFishId(int fishId) {
+        this.fishId = fishId;
     }
 
     public double getWeight() {

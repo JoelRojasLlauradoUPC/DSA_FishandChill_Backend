@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Fish & Chill - Login</title>
@@ -93,7 +93,7 @@
                 </div>
                 <div>
                     <h1 class="h4 fc-title mb-1">Fish &amp; Chill</h1>
-                    <p class="fc-subtitle mb-0">Inicia sesión y vuelve a la pesca</p>
+                    <p class="fc-subtitle mb-0">Log in and get back to fishing</p>
                 </div>
             </div>
 
@@ -101,19 +101,19 @@
 
             <form id="login-form" class="mt-2">
                 <div class="mb-3">
-                    <label for="username" class="form-label">Usuario</label>
+                    <label for="username" class="form-label">Username</label>
                     <input
                             id="username"
                             name="username"
                             type="text"
                             class="form-control"
-                            placeholder="Tu usuario"
+                            placeholder="Your username"
                             required
                     >
                 </div>
 
                 <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
+                    <label for="password" class="form-label">Password</label>
                     <div class="input-group">
                         <input
                                 id="password"
@@ -127,7 +127,7 @@
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
                                 type="button"
                                 id="togglePassword"
-                                aria-label="Mostrar u ocultar contraseña"
+                                aria-label="Show or hide password"
                         >
                             <i class="bi bi-eye"></i>
                         </button>
@@ -135,16 +135,16 @@
                 </div>
 
                 <button type="submit" class="btn btn-fish w-100 mt-3 py-2">
-                    ¡A pescar!
+                    Let's fish!
                 </button>
             </form>
 
             <div id="message" class="fc-message mt-3 small"></div>
 
             <p class="mt-4 mb-0 text-center small" style="color:#708381;">
-                ¿No tienes cuenta?
+                Don't have an account?
                 <a class="fc-link text-decoration-none" href="register">
-                    Regístrate aquí
+                    Register here
                 </a>
             </p>
         </div>
@@ -188,7 +188,7 @@
 
             if (!res.ok) {
                 const text = await res.text();
-                loginMessage.textContent = 'Error de login: ' + text;
+                loginMessage.textContent = 'Login error: ' + text;
                 loginMessage.classList.add('alert', 'alert-danger');
                 return;
             }
@@ -197,20 +197,20 @@
             const token = data.token;
 
             if (!token) {
-                loginMessage.textContent = 'Error: respuesta sin token';
+                loginMessage.textContent = 'Error: missing token in response';
                 loginMessage.classList.add('alert', 'alert-danger');
                 return;
             }
 
             localStorage.setItem('authToken', token);
 
-            loginMessage.textContent = 'Login correcto, redirigiendo...';
+            loginMessage.textContent = 'Login successful, redirecting...';
             loginMessage.classList.add('alert', 'alert-success');
 
             setTimeout(() => { window.location.href = 'shop'; }, 400);
         } catch (err) {
             console.error(err);
-            loginMessage.textContent = 'Error de conexión con el servidor';
+            loginMessage.textContent = 'Server connection error';
             loginMessage.classList.add('alert', 'alert-danger');
         }
     });

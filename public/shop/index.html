@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>Fish & Chill Shop</title>
 
-    <!-- FUENTE -->
+    <!-- FONT -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
@@ -259,7 +259,7 @@
 
 <body>
 
-<!-- PECES Y BURBUJAS -->
+<!-- FISHES AND BUBBLES -->
 <div class="bg-anim">
     <div class="bubbles">
         <span></span><span></span><span></span><span></span><span></span><span></span>
@@ -288,7 +288,7 @@
 
 <script>
     /* ===================================== */
-    /* PECES CON ORIENTACIÓN     */
+    /* FISHES WITH ORIENTATION              */
     /* ===================================== */
 
     function randomColor() {
@@ -335,7 +335,7 @@
 
 
     /* ===================================== */
-    /*  LÓGICA DE LA SHOP                  */
+    /*  SHOP LOGIC                          */
     /* ===================================== */
 
     (function () {
@@ -350,7 +350,7 @@
 
         if (!token) {
             info.textContent = 'No session — Redirecting...';
-            setTimeout(() => window.location.href = 'login.html', 1200);
+            setTimeout(() => window.location.href = '../index.html', 1200);
         } else {
             init();
         }
@@ -363,22 +363,19 @@
             if (!res.ok) return;
 
             const user = await res.json();
-            const name = user.username || "Player";
-            const coins = user.coins ?? user.balance ?? 0;
+            const name = user.username;
+            const coins = user.coins;
 
             info.textContent = `${name} | 💰 ${coins} coins`;
         }
 
         async function initShop() {
-            await fetch('/api/catalog/rods/loadAll', {
-                headers: { 'Authorization': token }
-            });
 
             await loadRods();
         }
 
         async function loadRods() {
-            const res = await fetch('/api/catalog/rods', {
+            const res = await fetch('/api/catalog/fishing_rods', {
                 headers: { 'Authorization': token }
             });
 
@@ -394,8 +391,8 @@
                 const el = document.createElement('div');
                 el.className = 'rod';
 
-                // 👇 Aquí usamos directamente el link que viene del backend
-                const imgSrc = rod.image || rod.imageUrl || rod.img || rod.link || 'https://via.placeholder.com/80';
+                // 👇 Here we use directly the link that comes from the backend
+                const imgSrc = rod.url ; //"/img/fishing_rods/fishing_rod_name.png";
 
                 el.innerHTML = `
               <img src="${imgSrc}" alt="${rod.name}">
@@ -411,14 +408,14 @@
             `;
 
                 el.querySelector('.buy').addEventListener('click', () =>
-                    buyRod(rod.id, rod.name, rod.price, el)
+                    buyFishingRod(rod.id, rod.name, rod.price, el)
                 );
 
                 rodsContainer.appendChild(el);
             });
         }
 
-        /* MENSAJE FLOTANTE */
+        /* FLOATING MESSAGE */
         function showFloatMsg(parentEl, text, ok = true) {
             parentEl.style.position = "relative";
 
@@ -430,8 +427,8 @@
             setTimeout(() => msg.remove(), 1300);
         }
 
-        async function buyRod(id, name, price, parentEl) {
-            const res = await fetch(`/api/shop/rods/${encodeURIComponent(id)}/buy`, {
+        async function buyFishingRod(id, name, price, parentEl) {
+            const res = await fetch(`/api/shop/fishing_rods/${encodeURIComponent(name)}/buy`, {
                 method: 'POST',
                 headers: { 'Authorization': token }
             });

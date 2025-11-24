@@ -2,15 +2,50 @@ package edu.upc.dsa.managers.shop;
 
 import edu.upc.dsa.models.FishingRod;
 import edu.upc.dsa.models.User;
+import edu.upc.dsa.orm.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ShopManager {
 
-    public int buyRod(User user, FishingRod rod) {
-        // Delegate to user logic and map codes to disambiguated ones
-        int res = user.buyFishingRod(rod);
-        if (res == 1) return 1;
-        if (res == -1) return -3; // not enough coins
-        if (res == -2) return -4; // already owned
-        return 0; // unknown error
+    public ShopManager() {
+    }
+
+    public static List<FishingRod> getBoughtFishingRods(User user, List<FishingRod> allFishingRods) {
+        Session session = FactorySession.openSession();
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("userId", user.getId());
+        List<Object> result = session.get(BoughtFishingRod.class, params);
+        session.close();
+        List<BoughtFishingRod> boughtFishingRodsMapping = (List<BoughtFishingRod>)(List<?>) result;
+
+        List<FishingRod> boughtFishingRods = new ArrayList<FishingRod>();
+        for (BoughtFishingRod bfrm  : boughtFishingRodsMapping) {
+            for (FishingRod fr : allFishingRods) {
+                if (bfrm.getFishingRodId() == fr.getId()) {
+                    boughtFishingRods.add(fr);
+                    break;
+                }
+            }
+        }
+        return boughtFishingRods;
+    }
+
+
+    public static int buyFishingRod(User user, FishingRod fishingRod) {
+        if (fishingRod.getId() > user.getCoins()) {
+            return -1; // not enough coins
+        }
+        // save bought fishing rod
+        BoughtFishingRod boughtFishingRod = new BoughtFishingRod(user.getId(), fishingRod.getId());
+        Session session = FactorySession.openSession();
+        session.save(boughtFishingRod);
+        // deduct coins
+        user.setCoins(user.getCoins() - fishingRod.getId());
+        session.update(user);
+        session.close();
+        return 1; // fishing rod bought successfully
     }
 }
