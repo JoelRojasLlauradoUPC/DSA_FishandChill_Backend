@@ -78,7 +78,10 @@ public class SystemManager {
     // FISH
     public static Fish getFish(String fishSpeciesName) {
         Fish fish = CatalogManager.getFish(fishSpeciesName);
-        if (fish == null) logger.warn("Fish species not found: " + fishSpeciesName);
+        if (fish == null) {
+            logger.warn("Fish species not found: " + fishSpeciesName);
+            return null;
+        }
         return fish;
     }
 
@@ -91,7 +94,10 @@ public class SystemManager {
     // FISHING RODS
     public static FishingRod getFishingRod(String fishingRodName) {
         FishingRod rod = CatalogManager.getFishingRod(fishingRodName);
-        if (rod == null) logger.warn("Fishing rod not found: " + fishingRodName);
+        if (rod == null) {
+            logger.warn("Fishing rod not found: " + fishingRodName);
+            return null;
+        }
         logger.info("getFishingRod: " + fishingRodName);
         return rod;
     }

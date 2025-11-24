@@ -18,7 +18,7 @@ public class Fish {
         this.speciesName = speciesName;
         this.rarity = rarity;
         this.speciesWeight = speciesWeight;
-        this.url = "/img/fish/" + fish.getSpeciesName().toLowerCase().replaceAll(" ", "_");
+        this.url = "/img/fishes/" + fish.getSpeciesName().toLowerCase().replaceAll(" ", "_")+".png";
     }
 
     public String getSpeciesName() {

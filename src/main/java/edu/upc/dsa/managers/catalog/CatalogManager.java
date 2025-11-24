@@ -36,7 +36,7 @@ public class CatalogManager {
         Session session = FactorySession.openSession();
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("name", fishingRodName);
-        List<Object> result = session.get(Fish.class, params);
+        List<Object> result = session.get(FishingRod.class, params);
         session.close();
         if (result.isEmpty()) return null;
         FishingRod fishingRod = (FishingRod) result.get(0);

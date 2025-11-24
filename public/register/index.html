@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Fish & Chill - Registro</title>
+    <title>Fish & Chill - Register</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -92,8 +92,8 @@
                     🐟
                 </div>
                 <div>
-                    <h1 class="h4 fc-title mb-1">Crea tu cuenta</h1>
-                    <p class="fc-subtitle mb-0">Unete al mejor simulador de pesca</p>
+                    <h1 class="h4 fc-title mb-1">Create your account</h1>
+                    <p class="fc-subtitle mb-0">Join the best fishing simulator</p>
                 </div>
             </div>
 
@@ -101,13 +101,13 @@
 
             <form id="register-form" class="mt-2">
                 <div class="mb-3">
-                    <label for="username" class="form-label">Usuario</label>
+                    <label for="username" class="form-label">Username</label>
                     <input
                             id="username"
                             name="username"
                             type="text"
                             class="form-control"
-                            placeholder="Elige tu usuario"
+                            placeholder="Choose your username"
                             required
                     >
                 </div>
@@ -119,26 +119,26 @@
                             name="email"
                             type="email"
                             class="form-control"
-                            placeholder="Correo electronico"
+                            placeholder="Email address"
                     >
                 </div>
 
                 <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
+                    <label for="password" class="form-label">Password</label>
                     <div class="input-group">
                         <input
                                 id="password"
                                 name="password"
                                 type="password"
                                 class="form-control"
-                                placeholder="Mínimo 6 caracteres"
+                                placeholder="At least 6 characters"
                                 required
                         >
                         <button
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
                                 type="button"
                                 id="togglePasswordRegister"
-                                aria-label="Mostrar u ocultar contraseña"
+                                aria-label="Show or hide password"
                         >
                             <i class="bi bi-eye"></i>
                         </button>
@@ -146,28 +146,28 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="confirmPassword" class="form-label">Repite la contraseña</label>
+                    <label for="confirmPassword" class="form-label">Repeat password</label>
                     <input
                             id="confirmPassword"
                             name="confirmPassword"
                             type="password"
                             class="form-control"
-                            placeholder="Vuelve a escribir la contraseña"
+                            placeholder="Re-enter your password"
                             required
                     >
                 </div>
 
                 <button type="submit" class="btn btn-fish w-100 mt-2">
-                    Registrarse
+                    Register
                 </button>
             </form>
 
             <div id="message" class="fc-message mt-3 small"></div>
 
             <p class="mt-4 mb-0 text-center small" style="color:#708381;">
-                ¿Ya tienes cuenta?
+                Already have an account?
                 <a class="fc-link text-decoration-none" href="/">
-                    Inicia sesión aquí
+                    Log in here
                 </a>
             </p>
         </div>
@@ -193,7 +193,7 @@
         icon.classList.toggle('bi-eye');
         icon.classList.toggle('bi-eye-slash');
 
-        // Opcional: mostrar/ocultar también el de confirmación
+        // Optional: also toggle confirmation input
         confirmPasswordInput.type = type;
     });
 
@@ -210,7 +210,7 @@
 
 
         if (password !== confirmPassword) {
-            registerMessage.textContent = 'Las contraseñas no coinciden';
+            registerMessage.textContent = 'Passwords do not match';
             registerMessage.classList.add('alert', 'alert-danger');
             return;
         }
@@ -224,17 +224,17 @@
 
             if (!res.ok) {
                 const text = await res.text();
-                registerMessage.textContent = 'Error al registrar: ' + text;
+                registerMessage.textContent = 'Registration error: ' + text;
                 registerMessage.classList.add('alert', 'alert-danger');
                 return;
             }
 
             const user = await res.json();
-            registerMessage.textContent = 'Usuario creado correctamente con id: ' + user.id;
+            registerMessage.textContent = 'User created successfully with id: ' + user.id;
             registerMessage.classList.add('alert', 'alert-success');
         } catch (err) {
             console.error(err);
-            registerMessage.textContent = 'Error de conexión con el servidor';
+            registerMessage.textContent = 'Server connection error';
             registerMessage.classList.add('alert', 'alert-danger');
         }
     });

@@ -1,6 +1,6 @@
 package edu.upc.dsa.services.dto;
 
-public class FishingRod extends edu.upc.dsa.models.FishingRod {
+public class FishingRod {
 
     private String name;  // name of the rod
     private double speed; // speed of reeling
@@ -11,7 +11,6 @@ public class FishingRod extends edu.upc.dsa.models.FishingRod {
     String url;
 
     public FishingRod() {
-        super();
     }
 
     public FishingRod(edu.upc.dsa.models.FishingRod fishingRod) {
@@ -28,7 +27,7 @@ public class FishingRod extends edu.upc.dsa.models.FishingRod {
         this.setRarity(rarity);
         this.setDurability(durability);
         this.setPrice(price);
-        this.url = "/img/fishing_rod/" + fishingRod.getName().toLowerCase().replace(" ", "_");
+        this.url = "/img/fishing_rods/" + fishingRod.getName().toLowerCase().replace(" ", "_") +".png";
     }
 
     public String getUrl() {
@@ -37,5 +36,53 @@ public class FishingRod extends edu.upc.dsa.models.FishingRod {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    public void setDurability(int durability) {
+        this.durability = durability;
+    }
+
+    public int getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(int rarity) {
+        this.rarity = rarity;
+    }
+
+    public double getPower() {
+        return power;
+    }
+
+    public void setPower(double power) {
+        this.power = power;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 }
