@@ -43,7 +43,7 @@ public class ShopManager {
         Session session = FactorySession.openSession();
         session.save(boughtFishingRod);
         // deduct coins
-        user.setCoins(user.getCoins() - fishingRod.getId());
+        user.setCoins(user.getCoins() - fishingRod.getPrice());
         session.update(user);
         session.close();
         return 1; // fishing rod bought successfully
