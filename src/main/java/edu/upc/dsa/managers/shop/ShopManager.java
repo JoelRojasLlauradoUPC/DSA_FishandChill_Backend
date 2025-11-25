@@ -35,7 +35,7 @@ public class ShopManager {
 
 
     public static int buyFishingRod(User user, FishingRod fishingRod) {
-        if (fishingRod.getId() > user.getCoins()) {
+        if (fishingRod.getPrice() > user.getCoins()) {
             return -1; // not enough coins
         }
         // save bought fishing rod
