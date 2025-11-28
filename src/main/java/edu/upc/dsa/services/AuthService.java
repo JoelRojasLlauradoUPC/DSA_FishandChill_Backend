@@ -8,6 +8,7 @@ import edu.upc.dsa.services.dto.Token;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -62,5 +63,20 @@ public class AuthService {
         if (token == null)
             return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid credentials").build();
         return Response.ok(new Token(token)).build();
+    }
+
+    @DELETE
+    @Path("/logout")
+    @ApiOperation(value = "Logout and invalidate token")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Logout successful"),
+        @ApiResponse(code = 401, message = "Unauthorized")
+    })
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response logout(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        SystemManager.logout(auth);
+        return Response.ok().build();
     }
 }

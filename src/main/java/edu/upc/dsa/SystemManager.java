@@ -41,6 +41,13 @@ public class SystemManager {
         return UserManager.getUser(username);
     }
 
+    public static void deleteUser(User user) {
+        ShopManager.deleteBoughtFishingRods(user);
+        GameManager.deleteCapturedFishes(user);
+        UserManager.deleteUser(user);
+        logger.info("deleteUser: username=" + user.getUsername());
+    }
+
     public static String login(String username, String password) {
         logger.info("login: username=" + username);
         String token = UserManager.login(username, password);
@@ -56,22 +63,30 @@ public class SystemManager {
         return user;
     }
 
+    public static void logout(String token) {
+        User user = UserManager.authenticate(token);
+        if (user != null) {
+            UserManager.logout(token);
+            logger.info("logout: username=" + user.getUsername());
+        } else {
+            logger.warn("Logout failed for token: " + token);
+        }
+    }
+
+
+
 
     // INVENTORY
     public static List<FishingRod> getOwnedFishingRods(User user) {
-        List<FishingRod> allFishingRods = CatalogManager.getAllFishingRods();
-        logger.info("Get owned fishing rods for user: username=" + user.getUsername() + ", totalRodsCount=" + allFishingRods.size());
-        return ShopManager.getBoughtFishingRods(user, allFishingRods);
+        logger.info("Get owned fishing rods for user: username=" + user.getUsername());
+        return ShopManager.getBoughtFishingRods(user);
     }
 
     public static List<CapturedFish> getCapturedFishes(User user) {
-        List<Fish> allFishes = getAllFishes();
-        List<CapturedFish> capturedFishes = GameManager.getCapturedFishes(user, allFishes);
-        logger.info("Get captured fishes for user: username=" + user.getUsername() + ", capturedFishesCount=" + capturedFishes.size());
+        List<CapturedFish> capturedFishes = GameManager.getCapturedFishes(user);
+        logger.info("Get captured fishes for user: username=" + user.getUsername());
         return capturedFishes;
     }
-
-
 
 
     // ---------- CATALOG declaration ----------

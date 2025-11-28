@@ -1,5 +1,6 @@
 package edu.upc.dsa.managers.game;
 
+import edu.upc.dsa.managers.catalog.CatalogManager;
 import edu.upc.dsa.models.Fish;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.orm.*;
@@ -12,13 +13,14 @@ import java.util.List;
 
 public class GameManager {
 
-    public static List<edu.upc.dsa.models.CapturedFish> getCapturedFishes(User user, List<Fish> allFishes) {
+    public static List<edu.upc.dsa.models.CapturedFish> getCapturedFishes(User user) {
         Session session = FactorySession.openSession();
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("userId", user.getId());
         List<Object> result = session.get(CapturedFish.class, params);
         session.close();
         List<CapturedFish> capturedFishesMapping = (List<CapturedFish>)(List<?>) result;
+        List<Fish> allFishes = CatalogManager.getAllFishes();
 
         // Set fish objects in capturedFishes
         List<edu.upc.dsa.models.CapturedFish> capturedFishes = new ArrayList<>();
@@ -44,5 +46,18 @@ public class GameManager {
         Session session = FactorySession.openSession();
         session.save(capturedFish);
         session.close();
+    }
+
+    public static int deleteCapturedFishes(User user) {
+        Session session = FactorySession.openSession();
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("userId", user.getId());
+        List<Object> result = session.get(CapturedFish.class, params);
+        for (Object obj : result) {
+            CapturedFish cf = (CapturedFish) obj;
+            session.delete(cf);
+        }
+        session.close();
+        return result.size();
     }
 }

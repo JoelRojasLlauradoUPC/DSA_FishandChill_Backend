@@ -72,4 +72,18 @@ public class MeService {
         }
         return Response.ok(new GenericEntity<List<FishingRod>> (resOwnedFishingRods) {}).build();
     }
+
+    @DELETE
+    @ApiOperation(value = "Delete my user account")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "User deleted"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
+    public Response deleteMyAccount(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        SystemManager.deleteUser(user);
+        return Response.ok().entity("User deleted").build();
+    }
+
 }

@@ -13,7 +13,6 @@ public class UserManager {
     private static int TOKEN_EXPIRATION_TIME = 1800; // seconds (30 minutes)
 
     public static int createUser(String username, String password, String email) {
-
         Session session = FactorySession.openSession();
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("username", username);
@@ -32,9 +31,9 @@ public class UserManager {
     }
 
     public static User getUser(String username) {
+        Session session = FactorySession.openSession();
         HashMap <String, Object> params = new HashMap<String, Object>();
         params.put("username", username);
-        Session session = FactorySession.openSession();
         User user = null;
         List<Object> result = session.get(User.class, params);
         if (!result.isEmpty()) {
@@ -42,6 +41,21 @@ public class UserManager {
         }
         session.close();
         return user;
+    }
+
+    public static void deleteUser(User user) {
+        Session session = FactorySession.openSession();
+        //delete tokens associated to the user
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("userId", user.getId());
+        List<Object> result = session.get(Token.class, params);
+        for (Object obj : result) {
+            Token token = (Token) obj;
+            session.delete(token);
+        }
+        //delete the user
+        session.delete(user);
+        session.close();
     }
 
     public static String login(String username, String password) {
@@ -90,5 +104,18 @@ public class UserManager {
         session.close();
         return user;
     }
+
+    public static void logout(String token) {
+        Session session = FactorySession.openSession();
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("token", token);
+        List<Object> result = session.get(Token.class, params);
+        if (!result.isEmpty()) {
+            Token t = (Token) result.get(0);
+            session.delete(t);
+        }
+        session.close();
+    }
+
 
 }
