@@ -40,17 +40,22 @@ public class ObjectHelper {
 
     public static Object getter(Object object, String property) {
         Class theClass = object.getClass();
-        Field[] fields = theClass.getDeclaredFields();
-        for (Field f: fields) {
-
-            if (f.getName().equals(property)) {
-                f.setAccessible(true);
-                try {
-                    return f.get(object);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
+//        Field[] fields = theClass.getDeclaredFields();
+//        for (Field f: fields) {
+//
+//            if (f.getName().equals(property)) {
+//                try {
+//                    return f.get(object);
+//                } catch (IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+        try {
+            Method method = theClass.getMethod("get"+property.substring(0,1).toUpperCase()+property.substring(1));
+            return method.invoke(object);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
