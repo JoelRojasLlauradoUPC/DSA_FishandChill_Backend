@@ -153,5 +153,12 @@ public class SystemManager {
         logger.info("User captured fish: username=" + user.getUsername() + ", fishSpecies=" + fish.getSpeciesName() + ", weight=" + weight);
     }
 
+    // ---------- QUESTIONS ----------
+    public static void receiveQuestion(Question q) {
+        logger.info("Question received: date=" + q.getDate()
+                + ", title=" + q.getTitle()
+                + ", sender=" + q.getSender());
+        // solo queda registrado en logs, faltaria BBDD si lo necesitamos
+    }
 
 }
