@@ -5,14 +5,10 @@ import edu.upc.dsa.managers.catalog.CatalogManager;
 import edu.upc.dsa.managers.game.GameManager;
 import edu.upc.dsa.managers.shop.ShopManager;
 import edu.upc.dsa.managers.user.UserManager;
+import edu.upc.dsa.services.dto.Question;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class SystemManager {
 

@@ -1,4 +1,4 @@
-package edu.upc.dsa.models;
+package edu.upc.dsa.services.dto;
 
 public class Question {
 
