@@ -19,7 +19,6 @@ public class SystemManagerTest {
 
     @Before
     public void setUp() {
-        this.systemManager = SystemManager.getInstance();
     }
 
     @After

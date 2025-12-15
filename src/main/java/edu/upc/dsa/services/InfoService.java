@@ -22,7 +22,7 @@ import java.util.List;
 @Path("/info")
 @Produces(MediaType.APPLICATION_JSON)
 public class InfoService {
-    final static Logger logger = Logger.getLogger(InfoService.class);
+    Logger logger = Logger.getLogger(InfoService.class);
 
     @GET
     @Path("/faqs")
@@ -134,4 +134,7 @@ public class InfoService {
         GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(videos) {};
         return Response.ok(entity).build();
     }
+
+
+
 }
