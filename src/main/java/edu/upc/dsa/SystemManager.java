@@ -7,6 +7,8 @@ import edu.upc.dsa.managers.shop.ShopManager;
 import edu.upc.dsa.managers.user.UserManager;
 import edu.upc.dsa.services.dto.Question;
 import org.apache.log4j.Logger;
+import edu.upc.dsa.managers.event.EventManager;
+import edu.upc.dsa.services.dto.EventUser;
 
 import java.util.List;
 
@@ -155,6 +157,12 @@ public class SystemManager {
                 + ", title=" + q.getTitle()
                 + ", sender=" + q.getSender());
         // solo queda registrado en logs, faltaria BBDD si lo necesitamos
+    }
+
+    // ---------- EVENTS  ----------
+    public static List<EventUser> getUsersRegisteredInEvent(String eventId) {
+        logger.info("Get users registered in event: eventId=" + eventId);
+        return EventManager.getRegisteredUsers(eventId);
     }
 
 }
