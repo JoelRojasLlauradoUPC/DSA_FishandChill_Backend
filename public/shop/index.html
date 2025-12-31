@@ -1,579 +1,613 @@
-<><!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <title>Fish & Chill Shop</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Fish & Chill Shop</title>
 
-        <style>
-            @font-face {
-                font-family: "PixelFont";
-                src: url("../font/pixel_font.ttf") format("truetype");
-                font-weight: 400;
-                font-style: normal;
-                font-display: swap;
+    <style>
+        @font-face {
+            font-family: "PixelFont";
+            src: url("../font/pixel_font.ttf") format("truetype");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --ink: #ffffff;
+            --muted: rgba(255, 255, 255, .88);
+            --stats: rgba(255, 255, 255, .82);
+            --button: #2a86c7;
+            --button-hover: #2476ad;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            margin: 0;
+            font-family: "PixelFont", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            background: radial-gradient(1200px 800px at 20% -10%, rgba(5, 25, 50, 0.6), transparent 70%),
+            radial-gradient(1200px 800px at 120% 0%, rgba(10, 40, 70, 0.6), transparent 70%),
+            #0b2239;
+            color: var(--ink);
+            overflow-x: hidden;
+        }
+
+        .bg-anim {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .bubbles span {
+            position: absolute;
+            bottom: -80px;
+            display: block;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+            animation: rise 12s linear infinite;
+        }
+
+        .bubbles span:nth-child(1) {
+            left: 5%;
+            width: 12px;
+            height: 12px;
+            animation-duration: 11s;
+        }
+
+        .bubbles span:nth-child(2) {
+            left: 15%;
+            width: 18px;
+            height: 18px;
+            animation-duration: 14s;
+        }
+
+        .bubbles span:nth-child(3) {
+            left: 22%;
+            width: 10px;
+            height: 10px;
+            animation-duration: 10s;
+        }
+
+        .bubbles span:nth-child(4) {
+            left: 30%;
+            width: 8px;
+            height: 8px;
+            animation-duration: 9s;
+        }
+
+        .bubbles span:nth-child(5) {
+            left: 38%;
+            width: 16px;
+            height: 16px;
+            animation-duration: 13s;
+        }
+
+        .bubbles span:nth-child(6) {
+            left: 45%;
+            width: 14px;
+            height: 14px;
+            animation-duration: 12s;
+        }
+
+        .bubbles span:nth-child(7) {
+            left: 50%;
+            width: 7px;
+            height: 7px;
+            animation-duration: 9s;
+        }
+
+        .bubbles span:nth-child(8) {
+            left: 58%;
+            width: 20px;
+            height: 20px;
+            animation-duration: 16s;
+        }
+
+        .bubbles span:nth-child(9) {
+            left: 63%;
+            width: 9px;
+            height: 9px;
+            animation-duration: 11s;
+        }
+
+        .bubbles span:nth-child(10) {
+            left: 70%;
+            width: 13px;
+            height: 13px;
+            animation-duration: 10s;
+        }
+
+        .bubbles span:nth-child(11) {
+            left: 75%;
+            width: 17px;
+            height: 17px;
+            animation-duration: 14s;
+        }
+
+        .bubbles span:nth-child(12) {
+            left: 80%;
+            width: 11px;
+            height: 11px;
+            animation-duration: 12s;
+        }
+
+        .bubbles span:nth-child(13) {
+            left: 85%;
+            width: 15px;
+            height: 15px;
+            animation-duration: 15s;
+        }
+
+        .bubbles span:nth-child(14) {
+            left: 88%;
+            width: 7px;
+            height: 7px;
+            animation-duration: 9s;
+        }
+
+        .bubbles span:nth-child(15) {
+            left: 92%;
+            width: 18px;
+            height: 18px;
+            animation-duration: 16s;
+        }
+
+        .bubbles span:nth-child(16) {
+            left: 96%;
+            width: 10px;
+            height: 10px;
+            animation-duration: 8s;
+        }
+
+        .bubbles span:nth-child(17) {
+            left: 50%;
+            width: 22px;
+            height: 22px;
+            animation-duration: 18s;
+        }
+
+        .bubbles span:nth-child(18) {
+            left: 32%;
+            width: 6px;
+            height: 6px;
+            animation-duration: 7s;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0) scale(.9);
+                opacity: 0;
             }
-
-            :root {
-                --ink: #ffffff;
-                --muted: rgba(255, 255, 255, .88);
-                --stats: rgba(255, 255, 255, .82);
-                --button: #2a86c7;
-                --button-hover: #2476ad;
+            10%, 80% {
+                opacity: 1;
             }
-
-            * {
-                box-sizing: border-box;
-                user-select: none;
+            100% {
+                transform: translateY(-120vh) scale(1.2);
+                opacity: 0;
             }
+        }
 
-            body {
-                margin: 0;
-                font-family: "PixelFont", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-                background: radial-gradient(1200px 800px at 20% -10%, rgba(5, 25, 50, 0.6), transparent 70%),
-                radial-gradient(1200px 800px at 120% 0%, rgba(10, 40, 70, 0.6), transparent 70%),
-                #0b2239;
-                color: var(--ink);
-                overflow-x: hidden;
+        .fishes .fish {
+            position: absolute;
+            width: 60px;
+            height: 28px;
+            border-radius: 999px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        .fish::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 20px;
+            border-radius: 4px;
+            left: var(--tail-x);
+            background: var(--tail-color);
+        }
+
+        .fish::after {
+            content: "";
+            position: absolute;
+            top: 9px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 2px 0 0 #000 inset;
+            left: var(--eye-x);
+        }
+
+        @keyframes swim-right {
+            0% {
+                transform: translateX(-120px);
             }
-
-            .bg-anim {
-                position: fixed;
-                inset: 0;
-                overflow: hidden;
-                pointer-events: none;
-                z-index: -1;
+            100% {
+                transform: translateX(110vw);
             }
+        }
 
-            .bubbles span {
-                position: absolute;
-                bottom: -80px;
-                display: block;
-                border-radius: 50%;
-                border: 2px solid rgba(255, 255, 255, 0.6);
-                box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
-                animation: rise 12s linear infinite;
+        @keyframes swim-left {
+            0% {
+                transform: translateX(110vw);
             }
-
-            .bubbles span:nth-child(1) {
-                left: 5%;
-                width: 12px;
-                height: 12px;
-                animation-duration: 11s;
+            100% {
+                transform: translateX(-120px);
             }
+        }
 
-            .bubbles span:nth-child(2) {
-                left: 15%;
-                width: 18px;
-                height: 18px;
-                animation-duration: 14s;
+        header {
+            background: rgba(0, 0, 0, 0.18);
+            backdrop-filter: blur(6px);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            color: #ffffff;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .brand img {
+            width: 180px;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .55));
+            image-rendering: pixelated;
+        }
+
+        .userbox {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+            margin-right: 6px; /* moved a bit left */
+        }
+
+        #user-info {
+            background: rgba(0, 0, 0, 0.22);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, .16);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
+            white-space: nowrap;
+        }
+
+        #logoutBtn {
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, .16);
+            background: rgba(0, 0, 0, 0.22);
+            color: #ffffff;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: inherit;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
+            transition: transform .12s, background .12s;
+        }
+
+        #logoutBtn:hover {
+            background: rgba(255, 255, 255, .12);
+            transform: translateY(-1px);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .profile-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 84px;
+            height: 84px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, .16);
+            background: rgba(0, 0, 0, 0.22);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .profile-link img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            image-rendering: pixelated;
+        }
+
+        main {
+            max-width: 980px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        #rods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .rod {
+            display: flex;
+            gap: 18px;
+            background: url("../webResources/pixel_wood_bg.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, .35), 0 0 0 1px rgba(255, 255, 255, .10) inset;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, .18);
+            transition: transform .15s, box-shadow .15s;
+            color: #ffffff;
+        }
+
+        .rod:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, .45), 0 0 0 1px rgba(255, 255, 255, .12) inset;
+        }
+
+        .rod img {
+            width: 84px;
+            height: 84px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, .35);
+        }
+
+        .rod-info header {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            background: transparent;
+            padding: 0;
+            position: static;
+            backdrop-filter: none;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .55);
+        }
+
+        .stats {
+            font-size: 12px;
+            color: var(--stats);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
+        }
+
+        .price {
+            font-weight: 800;
+            margin-top: 8px;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .55);
+        }
+
+        button.buy {
+            margin-top: 10px;
+            padding: 10px 16px;
+            background: var(--button);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, .16);
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .15s;
+            font-family: inherit;
+        }
+
+        button.buy:hover {
+            background: var(--button-hover);
+            transform: scale(1.03);
+        }
+
+        .float-msg {
+            position: absolute;
+            left: 50%;
+            top: -5px;
+            transform: translateX(-50%);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            background: rgba(0, 0, 0, 0.55);
+            animation: floatUp 1.2s ease forwards;
+            pointer-events: none;
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+            z-index: 20;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, .18);
+        }
+
+        .float-success {
+            border-color: rgba(42, 157, 111, 0.55);
+        }
+
+        .float-error {
+            border-color: rgba(200, 70, 70, 0.55);
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, 10px) scale(0.9);
             }
-
-            .bubbles span:nth-child(3) {
-                left: 22%;
-                width: 10px;
-                height: 10px;
-                animation-duration: 10s;
+            10% {
+                opacity: 1;
             }
-
-            .bubbles span:nth-child(4) {
-                left: 30%;
-                width: 8px;
-                height: 8px;
-                animation-duration: 9s;
+            85% {
+                opacity: 1;
+                transform: translate(-50%, -20px) scale(1);
             }
-
-            .bubbles span:nth-child(5) {
-                left: 38%;
-                width: 16px;
-                height: 16px;
-                animation-duration: 13s;
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -40px);
             }
+        }
+    </style>
+</head>
 
-            .bubbles span:nth-child(6) {
-                left: 45%;
-                width: 14px;
-                height: 14px;
-                animation-duration: 12s;
-            }
+<body>
 
-            .bubbles span:nth-child(7) {
-                left: 50%;
-                width: 7px;
-                height: 7px;
-                animation-duration: 9s;
-            }
-
-            .bubbles span:nth-child(8) {
-                left: 58%;
-                width: 20px;
-                height: 20px;
-                animation-duration: 16s;
-            }
-
-            .bubbles span:nth-child(9) {
-                left: 63%;
-                width: 9px;
-                height: 9px;
-                animation-duration: 11s;
-            }
-
-            .bubbles span:nth-child(10) {
-                left: 70%;
-                width: 13px;
-                height: 13px;
-                animation-duration: 10s;
-            }
-
-            .bubbles span:nth-child(11) {
-                left: 75%;
-                width: 17px;
-                height: 17px;
-                animation-duration: 14s;
-            }
-
-            .bubbles span:nth-child(12) {
-                left: 80%;
-                width: 11px;
-                height: 11px;
-                animation-duration: 12s;
-            }
-
-            .bubbles span:nth-child(13) {
-                left: 85%;
-                width: 15px;
-                height: 15px;
-                animation-duration: 15s;
-            }
-
-            .bubbles span:nth-child(14) {
-                left: 88%;
-                width: 7px;
-                height: 7px;
-                animation-duration: 9s;
-            }
-
-            .bubbles span:nth-child(15) {
-                left: 92%;
-                width: 18px;
-                height: 18px;
-                animation-duration: 16s;
-            }
-
-            .bubbles span:nth-child(16) {
-                left: 96%;
-                width: 10px;
-                height: 10px;
-                animation-duration: 8s;
-            }
-
-            .bubbles span:nth-child(17) {
-                left: 50%;
-                width: 22px;
-                height: 22px;
-                animation-duration: 18s;
-            }
-
-            .bubbles span:nth-child(18) {
-                left: 32%;
-                width: 6px;
-                height: 6px;
-                animation-duration: 7s;
-            }
-
-            @keyframes rise {
-                0% {
-                    transform: translateY(0) scale(.9);
-                    opacity: 0;
-                }
-                10%, 80% {
-                    opacity: 1;
-                }
-                100% {
-                    transform: translateY(-120vh) scale(1.2);
-                    opacity: 0;
-                }
-            }
-
-            .fishes .fish {
-                position: absolute;
-                width: 60px;
-                height: 28px;
-                border-radius: 999px;
-                box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
-                animation-timing-function: linear;
-                animation-iteration-count: infinite;
-            }
-
-            .fish::before {
-                content: "";
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 18px;
-                height: 20px;
-                border-radius: 4px;
-                left: var(--tail-x);
-                background: var(--tail-color);
-            }
-
-            .fish::after {
-                content: "";
-                position: absolute;
-                top: 9px;
-                width: 6px;
-                height: 6px;
-                border-radius: 50%;
-                background: white;
-                box-shadow: 2px 0 0 #000 inset;
-                left: var(--eye-x);
-            }
-
-            @keyframes swim-right {
-                0% {
-                    transform: translateX(-120px);
-                }
-                100% {
-                    transform: translateX(110vw);
-                }
-            }
-
-            @keyframes swim-left {
-                0% {
-                    transform: translateX(110vw);
-                }
-                100% {
-                    transform: translateX(-120px);
-                }
-            }
-
-            header {
-                background: rgba(0, 0, 0, 0.18);
-                backdrop-filter: blur(6px);
-                padding: 12px 16px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                position: sticky;
-                top: 0;
-                z-index: 10;
-                color: #ffffff;
-            }
-
-            .brand {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                min-width: 0;
-            }
-
-            .brand img {
-                width: 180px;
-                height: auto;
-                display: block;
-                filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .55));
-                image-rendering: pixelated;
-            }
-
-            .userbox {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-                gap: 8px;
-            }
-
-            #user-info {
-                background: rgba(0, 0, 0, 0.22);
-                padding: 8px 12px;
-                border-radius: 12px;
-                font-weight: 700;
-                color: #ffffff;
-                border: 1px solid rgba(255, 255, 255, .16);
-                text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
-                white-space: nowrap;
-            }
-
-            #logoutBtn {
-                padding: 8px 12px;
-                border-radius: 12px;
-                border: 1px solid rgba(255, 255, 255, .16);
-                background: rgba(0, 0, 0, 0.22);
-                color: #ffffff;
-                font-weight: 800;
-                cursor: pointer;
-                font-family: inherit;
-                text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
-                transition: transform .12s, background .12s;
-            }
-
-            #logoutBtn:hover {
-                background: rgba(255, 255, 255, .12);
-                transform: translateY(-1px);
-            }
-
-            main {
-                max-width: 980px;
-                margin: 20px auto;
-                padding: 0 20px;
-            }
-
-            #rods {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 18px;
-            }
-
-            .rod {
-                display: flex;
-                gap: 18px;
-                background: url("../webResources/pixel_wood_bg.png");
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                border-radius: 16px;
-                padding: 16px;
-                box-shadow: 0 10px 28px rgba(0, 0, 0, .35), 0 0 0 1px rgba(255, 255, 255, .10) inset;
-                position: relative;
-                border: 1px solid rgba(255, 255, 255, .18);
-                transition: transform .15s, box-shadow .15s;
-                color: #ffffff;
-            }
-
-            .rod:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 16px 36px rgba(0, 0, 0, .45), 0 0 0 1px rgba(255, 255, 255, .12) inset;
-            }
-
-            .rod img {
-                width: 84px;
-                height: 84px;
-                border-radius: 12px;
-                object-fit: cover;
-                box-shadow: 0 10px 18px rgba(0, 0, 0, .35);
-            }
-
-            .rod-info header {
-                font-size: 18px;
-                font-weight: 800;
-                color: #ffffff;
-                background: transparent;
-                padding: 0;
-                position: static;
-                backdrop-filter: none;
-                text-shadow: 0 2px 10px rgba(0, 0, 0, .55);
-            }
-
-            .stats {
-                font-size: 12px;
-                color: var(--stats);
-                text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
-            }
-
-            .price {
-                font-weight: 800;
-                margin-top: 8px;
-                color: #ffffff;
-                text-shadow: 0 2px 10px rgba(0, 0, 0, .55);
-            }
-
-            button.buy {
-                margin-top: 10px;
-                padding: 10px 16px;
-                background: var(--button);
-                color: white;
-                border: 1px solid rgba(255, 255, 255, .16);
-                border-radius: 10px;
-                font-weight: 800;
-                cursor: pointer;
-                transition: .15s;
-                font-family: inherit;
-            }
-
-            button.buy:hover {
-                background: var(--button-hover);
-                transform: scale(1.03);
-            }
-
-            .float-msg {
-                position: absolute;
-                left: 50%;
-                top: -5px;
-                transform: translateX(-50%);
-                padding: 10px 16px;
-                border-radius: 10px;
-                font-weight: 800;
-                background: rgba(0, 0, 0, 0.55);
-                animation: floatUp 1.2s ease forwards;
-                pointer-events: none;
-                box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
-                z-index: 20;
-                color: #ffffff;
-                border: 1px solid rgba(255, 255, 255, .18);
-            }
-
-            .float-success {
-                border-color: rgba(42, 157, 111, 0.55);
-            }
-
-            .float-error {
-                border-color: rgba(200, 70, 70, 0.55);
-            }
-
-            @keyframes floatUp {
-                0% {
-                    opacity: 0;
-                    transform: translate(-50%, 10px) scale(0.9);
-                }
-                10% {
-                    opacity: 1;
-                }
-                85% {
-                    opacity: 1;
-                    transform: translate(-50%, -20px) scale(1);
-                }
-                100% {
-                    opacity: 0;
-                    transform: translate(-50%, -40px);
-                }
-            }
-        </style>
-    </head>
-
-    <body>
-
-    <div class="bg-anim">
-        <div class="bubbles">
-            <span></span><span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
-
-        <div class="fishes">
-            <div class="fish f1"></div>
-            <div class="fish f2"></div>
-            <div class="fish f3"></div>
-            <div class="fish f4"></div>
-            <div class="fish f5"></div>
-            <div class="fish f6"></div>
-        </div>
+<div class="bg-anim">
+    <div class="bubbles">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
     </div>
 
-    <header>
-        <div class="brand">
-            <img src="../webResources/mainlogo.png" alt="Fish & Chill">
-        </div>
+    <div class="fishes">
+        <div class="fish f1"></div>
+        <div class="fish f2"></div>
+        <div class="fish f3"></div>
+        <div class="fish f4"></div>
+        <div class="fish f5"></div>
+        <div class="fish f6"></div>
+    </div>
+</div>
+
+<header>
+    <div class="brand">
+        <img src="../webResources/mainlogo.png" alt="Fish & Chill">
+    </div>
+
+    <div class="header-right">
         <div class="userbox">
             <p id="user-info">Loading...</p>
             <button id="logoutBtn" type="button">Log Out</button>
         </div>
-    </header>
 
-    <main>
-        <div id="rods"></div>
-    </main>
+        <a class="profile-link" href="../myprofile">
+            <img src="../webResources/userprofile.png" alt="My profile">
+        </a>
+    </div>
+</header>
 
-    <script>
-        function randomColor() {
-            const colors = [
-                ["#ff6b6b", "#ffb347"],
-                ["#6b8cff", "#4661ff"],
-                ["#6bff95", "#20c659"],
-                ["#ff6bf3", "#d446ff"],
-                ["#ffd36b", "#ffb200"],
-                ["#6bfff1", "#2ed8cc"],
-            ];
-            return colors[Math.floor(Math.random() * colors.length)];
+<main>
+    <div id="rods"></div>
+</main>
+
+<script>
+    function randomColor() {
+        const colors = [
+            ["#ff6b6b", "#ffb347"],
+            ["#6b8cff", "#4661ff"],
+            ["#6bff95", "#20c659"],
+            ["#ff6bf3", "#d446ff"],
+            ["#ffd36b", "#ffb200"],
+            ["#6bfff1", "#2ed8cc"],
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function randomFishBehavior(fish, index) {
+        const top = 10 + index * 13 + Math.random() * 10;
+        fish.style.top = top + "%";
+
+        const duration = 18 + Math.random() * 10;
+        fish.style.animationDuration = duration + "s";
+
+        const goLeft = Math.random() < 0.5;
+
+        if (goLeft) {
+            fish.style.animationName = "swim-left";
+            fish.style.setProperty("--tail-x", "calc(100% - 4px)");
+            fish.style.setProperty("--eye-x", "8px");
+        } else {
+            fish.style.animationName = "swim-right";
+            fish.style.setProperty("--tail-x", "-18px");
+            fish.style.setProperty("--eye-x", "calc(100% - 16px)");
         }
 
-        function randomFishBehavior(fish, index) {
-            const top = 10 + index * 13 + Math.random() * 10;
-            fish.style.top = top + "%";
+        const [c1, c2] = randomColor();
+        fish.style.background = `linear-gradient(90deg, ${c1}, ${c2})`;
+        fish.style.setProperty("--tail-color", c1);
+    }
 
-            const duration = 18 + Math.random() * 10;
-            fish.style.animationDuration = duration + "s";
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".fish").forEach((fish, i) => {
+            randomFishBehavior(fish, i);
+        });
+    });
 
-            const goLeft = Math.random() < 0.5;
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('authToken');
+        window.location.href = '../index.html';
+    });
 
-            if (goLeft) {
-                fish.style.animationName = "swim-left";
-                fish.style.setProperty("--tail-x", "calc(100% - 4px)");
-                fish.style.setProperty("--eye-x", "8px");
-            } else {
-                fish.style.animationName = "swim-right";
-                fish.style.setProperty("--tail-x", "-18px");
-                fish.style.setProperty("--eye-x", "calc(100% - 16px)");
-            }
+    (function () {
+        const info = document.getElementById('user-info');
+        const rodsContainer = document.getElementById('rods');
+        const token = localStorage.getItem('authToken');
 
-            const [c1, c2] = randomColor();
-            fish.style.background = `linear-gradient(90deg, ${c1}, ${c2})`;
-            fish.style.setProperty("--tail-color", c1);
+        async function init() {
+            await loadMe();
+            await initShop();
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll(".fish").forEach((fish, i) => {
-                randomFishBehavior(fish, i);
+        if (!token) {
+            info.textContent = 'No session — Redirecting...';
+            setTimeout(() => window.location.href = '../index.html', 1200);
+        } else {
+            init();
+        }
+
+        async function loadMe() {
+            const res = await fetch('/api/me', {
+                headers: {'Authorization': token}
             });
-        });
 
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('authToken');
-            window.location.href = '../index.html';
-        });
+            if (!res.ok) return;
 
-        (function () {
-            const info = document.getElementById('user-info');
-            const rodsContainer = document.getElementById('rods');
-            const token = localStorage.getItem('authToken');
+            const user = await res.json();
+            const name = user.username;
+            const coins = user.coins;
 
-            async function init() {
-                await loadMe();
-                await initShop();
-            }
+            info.textContent = `${name} | 💰 ${coins} coins`;
+        }
 
-            if (!token) {
-                info.textContent = 'No session — Redirecting...';
-                setTimeout(() => window.location.href = '../index.html', 1200);
-            } else {
-                init();
-            }
+        async function initShop() {
+            await loadRods();
+        }
 
-            async function loadMe() {
-                const res = await fetch('/api/me', {
-                    headers: {'Authorization': token}
-                });
+        async function loadRods() {
+            const res = await fetch('/api/catalog/fishing_rods', {
+                headers: {'Authorization': token}
+            });
 
-                if (!res.ok) return;
+            if (!res.ok) return;
 
-                const user = await res.json();
-                const name = user.username;
-                const coins = user.coins;
+            const rods = await res.json();
+            renderRods(rods);
+        }
 
-                info.textContent = `${name} | 💰 ${coins} coins`;
-            }
+        function renderRods(rods) {
+            rodsContainer.innerHTML = '';
+            rods.forEach(rod => {
+                const el = document.createElement('div');
+                el.className = 'rod';
 
-            async function initShop() {
-                await loadRods();
-            }
+                const imgSrc = rod.url;
 
-            async function loadRods() {
-                const res = await fetch('/api/catalog/fishing_rods', {
-                    headers: {'Authorization': token}
-                });
-
-                if (!res.ok) return;
-
-                const rods = await res.json();
-                renderRods(rods);
-            }
-
-            function renderRods(rods) {
-                rodsContainer.innerHTML = '';
-                rods.forEach(rod => {
-                    const el = document.createElement('div');
-                    el.className = 'rod';
-
-                    const imgSrc = rod.url;
-
-                    el.innerHTML = `
+                el.innerHTML = `
                   <img src="${imgSrc}" alt="${rod.name}">
                   <div class="rod-info">
                     <header>${rod.name}</header>
@@ -586,44 +620,43 @@
                   </div>
                 `;
 
-                    el.querySelector('.buy').addEventListener('click', () =>
-                        buyFishingRod(rod.id, rod.name, rod.price, el)
-                    );
+                el.querySelector('.buy').addEventListener('click', () =>
+                    buyFishingRod(rod.id, rod.name, rod.price, el)
+                );
 
-                    rodsContainer.appendChild(el);
-                });
+                rodsContainer.appendChild(el);
+            });
+        }
+
+        function showFloatMsg(parentEl, text, ok = true) {
+            parentEl.style.position = "relative";
+
+            const msg = document.createElement("div");
+            msg.className = "float-msg " + (ok ? "float-success" : "float-error");
+            msg.textContent = text;
+
+            parentEl.appendChild(msg);
+            setTimeout(() => msg.remove(), 1300);
+        }
+
+        async function buyFishingRod(id, name, price, parentEl) {
+            const res = await fetch(`/api/shop/fishing_rods/${encodeURIComponent(name)}/buy`, {
+                method: 'POST',
+                headers: {'Authorization': token}
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                showFloatMsg(parentEl, "❌ " + text, false);
+                return;
             }
 
-            function showFloatMsg(parentEl, text, ok = true) {
-                parentEl.style.position = "relative";
+            showFloatMsg(parentEl, `✅ You bought ${name} for ${price} coins!`, true);
+            await loadMe();
+        }
 
-                const msg = document.createElement("div");
-                msg.className = "float-msg " + (ok ? "float-success" : "float-error");
-                msg.textContent = text;
+    })();
+</script>
 
-                parentEl.appendChild(msg);
-                setTimeout(() => msg.remove(), 1300);
-            }
-
-            async function buyFishingRod(id, name, price, parentEl) {
-                const res = await fetch(`/api/shop/fishing_rods/${encodeURIComponent(name)}/buy`, {
-                    method: 'POST',
-                    headers: {'Authorization': token}
-                });
-
-                if (!res.ok) {
-                    const text = await res.text();
-                    showFloatMsg(parentEl, "❌ " + text, false);
-                    return;
-                }
-
-                showFloatMsg(parentEl, `✅ You bought ${name} for ${price} coins!`, true);
-                await loadMe();
-            }
-
-        })();
-    </script>
-
-    </body>
-    </html>
-</>
+</body>
+</html>
