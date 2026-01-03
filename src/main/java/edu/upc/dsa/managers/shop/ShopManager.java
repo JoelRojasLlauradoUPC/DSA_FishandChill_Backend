@@ -52,7 +52,7 @@ public class ShopManager {
         return 1; // fishing rod bought successfully
     }
 
-    public static void sellCapturedFish(User user, int fishId, float weight, Timestamp captureTime, int price) {
+    public static int sellCapturedFish(User user, int fishId, Timestamp captureTime, int price) {
         Session session = FactorySession.openSession();
         // add coins to user
         user.setCoins(user.getCoins() + price);
@@ -61,14 +61,17 @@ public class ShopManager {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("userId", user.getId());
         params.put("fishId", fishId);
-        params.put("weight", weight);
         params.put("captureTime", captureTime);
         List<Object> result = session.get(CapturedFish.class, params);
         if (!result.isEmpty()) {
             CapturedFish cf = (CapturedFish) result.get(0);
+            if (result.size() < 1) {
+                return -1; // captured fish not found
+            }
             session.delete(cf);
         }
         session.close();
+        return 1; // captured fish sold successfully
     }
 
     public static int deleteBoughtFishingRods(User user) {

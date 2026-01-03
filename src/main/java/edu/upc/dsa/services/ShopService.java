@@ -51,7 +51,7 @@ public class ShopService {
     public Response sellCapturedFish(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth, SellCapturedFish req) {
         User user = SystemManager.authenticate(auth);
         if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        SystemManager.sellCapturedFish(user, req.getFishSpeciesName(), req.getWeight(), req.getCaptureTime(), req.getPrice());
+        SystemManager.sellCapturedFish(user, req.getFishSpeciesName(), req.getCaptureTime(), req.getPrice());
         return Response.status(Response.Status.OK).build();
     }
 

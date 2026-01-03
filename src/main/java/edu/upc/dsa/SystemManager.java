@@ -143,11 +143,15 @@ public class SystemManager {
         return 1; // rod bought successfully
     }
 
-    public static void sellCapturedFish(User user, String fishSpeciesName, float weight, Timestamp captureTime, int price) {
+    public static void sellCapturedFish(User user, String fishSpeciesName, Timestamp captureTime, int price) {
         int fishId = getFish(fishSpeciesName).getId();
-        ShopManager.sellCapturedFish( user, fishId, weight, captureTime, price);
+        int result = ShopManager.sellCapturedFish( user, fishId, captureTime, price);
 
-        logger.info("User sold captured fish: username=" + user.getUsername() + ", fishSpecies=" + fishSpeciesName + ", weight=" + weight);
+        if (result == -1) {
+            logger.warn("Captured fish not found: username=" + user.getUsername() + ", fishSpecies=" + fishSpeciesName + ", captureTime=" + captureTime);
+        } else {
+            logger.info("User sold captured fish: username=" + user.getUsername() + ", fishSpecies=" + fishSpeciesName + ", captureTime=" + captureTime + ", price=" + price);
+        }
 
     }
 

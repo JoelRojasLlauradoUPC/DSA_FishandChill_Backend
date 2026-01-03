@@ -4,16 +4,14 @@ import java.sql.Timestamp;
 
 public class SellCapturedFish {
     private String fishSpeciesName;
-    private float weight;
     private Timestamp captureTime;
     private int price;
 
     public SellCapturedFish() {
     }
 
-    public SellCapturedFish(String fishSpeciesName, float weight, Timestamp captureTime, int price) {
+    public SellCapturedFish(String fishSpeciesName, Timestamp captureTime, int price) {
         this.fishSpeciesName = fishSpeciesName;
-        this.weight = weight;
         this.captureTime = captureTime;
         this.price = price;
     }
@@ -24,14 +22,6 @@ public class SellCapturedFish {
 
     public void setFishSpeciesName(String fishSpeciesName) {
         this.fishSpeciesName = fishSpeciesName;
-    }
-
-    public float getWeight() {
-        return weight;
-    }
-
-    public void setWeight(float weight) {
-        this.weight = weight;
     }
 
     public Timestamp getCaptureTime() {
