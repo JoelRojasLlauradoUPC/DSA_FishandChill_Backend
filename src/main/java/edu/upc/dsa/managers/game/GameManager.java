@@ -40,7 +40,6 @@ public class GameManager {
     }
 
     public static void captureFish(User user, Fish fish, double weight) {
-
         Timestamp captureTime = new Timestamp(System.currentTimeMillis());
         CapturedFish capturedFish = new CapturedFish( user.getId(), fish.getId(), weight, captureTime);
         Session session = FactorySession.openSession();

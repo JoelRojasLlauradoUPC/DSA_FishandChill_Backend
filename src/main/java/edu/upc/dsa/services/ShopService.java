@@ -3,6 +3,7 @@ package edu.upc.dsa.services;
 import edu.upc.dsa.SystemManager;
 import edu.upc.dsa.models.FishingRod;
 import edu.upc.dsa.models.User;
+import edu.upc.dsa.services.dto.SellCapturedFish;
 import io.swagger.annotations.*;
 
 import javax.ws.rs.*;
@@ -38,4 +39,20 @@ public class ShopService {
         else if (res == -2) return Response.status(Response.Status.CONFLICT).entity("Not enough coins").build();
         return Response.status(Response.Status.OK).build();
     }
+
+    @POST
+    @Path("/captured_fishes/sell")
+    @ApiOperation(value = "Sell a captured fish")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Captured fish sold"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Captured fish not found")
+    })
+    public Response sellCapturedFish(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth, SellCapturedFish req) {
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        SystemManager.sellCapturedFish(user, req.getFishSpeciesName(), req.getWeight(), req.getCaptureTime(), req.getPrice());
+        return Response.status(Response.Status.OK).build();
+    }
+
 }

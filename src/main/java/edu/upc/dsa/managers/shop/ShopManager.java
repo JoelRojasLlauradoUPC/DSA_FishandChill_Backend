@@ -1,9 +1,11 @@
 package edu.upc.dsa.managers.shop;
 
 import edu.upc.dsa.managers.catalog.CatalogManager;
+import edu.upc.dsa.managers.game.CapturedFish;
 import edu.upc.dsa.models.FishingRod;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.orm.*;
+import java.sql.Timestamp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +50,25 @@ public class ShopManager {
         session.update(user);
         session.close();
         return 1; // fishing rod bought successfully
+    }
+
+    public static void sellCapturedFish(User user, int fishId, float weight, Timestamp captureTime, int price) {
+        Session session = FactorySession.openSession();
+        // add coins to user
+        user.setCoins(user.getCoins() + price);
+        session.update(user);
+        // delete captured fish
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("userId", user.getId());
+        params.put("fishId", fishId);
+        params.put("weight", weight);
+        params.put("captureTime", captureTime);
+        List<Object> result = session.get(CapturedFish.class, params);
+        if (!result.isEmpty()) {
+            CapturedFish cf = (CapturedFish) result.get(0);
+            session.delete(cf);
+        }
+        session.close();
     }
 
     public static int deleteBoughtFishingRods(User user) {

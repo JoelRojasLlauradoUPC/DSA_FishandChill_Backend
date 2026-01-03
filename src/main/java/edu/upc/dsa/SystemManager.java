@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import edu.upc.dsa.managers.event.EventManager;
 import edu.upc.dsa.services.dto.EventUser;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class SystemManager {
@@ -140,6 +141,14 @@ public class SystemManager {
 
         logger.info("User bought fishing rod: username=" + user.getUsername() + ", rodName=" + fishingRod.getName()+", userCoins = "+user.getCoins());
         return 1; // rod bought successfully
+    }
+
+    public static void sellCapturedFish(User user, String fishSpeciesName, float weight, Timestamp captureTime, int price) {
+        int fishId = getFish(fishSpeciesName).getId();
+        ShopManager.sellCapturedFish( user, fishId, weight, captureTime, price);
+
+        logger.info("User sold captured fish: username=" + user.getUsername() + ", fishSpecies=" + fishSpeciesName + ", weight=" + weight);
+
     }
 
 
