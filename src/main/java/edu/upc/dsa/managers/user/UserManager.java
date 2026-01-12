@@ -1,5 +1,7 @@
 package edu.upc.dsa.managers.user;
 
+import edu.upc.dsa.managers.shop.BoughtFishingRod;
+import edu.upc.dsa.models.FishingRod;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.orm.*;
 
@@ -25,7 +27,11 @@ public class UserManager {
         if (!session.get(User.class, params).isEmpty()) return -2;
 
         User u = new User(username, password, email);
+        //fishing rod default id = 1
         session.save(u);
+        u = (User) session.get(User.class, params).get(0);
+        BoughtFishingRod boughtFishingRod = new BoughtFishingRod(u.getId(), 1);
+        session.save(boughtFishingRod);
         session.close();
         return 1;
     }
@@ -39,7 +45,6 @@ public class UserManager {
         if (!result.isEmpty()) {
             user = (User) result.get(0);
         }
-        session.close();
         return user;
     }
 

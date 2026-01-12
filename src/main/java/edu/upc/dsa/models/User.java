@@ -10,6 +10,7 @@ public class User {
     private String password;
     private String email;
     private int coins;
+    private int equippedFishingRodId;
 
     public User() {
     }
@@ -20,6 +21,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.coins = 1000;
+        this.equippedFishingRodId = 1; // Default fishing rod
     }
 
     public int getId() { return id;   }
@@ -56,5 +58,13 @@ public class User {
 
     public void setCoins(int coins) {
         this.coins = coins;
+    }
+
+    public int getEquippedFishingRodId() {
+        return equippedFishingRodId;
+    }
+
+    public void setEquippedFishingRodId(int equippedFishingRodId) {
+        this.equippedFishingRodId = equippedFishingRodId;
     }
 }

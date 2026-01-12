@@ -27,13 +27,15 @@ public class MeService {
     @GET
     @ApiOperation(value = "Get my profile")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK", response = User.class),
+            @ApiResponse(code = 200, message = "OK", response = edu.upc.dsa.services.dto.User.class) ,
             @ApiResponse(code = 401, message = "Unauthorized")
     })
     public Response me(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
         User u = SystemManager.authenticate(auth);
-        if (u == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        return Response.ok(u).build();
+        edu.upc.dsa.services.dto.User user = SystemManager.getUser(u.getUsername());
+
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        return Response.ok(user).build();
     }
 
     @GET

@@ -41,6 +41,26 @@ public class ShopService {
     }
 
     @POST
+    @Path("/fishing_rods/{fishing_rod_name}/equip")
+    @ApiOperation(value = "Equip a fishing rod")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Fishing rod equipped"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Fishing rod not found"),
+            @ApiResponse(code = 409, message = "Fishing rod not owned")
+    })
+    public Response equipFishingRod(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth,
+                                   @PathParam("fishing_rod_name") String fishingRodName) {
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        FishingRod fishingRod = SystemManager.getFishingRod(fishingRodName);
+        if (fishingRod == null) return Response.status(Response.Status.NOT_FOUND).entity("Fishing rod not found").build();
+        int res = SystemManager.equipFishingRod(user, fishingRod);
+        if (res == -1) return Response.status(Response.Status.CONFLICT).entity("Fishing rod not owned").build();
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @POST
     @Path("/captured_fishes/sell")
     @ApiOperation(value = "Sell a captured fish")
     @ApiResponses({

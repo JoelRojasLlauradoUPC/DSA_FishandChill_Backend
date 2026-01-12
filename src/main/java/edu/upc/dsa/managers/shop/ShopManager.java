@@ -52,6 +52,14 @@ public class ShopManager {
         return 1; // fishing rod bought successfully
     }
 
+    public static int equipFishingRod(User user, FishingRod fishingRod) {
+        user.setEquippedFishingRodId(fishingRod.getId());
+        Session session = FactorySession.openSession();
+        session.update(user);
+        session.close();
+        return 1; // fishing rod equipped successfully
+    }
+
     public static int sellCapturedFish(User user, int fishId, Timestamp captureTime, int price) {
         Session session = FactorySession.openSession();
         // add coins to user

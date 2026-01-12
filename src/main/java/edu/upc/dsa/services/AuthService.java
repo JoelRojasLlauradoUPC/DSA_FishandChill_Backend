@@ -40,7 +40,7 @@ public class AuthService {
         int res = SystemManager.createUser(username, password, email);
         if (res == -1) return Response.status(Response.Status.CONFLICT).entity("Username already exists").build();
         else if (res == -2) return Response.status(Response.Status.CONFLICT).entity("Email already used").build();
-        User u = SystemManager.getUser(username);
+        edu.upc.dsa.services.dto.User u = SystemManager.getUser(username);
         return Response.status(Response.Status.CREATED).entity(u).build();
     }
 

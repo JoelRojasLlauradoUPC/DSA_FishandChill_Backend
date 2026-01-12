@@ -43,6 +43,20 @@ public class CatalogManager {
         return  fishingRod;
     }
 
+    public static FishingRod getFishingRod(int fishingRodId) {
+        Session session = FactorySession.openSession();
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("id", fishingRodId);
+        List<Object> result = session.get(FishingRod.class, params);
+        session.close();
+        FishingRod fishingRod = null;
+        if (!result.isEmpty()) {
+            fishingRod = (FishingRod) result.get(0);
+        }
+        session.close();
+        return fishingRod;
+    }
+
     public static List<FishingRod> getAllFishingRods() {
         Session session = FactorySession.openSession();
         HashMap<String, Object> params = new HashMap<String, Object>();

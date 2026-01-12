@@ -35,9 +35,17 @@ public class SystemManager {
         return res;
     }
 
-    public static User getUser(String username) {
+    public static edu.upc.dsa.services.dto.User getUser(String username) {
         logger.info("getUser: username=" + username);
-        return UserManager.getUser(username);
+        User user = UserManager.getUser(username);
+        FishingRod fishingRod = CatalogManager.getFishingRod(user.getEquippedFishingRodId());
+        edu.upc.dsa.services.dto.User dtoUser = new edu.upc.dsa.services.dto.User(
+                user.getUsername(),
+                user.getEmail(),
+                user.getCoins(),
+                fishingRod != null ? fishingRod.getName() : null
+        );
+        return dtoUser;
     }
 
     public static void deleteUser(User user) {
@@ -141,6 +149,18 @@ public class SystemManager {
 
         logger.info("User bought fishing rod: username=" + user.getUsername() + ", rodName=" + fishingRod.getName()+", userCoins = "+user.getCoins());
         return 1; // rod bought successfully
+    }
+
+    public static int equipFishingRod(User user, FishingRod fishingRod) {
+        List<FishingRod> ownedFishingRods = getOwnedFishingRods(user);
+        boolean ownsFishingRod = ownedFishingRods.contains(fishingRod);
+        if (!ownsFishingRod) {
+            logger.warn("Fishing not owned: " + fishingRod.getName());
+            return -1;
+        }
+        int res = ShopManager.equipFishingRod(user, fishingRod);
+        logger.info("User equipped fishing rod: username=" + user.getUsername() + ", rodName=" + fishingRod.getName());
+        return res; // rod equipped successfully
     }
 
     public static void sellCapturedFish(User user, String fishSpeciesName, Timestamp captureTime, int price) {
