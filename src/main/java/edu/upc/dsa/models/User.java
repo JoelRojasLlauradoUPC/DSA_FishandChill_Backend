@@ -20,7 +20,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.coins = 1000;
+        this.coins = 0;
         this.equippedFishingRodId = 1; // Default fishing rod
     }
 

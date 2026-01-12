@@ -17,8 +17,20 @@
             --ink: #ffffff;
             --muted: rgba(255, 255, 255, .88);
             --stats: rgba(255, 255, 255, .82);
-            --button: #2a86c7;
-            --button-hover: #2476ad;
+
+            --buy: #2a86c7;
+            --buy-hover: #2476ad;
+
+            --equip: #2a9d6f;
+            --equip-hover: #23865f;
+
+            --equipped: rgba(255, 255, 255, 0.18);
+
+            --rarity-1: #3bd671; /* green */
+            --rarity-2: #3b82f6; /* blue */
+            --rarity-3: #a855f7; /* purple */
+            --rarity-4: #ef4444; /* red */
+            --rarity-5: #ffffff; /* bright white */
         }
 
         * {
@@ -345,67 +357,187 @@
 
         #rods {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 18px;
         }
 
+        @media (max-width: 720px) {
+            #rods {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .rod {
-            display: flex;
-            gap: 18px;
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 16px;
+            align-items: stretch;
             background: url("../webResources/pixel_wood_bg.png");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             border-radius: 16px;
-            padding: 16px;
+            padding: 18px;
             box-shadow: 0 10px 28px rgba(0, 0, 0, .35), 0 0 0 1px rgba(255, 255, 255, .10) inset;
             position: relative;
-            border: 1px solid rgba(255, 255, 255, .18);
+            border: 2px solid rgba(255, 255, 255, .18);
             transition: transform .15s, box-shadow .15s;
             color: #ffffff;
+            min-height: 240px;
         }
 
-        .rod:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, .45), 0 0 0 1px rgba(255, 255, 255, .12) inset;
+        .rod-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: stretch;
+            height: 100%;
         }
 
-        .rod img {
-            width: 84px;
-            height: 84px;
+        .rod-image {
+            width: 100%;
+            height: 160px;
             border-radius: 12px;
-            object-fit: cover;
-            box-shadow: 0 10px 18px rgba(0, 0, 0, .35);
+            object-fit: contain;
+            object-position: center;
+            image-rendering: pixelated;
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 40%, transparent 75%);
+            border: none;
+            box-shadow: none;
         }
 
-        .rod-info header {
-            font-size: 18px;
-            font-weight: 800;
-            color: #ffffff;
-            background: transparent;
-            padding: 0;
-            position: static;
-            backdrop-filter: none;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, .55);
+        /* Image background with radial gradient based on rarity color */
+        .rod.rarity-1 .rod-image {
+            background: radial-gradient(circle at center, rgba(59, 214, 113, 0.6) 0%, rgba(59, 214, 113, 0.25) 40%, transparent 75%);
+            border: none;
+            box-shadow: none;
+        }
+        .rod.rarity-2 .rod-image {
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.6) 0%, rgba(59, 130, 246, 0.25) 40%, transparent 75%);
+            border: none;
+            box-shadow: none;
+        }
+        .rod.rarity-3 .rod-image {
+            background: radial-gradient(circle at center, rgba(168, 85, 247, 0.6) 0%, rgba(168, 85, 247, 0.25) 40%, transparent 75%);
+            border: none;
+            box-shadow: none;
+        }
+        .rod.rarity-4 .rod-image {
+            background: radial-gradient(circle at center, rgba(255, 150, 150, 0.6) 0%, rgba(255, 150, 150, 0.25) 40%, transparent 75%);
+            border: none;
+            box-shadow: none;
+        }
+
+        .rod-footer {
+            margin-top: auto;
+            display: block;
+        }
+
+        .rod-footer button.buy {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            line-height: 1.1;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        /* Right column: name at top, stats in middle, coins at bottom */
+        .rod-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 12px;
+            border-radius: 10px;
+            backdrop-filter: blur(1px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Rarity-based right column background */
+        .rod.rarity-1 .rod-right {
+            background: rgba(59, 214, 113, 0.12);
+            border-color: rgba(59, 214, 113, 0.3);
+        }
+        .rod.rarity-2 .rod-right {
+            background: rgba(59, 130, 246, 0.12);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        .rod.rarity-3 .rod-right {
+            background: rgba(168, 85, 247, 0.12);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+        .rod.rarity-4 .rod-right {
+            background: rgba(255, 120, 120, 0.18);
+            border-color: rgba(255, 150, 150, 0.4);
+        }
+        .rod.rarity-5 .rod-right {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.4);
+            animation: rainbowBg 3s linear infinite;
+        }
+
+        .rod.rarity-5 .rod-image {
+            border: none;
+            box-shadow: none;
+            animation: rainbowImg 3s linear infinite;
+        }
+
+        @keyframes rainbowBg {
+            0% { background: rgba(255, 100, 100, 0.2); border-color: rgba(255, 100, 100, 0.5); }
+            16% { background: rgba(255, 200, 100, 0.2); border-color: rgba(255, 200, 100, 0.5); }
+            33% { background: rgba(200, 255, 100, 0.2); border-color: rgba(200, 255, 100, 0.5); }
+            50% { background: rgba(100, 255, 200, 0.2); border-color: rgba(100, 255, 200, 0.5); }
+            66% { background: rgba(100, 200, 255, 0.2); border-color: rgba(100, 200, 255, 0.5); }
+            83% { background: rgba(200, 100, 255, 0.2); border-color: rgba(200, 100, 255, 0.5); }
+            100% { background: rgba(255, 100, 100, 0.2); border-color: rgba(255, 100, 100, 0.5); }
+        }
+
+        @keyframes rainbowImg {
+            0% { background: radial-gradient(circle at center, rgba(255, 100, 100, 0.6) 0%, rgba(255, 100, 100, 0.25) 40%, transparent 75%); }
+            16% { background: radial-gradient(circle at center, rgba(255, 200, 100, 0.6) 0%, rgba(255, 200, 100, 0.25) 40%, transparent 75%); }
+            33% { background: radial-gradient(circle at center, rgba(200, 255, 100, 0.6) 0%, rgba(200, 255, 100, 0.25) 40%, transparent 75%); }
+            50% { background: radial-gradient(circle at center, rgba(100, 255, 200, 0.6) 0%, rgba(100, 255, 200, 0.25) 40%, transparent 75%); }
+            66% { background: radial-gradient(circle at center, rgba(100, 200, 255, 0.6) 0%, rgba(100, 200, 255, 0.25) 40%, transparent 75%); }
+            83% { background: radial-gradient(circle at center, rgba(200, 100, 255, 0.6) 0%, rgba(200, 100, 255, 0.25) 40%, transparent 75%); }
+            100% { background: radial-gradient(circle at center, rgba(255, 100, 100, 0.6) 0%, rgba(255, 100, 100, 0.25) 40%, transparent 75%); }
+        }
+
+        .rod-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            text-align: center;
         }
 
         .stats {
-            font-size: 12px;
+            display: grid;
+            gap: 8px;
+            font-size: 15px;
             color: var(--stats);
             text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
+            text-align: center;
+            margin: auto 0;
         }
 
-        .price {
+        .rod-right .price {
             font-weight: 800;
-            margin-top: 8px;
+            font-size: 15px;
             color: #ffffff;
             text-shadow: 0 2px 10px rgba(0, 0, 0, .55);
+            margin: 0;
+            text-align: center;
         }
 
+        /* Buttons */
         button.buy {
-            margin-top: 10px;
-            padding: 10px 16px;
-            background: var(--button);
+            margin-top: 0;
+            padding: 8px 12px;
+            background: var(--buy);
             color: white;
             border: 1px solid rgba(255, 255, 255, .16);
             border-radius: 10px;
@@ -413,11 +545,106 @@
             cursor: pointer;
             transition: .15s;
             font-family: inherit;
+            font-size: 14px;
         }
 
         button.buy:hover {
-            background: var(--button-hover);
+            background: var(--buy-hover);
             transform: scale(1.03);
+        }
+
+        button.buy.equip {
+            background: var(--equip);
+        }
+
+        button.buy.equip:hover {
+            background: var(--equip-hover);
+        }
+
+        button.buy.equipped {
+            background: var(--equipped);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        button.buy:disabled {
+            opacity: 0.75;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Rarity header glow */
+        .rod-info header {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            position: relative;
+            backdrop-filter: none;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .55);
+            margin: 0;
+            text-align: center;
+            display: block;
+            border: none;
+        }
+
+        /* Rarity-based header text color + animated glow */
+        .rod.rarity-1 .rod-info header {
+            color: var(--rarity-1); /* green */
+            animation: glowPulse1 2.5s ease-in-out infinite;
+        }
+        .rod.rarity-2 .rod-info header {
+            color: var(--rarity-2); /* blue */
+            animation: glowPulse2 2.5s ease-in-out infinite;
+        }
+        .rod.rarity-3 .rod-info header {
+            color: var(--rarity-3); /* purple */
+            animation: glowPulse3 2.5s ease-in-out infinite;
+        }
+        .rod.rarity-4 .rod-info header {
+            color: #ff9999; /* lighter red */
+            animation: glowPulse4 2.5s ease-in-out infinite;
+        }
+        .rod.rarity-5 .rod-info header {
+            color: var(--rarity-5); /* white */
+            animation: glowPulse5Legendary 1.8s ease-in-out infinite;
+            text-shadow:
+                0 0 10px rgba(255, 255, 255, 0.7),
+                0 0 25px rgba(255, 255, 255, 0.5),
+                0 0 50px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes glowPulse1 {
+            0%, 100% { text-shadow: 0 0 6px rgba(59, 214, 113, 0.5), 0 0 12px rgba(59, 214, 113, 0.3); }
+            50% { text-shadow: 0 0 14px rgba(59, 214, 113, 0.8), 0 0 28px rgba(59, 214, 113, 0.5); }
+        }
+        @keyframes glowPulse2 {
+            0%, 100% { text-shadow: 0 0 6px rgba(59, 130, 246, 0.5), 0 0 12px rgba(59, 130, 246, 0.3); }
+            50% { text-shadow: 0 0 14px rgba(59, 130, 246, 0.8), 0 0 28px rgba(59, 130, 246, 0.5); }
+        }
+        @keyframes glowPulse3 {
+            0%, 100% { text-shadow: 0 0 6px rgba(168, 85, 247, 0.5), 0 0 12px rgba(168, 85, 247, 0.3); }
+            50% { text-shadow: 0 0 14px rgba(168, 85, 247, 0.8), 0 0 28px rgba(168, 85, 247, 0.5); }
+        }
+        @keyframes glowPulse4 {
+            0%, 100% { text-shadow: 0 0 6px rgba(255, 150, 150, 0.5), 0 0 12px rgba(255, 150, 150, 0.3); }
+            50% { text-shadow: 0 0 14px rgba(255, 150, 150, 0.8), 0 0 28px rgba(255, 150, 150, 0.5); }
+        }
+        @keyframes glowPulse5Legendary {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px rgba(255, 255, 255, 0.7),
+                    0 0 25px rgba(255, 255, 255, 0.5),
+                    0 0 50px rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                text-shadow:
+                    0 0 20px rgba(255, 255, 255, 1),
+                    0 0 50px rgba(255, 255, 255, 1),
+                    0 0 100px rgba(255, 255, 255, 0.8),
+                    0 0 150px rgba(255, 255, 255, 0.5);
+            }
         }
 
         .float-msg {
@@ -558,9 +785,15 @@
         const rodsContainer = document.getElementById('rods');
         const token = localStorage.getItem('authToken');
 
+        // Cache of state used to render the shop
+        let catalogRods = [];
+        let ownedRodNames = new Set();
+        let equippedRodName = null;
+
         async function init() {
-            await loadMe();
-            await initShop();
+            await refreshUserState();
+            await refreshRodsState();
+            renderRods();
         }
 
         if (!token) {
@@ -570,7 +803,7 @@
             init();
         }
 
-        async function loadMe() {
+        async function refreshUserState() {
             const res = await fetch('/api/me', {
                 headers: {'Authorization': token}
             });
@@ -581,51 +814,30 @@
             const name = user.username;
             const coins = user.coins;
 
+            // MeService dto has `equippedFishingRod` (string rod name)
+            equippedRodName = user.equippedFishingRod || null;
+
             info.textContent = `${name} | 💰 ${coins} coins`;
         }
 
-        async function initShop() {
-            await loadRods();
-        }
+        async function refreshRodsState() {
+            const [catalogRes, ownedRes] = await Promise.all([
+                fetch('/api/catalog/fishing_rods', { headers: {'Authorization': token} }),
+                fetch('/api/me/owned_fishing_rods', { headers: {'Authorization': token} })
+            ]);
 
-        async function loadRods() {
-            const res = await fetch('/api/catalog/fishing_rods', {
-                headers: {'Authorization': token}
-            });
+            if (catalogRes.ok) {
+                catalogRods = await catalogRes.json();
+            } else {
+                catalogRods = [];
+            }
 
-            if (!res.ok) return;
-
-            const rods = await res.json();
-            renderRods(rods);
-        }
-
-        function renderRods(rods) {
-            rodsContainer.innerHTML = '';
-            rods.forEach(rod => {
-                const el = document.createElement('div');
-                el.className = 'rod';
-
-                const imgSrc = rod.url;
-
-                el.innerHTML = `
-                  <img src="${imgSrc}" alt="${rod.name}">
-                  <div class="rod-info">
-                    <header>${rod.name}</header>
-                    <div class="stats">
-                      Speed: ${rod.speed} | Power: ${rod.power} | Rarity: ${rod.rarity}<br>
-                      Durability: ${rod.durability}
-                    </div>
-                    <div class="price">💰 ${rod.price} coins</div>
-                    <button class="buy">Buy</button>
-                  </div>
-                `;
-
-                el.querySelector('.buy').addEventListener('click', () =>
-                    buyFishingRod(rod.id, rod.name, rod.price, el)
-                );
-
-                rodsContainer.appendChild(el);
-            });
+            if (ownedRes.ok) {
+                const owned = await ownedRes.json();
+                ownedRodNames = new Set((owned || []).map(r => r.name));
+            } else {
+                ownedRodNames = new Set();
+            }
         }
 
         function showFloatMsg(parentEl, text, ok = true) {
@@ -639,7 +851,78 @@
             setTimeout(() => msg.remove(), 1300);
         }
 
-        async function buyFishingRod(id, name, price, parentEl) {
+        function renderRods() {
+            rodsContainer.innerHTML = '';
+
+            catalogRods.forEach(rod => {
+                const el = document.createElement('div');
+                const rarity = Number(rod.rarity);
+                const rarityClass = Number.isFinite(rarity) ? `rarity-${rarity}` : '';
+
+                el.className = `rod ${rarityClass}`.trim();
+
+                const imgSrc = rod.url;
+                const isOwned = ownedRodNames.has(rod.name);
+                const isEquipped = !!equippedRodName && rod.name === equippedRodName;
+
+                let buttonLabel = 'Buy';
+                let buttonDisabled = false;
+                let buttonClass = 'buy';
+
+                if (isOwned && isEquipped) {
+                    buttonLabel = 'Equipped';
+                    buttonDisabled = true;
+                    buttonClass = 'buy equipped';
+                } else if (isOwned) {
+                    buttonLabel = 'Equip';
+                    buttonClass = 'buy equip';
+                }
+
+                const speed = Number.isFinite(Number(rod.speed)) ? Number(rod.speed).toFixed(1) : rod.speed;
+                const power = Number.isFinite(Number(rod.power)) ? Number(rod.power).toFixed(1) : rod.power;
+
+                // Hide coins if already owned
+                const priceHtml = isOwned ? '' : `<div class="price">💰 ${rod.price} coins</div>`;
+
+                el.innerHTML = `
+                  <div class="rod-left">
+                    <img class="rod-image" src="${imgSrc}" alt="${rod.name}">
+                    <div class="rod-footer">
+                      <button class="${buttonClass}" ${buttonDisabled ? 'disabled' : ''}>${buttonLabel}</button>
+                    </div>
+                  </div>
+
+                  <div class="rod-right">
+                    <div class="rod-info">
+                      <header>${rod.name}</header>
+                      <div class="stats">
+                        <div>Power: ${power}</div>
+                        <div>Speed: ${speed}</div>
+                        <div>Durability: ${rod.durability}</div>
+                      </div>
+                      ${priceHtml}
+                    </div>
+                  </div>
+                `;
+
+                const btn = el.querySelector('button');
+                btn.addEventListener('click', async () => {
+                    if (btn.disabled) return;
+
+                    // Don’t allow buying already-owned rods. Owned => Equip.
+                    if (ownedRodNames.has(rod.name)) {
+                        await equipFishingRod(rod.name, el);
+                        return;
+                    }
+
+                    await buyFishingRod(rod.name, rod.price, el);
+                });
+
+                rodsContainer.appendChild(el);
+            });
+        }
+
+        async function buyFishingRod(name, price, parentEl) {
             const res = await fetch(`/api/shop/fishing_rods/${encodeURIComponent(name)}/buy`, {
                 method: 'POST',
                 headers: {'Authorization': token}
@@ -648,11 +931,40 @@
             if (!res.ok) {
                 const text = await res.text();
                 showFloatMsg(parentEl, "❌ " + text, false);
+
+                // If backend says already owned, we can refresh state so UI flips to Equip.
+                await refreshUserState();
+                await refreshRodsState();
+                renderRods();
                 return;
             }
 
             showFloatMsg(parentEl, `✅ You bought ${name} for ${price} coins!`, true);
-            await loadMe();
+
+            await refreshUserState();
+            await refreshRodsState();
+            renderRods();
+        }
+
+        async function equipFishingRod(name, parentEl) {
+            const res = await fetch(`/api/shop/fishing_rods/${encodeURIComponent(name)}/equip`, {
+                method: 'POST',
+                headers: {'Authorization': token}
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                showFloatMsg(parentEl, "❌ " + (text || 'Unable to equip'), false);
+                await refreshUserState();
+                await refreshRodsState();
+                renderRods();
+                return;
+            }
+
+            showFloatMsg(parentEl, `✅ Equipped ${name}!`, true);
+            await refreshUserState();
+            await refreshRodsState();
+            renderRods();
         }
 
     })();

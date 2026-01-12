@@ -32,7 +32,7 @@ CREATE TABLE `BoughtFishingRod` (
   KEY `FISHINGROD_BFR` (`fishingRodId`),
   CONSTRAINT `FISHINGROD_BFR` FOREIGN KEY (`fishingRodId`) REFERENCES `FishingRod` (`id`),
   CONSTRAINT `USERID_BFR` FOREIGN KEY (`userId`) REFERENCES `User` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,11 +42,13 @@ CREATE TABLE `BoughtFishingRod` (
 LOCK TABLES `BoughtFishingRod` WRITE;
 /*!40000 ALTER TABLE `BoughtFishingRod` DISABLE KEYS */;
 INSERT INTO `BoughtFishingRod` VALUES
-(1,2,1),
-(2,2,2),
-(3,2,3),
-(4,4,3),
-(5,4,2);
+(6,1,1),
+(7,1,2),
+(8,7,1),
+(9,7,2),
+(10,7,3),
+(11,8,1),
+(12,8,2);
 /*!40000 ALTER TABLE `BoughtFishingRod` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -68,7 +70,7 @@ CREATE TABLE `CapturedFish` (
   KEY `USERID_CF` (`userId`),
   CONSTRAINT `FISHID_CF` FOREIGN KEY (`fishId`) REFERENCES `Fish` (`id`),
   CONSTRAINT `USERID_CF` FOREIGN KEY (`userId`) REFERENCES `User` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,11 +79,6 @@ CREATE TABLE `CapturedFish` (
 
 LOCK TABLES `CapturedFish` WRITE;
 /*!40000 ALTER TABLE `CapturedFish` DISABLE KEYS */;
-INSERT INTO `CapturedFish` VALUES
-(1,2,1,23,'2025-11-22 11:24:48'),
-(2,2,2,32,'2025-11-22 12:32:15'),
-(3,2,1,25,'2025-11-22 13:01:32'),
-(4,4,1,49,'2025-11-23 23:54:44');
 /*!40000 ALTER TABLE `CapturedFish` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,7 +170,7 @@ CREATE TABLE `Token` (
   KEY `TOKEN` (`token`),
   KEY `Token_User_id_fk` (`userId`),
   CONSTRAINT `Token_User_id_fk` FOREIGN KEY (`userId`) REFERENCES `User` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,14 +180,20 @@ CREATE TABLE `Token` (
 LOCK TABLES `Token` WRITE;
 /*!40000 ALTER TABLE `Token` DISABLE KEYS */;
 INSERT INTO `Token` VALUES
-(1,'9cecc8fd-0f5d-4abb-bc6d-6d0677772c89',4,'2025-11-24 00:32:22'),
-(2,'d69e9ed7-f792-4879-be48-c3c269c4998a',4,'2025-11-24 00:37:31'),
-(3,'12e9e9b9-a1c1-4cbc-92b3-84deeb9b4322',4,'2025-11-24 00:38:22'),
-(4,'89b2e1e5-06af-437d-9fb1-cbe859ecf748',4,'2025-11-24 00:39:43'),
-(5,'94e9e115-e4fd-44ca-95fc-ec416f15070e',4,'2025-11-24 00:40:33'),
-(6,'cb199c93-41fc-4a5c-9857-bb367e46403f',4,'2025-11-24 00:41:05'),
-(7,'c9a14767-7b94-40e2-ac3b-b0845caeaf53',4,'2025-11-24 00:46:24'),
-(9,'728739fb-f814-41b6-9ce3-aaddd903d47b',4,'2025-11-24 15:11:01');
+(18,'dd855c6f-fbf5-48e8-8aeb-08e40774e4fd',1,'2025-12-16 21:10:16'),
+(19,'2b85fd28-a5e5-4341-9db7-9c8a7007dbd8',1,'2026-01-02 17:53:55'),
+(20,'9be42ffc-9711-4205-a5eb-3b0f1bce3aa8',1,'2026-01-03 11:42:14'),
+(21,'75abc92d-1359-4aed-b65f-fa15eb64b1b5',1,'2026-01-03 12:01:30'),
+(22,'1ae0a860-469f-43f3-866d-ab28727aa585',1,'2026-01-03 12:02:15'),
+(23,'1c929572-8d01-426e-804a-220022c95ffb',1,'2026-01-12 14:07:08'),
+(24,'cb80d65b-ac56-4bed-bf8d-2a87c9a05cab',7,'2026-01-12 15:19:03'),
+(25,'2be7f26d-7dbe-4d1c-a5d3-8b5948960c98',7,'2026-01-12 15:20:12'),
+(26,'5f75c415-ebfb-47e0-b0bd-6d19a8a67d67',7,'2026-01-12 15:45:13'),
+(27,'7bc1acad-b511-48db-83e4-20ea7e81bb19',7,'2026-01-12 16:31:36'),
+(28,'4ca45814-6d85-44ef-a8fc-b22dcbc30964',7,'2026-01-12 15:46:31'),
+(29,'51168466-9644-45e5-9a89-2fee2d117e3a',8,'2026-01-12 15:58:45'),
+(30,'ac1370d8-8c4d-4134-88bb-7db425318ad2',8,'2026-01-12 16:33:22'),
+(31,'925eedbb-ecc4-4b31-8b9c-bd16ffb24255',7,'2026-01-12 17:17:49');
 /*!40000 ALTER TABLE `Token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,9 +210,10 @@ CREATE TABLE `User` (
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `coins` int(11) NOT NULL,
+  `equippedFishingRodId` int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `USERNAME` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,9 +223,11 @@ CREATE TABLE `User` (
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
 INSERT INTO `User` VALUES
-(1,'root','root@root.com','root',100000),
-(2,'midPlayer','midplayer@upc.edu','123321',1234),
-(4,'jairo','jairo@upd.edu','hola',1106);
+(1,'root','root@root.com','root',99700,1),
+(5,'Palomo','palomo@asda','123456',1000,1),
+(6,'Jose','aa@aa','123456',1000,1),
+(7,'casa','casa@asd','CasaMala04$',250,3),
+(8,'queso','queso@gmail','QuesoQueso11&',750,2);
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -234,4 +240,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-11-25 12:02:55
+-- Dump completed on 2026-01-12 17:19:53
