@@ -96,7 +96,7 @@ CREATE TABLE `Fish` (
   `rarity` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `SPECIESNAME` (`speciesName`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,12 +106,18 @@ CREATE TABLE `Fish` (
 LOCK TABLES `Fish` WRITE;
 /*!40000 ALTER TABLE `Fish` DISABLE KEYS */;
 INSERT INTO `Fish` VALUES
-(1,'Trout',10,1),
-(2,'Salmon',32,1),
-(3,'Bass',34,1),
-(4,'Catfish',53,2),
-(5,'Carp',45,2),
-(6,'Moonfish',82,3);
+(1,'blobfin',10,1),
+(2,'box',13,1),
+(3,'coin',5,1),
+(4,'crystalline',18,1),
+(5,'fire',23,2),
+(6,'gallacticjellyfish',30,3),
+(7,'grass',15,1),
+(8,'seahorse',25,2),
+(9,'shell',3,1),
+(10,'spark',38,3),
+(11,'spiky',21,2),
+(12,'white',27,2);
 /*!40000 ALTER TABLE `Fish` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,7 +176,7 @@ CREATE TABLE `Token` (
   KEY `TOKEN` (`token`),
   KEY `Token_User_id_fk` (`userId`),
   CONSTRAINT `Token_User_id_fk` FOREIGN KEY (`userId`) REFERENCES `User` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,7 +199,8 @@ INSERT INTO `Token` VALUES
 (28,'4ca45814-6d85-44ef-a8fc-b22dcbc30964',7,'2026-01-12 15:46:31'),
 (29,'51168466-9644-45e5-9a89-2fee2d117e3a',8,'2026-01-12 15:58:45'),
 (30,'ac1370d8-8c4d-4134-88bb-7db425318ad2',8,'2026-01-12 16:33:22'),
-(31,'925eedbb-ecc4-4b31-8b9c-bd16ffb24255',7,'2026-01-12 17:17:49');
+(31,'925eedbb-ecc4-4b31-8b9c-bd16ffb24255',7,'2026-01-12 17:17:49'),
+(32,'ac7cdb83-24a1-4237-b591-e9202f954daa',7,'2026-01-13 09:47:23');
 /*!40000 ALTER TABLE `Token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -240,4 +247,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-01-12 17:19:53
+-- Dump completed on 2026-01-13 10:17:27
