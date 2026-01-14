@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+
 
 public class UserManager {
     private static int TOKEN_EXPIRATION_TIME = 1800; // seconds (30 minutes)
@@ -38,7 +40,7 @@ public class UserManager {
 
     public static User getUser(String username) {
         Session session = FactorySession.openSession();
-        HashMap <String, Object> params = new HashMap<String, Object>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("username", username);
         User user = null;
         List<Object> result = session.get(User.class, params);
@@ -96,7 +98,7 @@ public class UserManager {
 
         session = FactorySession.openSession();
         long now = System.currentTimeMillis() / 1000L;
-        long age = now - t.getLastAccess().getTime()/1000L;
+        long age = now - t.getLastAccess().getTime() / 1000L;
         if (age > TOKEN_EXPIRATION_TIME) {
             session.delete(t);
             return null;
@@ -122,5 +124,22 @@ public class UserManager {
         session.close();
     }
 
+    public static List<User> getAllUsers() {
+        Session session = FactorySession.openSession();
 
+        // Normalmente, params vacío => traer todos los registros de esa clase
+        HashMap<String, Object> params = new HashMap<>();
+        List<Object> result = session.get(User.class, params);
+
+        session.close();
+
+        List<User> users = new ArrayList<>();
+        for (Object o : result) {
+            users.add((User) o);
+        }
+        return users;
+    }
 }
+
+
+

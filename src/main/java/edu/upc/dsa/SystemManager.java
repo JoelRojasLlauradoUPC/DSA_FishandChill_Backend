@@ -10,19 +10,19 @@ import org.apache.log4j.Logger;
 import edu.upc.dsa.managers.event.EventManager;
 import edu.upc.dsa.services.dto.EventUser;
 
+// ✅ NUEVO import (DTO leaderboard)
+import edu.upc.dsa.services.dto.LeaderboardEntry;
+
+// ✅ NUEVOS imports
+import java.util.ArrayList;
+import java.util.Comparator;
+
 import java.sql.Timestamp;
 import java.util.List;
 
 public class SystemManager {
 
-//    private static SystemManager instance;
     final static Logger logger = Logger.getLogger(SystemManager.class);
-
-//
-//    public static SystemManager getInstance() {
-//        if (instance == null) instance = new SystemManager();
-//        return instance;
-//    }
 
     // ---------- USERS ----------
 
@@ -80,9 +80,6 @@ public class SystemManager {
         }
     }
 
-
-
-
     // INVENTORY
     public static List<FishingRod> getOwnedFishingRods(User user) {
         logger.info("Get owned fishing rods for user: username=" + user.getUsername());
@@ -94,7 +91,6 @@ public class SystemManager {
         logger.info("Get captured fishes for user: username=" + user.getUsername());
         return capturedFishes;
     }
-
 
     // ---------- CATALOG declaration ----------
     // FISH
@@ -130,7 +126,6 @@ public class SystemManager {
         return allFishingRods;
     }
 
-
     // ---------- SHOP ----------
     public static int buyFishingRod(User user, FishingRod fishingRod) {
 
@@ -165,23 +160,37 @@ public class SystemManager {
 
     public static void sellCapturedFish(User user, String fishSpeciesName, Timestamp captureTime, int price) {
         int fishId = getFish(fishSpeciesName).getId();
-        int result = ShopManager.sellCapturedFish( user, fishId, captureTime, price);
+        int result = ShopManager.sellCapturedFish(user, fishId, captureTime, price);
 
         if (result == -1) {
             logger.warn("Captured fish not found: username=" + user.getUsername() + ", fishSpecies=" + fishSpeciesName + ", captureTime=" + captureTime);
         } else {
             logger.info("User sold captured fish: username=" + user.getUsername() + ", fishSpecies=" + fishSpeciesName + ", captureTime=" + captureTime + ", price=" + price);
         }
-
     }
 
-
     // ---------- GAME ----------
-
-
     public static void captureFish(User user, Fish fish, double weight) {
         GameManager.captureFish(user, fish, weight);
         logger.info("User captured fish: username=" + user.getUsername() + ", fishSpecies=" + fish.getSpeciesName() + ", weight=" + weight);
+    }
+
+    // ✅ LEADERBOARD (SENCILLO): top por peces actuales en inventario
+    public static List<LeaderboardEntry> getFishLeaderboardCurrent(int limit) {
+        if (limit < 1) limit = 1;
+
+        List<User> users = UserManager.getAllUsers(); // tienes que añadir este método en UserManager
+        List<LeaderboardEntry> res = new ArrayList<>();
+
+        for (User u : users) {
+            int count = GameManager.getCapturedFishes(u).size();
+            res.add(new LeaderboardEntry(u.getUsername(), count));
+        }
+
+        res.sort(Comparator.comparingInt(LeaderboardEntry::getTotalFishes).reversed());
+
+        if (res.size() > limit) return res.subList(0, limit);
+        return res;
     }
 
     // ---------- QUESTIONS ----------
@@ -192,10 +201,9 @@ public class SystemManager {
         // solo queda registrado en logs, faltaria BBDD si lo necesitamos
     }
 
-    // ---------- EVENTS  ----------
+    // ---------- EVENTS ----------
     public static List<EventUser> getUsersRegisteredInEvent(String eventId) {
         logger.info("Get users registered in event: eventId=" + eventId);
         return EventManager.getRegisteredUsers(eventId);
     }
-
 }
