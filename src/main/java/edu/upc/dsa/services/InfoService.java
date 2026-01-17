@@ -4,6 +4,7 @@ import edu.upc.dsa.SystemManager;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.services.dto.Faq;
 import edu.upc.dsa.services.dto.Group;
+import edu.upc.dsa.services.dto.GroupUser;
 import edu.upc.dsa.services.dto.Question;
 import edu.upc.dsa.services.dto.Video;
 import io.swagger.annotations.*;
@@ -146,12 +147,12 @@ public class InfoService {
 
     @POST
     @Path("/groups/{groupId}/")
-    @ApiOperation(value = "Join a group")
+    @ApiOperation(value = "Join a group (only one group per user)")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Joined successfully"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 404, message = "Group not found"),
-            @ApiResponse(code = 409, message = "Already joined")
+            @ApiResponse(code = 409, message = "Already joined or already in another group")
     })
     public Response joinGroup(@HeaderParam("Authorization") String token,
                               @PathParam("groupId") int groupId) {
@@ -165,19 +166,55 @@ public class InfoService {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid token").build();
         }
 
-        boolean exists = SystemManager.groupExists(groupId);
-        if (!exists) {
+        if (!SystemManager.groupExists(groupId)) {
             return Response.status(Response.Status.NOT_FOUND).entity("Group not found").build();
         }
 
-        int res = SystemManager.joinGroup(user, groupId);
+        int res = SystemManager.joinSingleGroup(user, groupId);
 
         if (res == 1) {
             return Response.ok().build();
         } else if (res == 0) {
             return Response.status(Response.Status.CONFLICT).entity("Already joined").build();
-        } else {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error").build();
+        } else if (res == -2) {
+            return Response.status(Response.Status.CONFLICT).entity("Already in another group").build();
         }
+
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error").build();
+    }
+
+    @GET
+    @Path("/groups/{groupId}/users")
+    @ApiOperation(value = "Get users of a group (only if you are member)")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Users returned correctly"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Not a member"),
+            @ApiResponse(code = 404, message = "Group not found")
+    })
+    public Response getGroupUsers(@HeaderParam("Authorization") String token,
+                                  @PathParam("groupId") int groupId) {
+
+        if (token == null || token.trim().isEmpty()) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Missing token").build();
+        }
+
+        User user = SystemManager.authenticate(token);
+        if (user == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid token").build();
+        }
+
+        if (!SystemManager.groupExists(groupId)) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Group not found").build();
+        }
+
+        int userGroup = SystemManager.getUserGroupId(user);
+        if (userGroup != groupId) {
+            return Response.status(Response.Status.FORBIDDEN).entity("Not a member").build();
+        }
+
+        List<GroupUser> members = SystemManager.getGroupMembers(groupId);
+        GenericEntity<List<GroupUser>> entity = new GenericEntity<List<GroupUser>>(members) {};
+        return Response.ok(entity).build();
     }
 }

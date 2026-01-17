@@ -21,6 +21,9 @@ public class SystemManager {
 
     final static Logger logger = Logger.getLogger(SystemManager.class);
 
+    private static final java.util.Map<String, Integer> groupByUser = new java.util.HashMap<>();
+    private static final java.util.Map<Integer, java.util.Set<String>> membersByGroup = new java.util.HashMap<>();
+
     public static int createUser(String username, String password, String email) {
         int res = UserManager.createUser(username, password, email);
         if (res == -1) logger.warn("Username already exists: " + username );
@@ -117,7 +120,6 @@ public class SystemManager {
     }
 
     public static int buyFishingRod(User user, FishingRod fishingRod) {
-
         List<FishingRod> ownedFishingRods = getOwnedFishingRods(user);
         for (FishingRod r : ownedFishingRods) {
             if (r.getName().equals(fishingRod.getName())) {
@@ -200,7 +202,6 @@ public class SystemManager {
         groups.add(new edu.upc.dsa.services.dto.Group(5, "Old Rod Society"));
         return groups;
     }
-    private static final java.util.Map<String, java.util.Set<Integer>> joinedGroupsByUser = new java.util.HashMap<>();
 
     public static boolean groupExists(int groupId) {
         List<edu.upc.dsa.services.dto.Group> groups = getAllGroups();
@@ -210,18 +211,41 @@ public class SystemManager {
         return false;
     }
 
-    public static int joinGroup(User user, int groupId) {
+    public static int getUserGroupId(User user) {
+        if (user == null) return -1;
+        Integer gid = groupByUser.get(user.getUsername());
+        return gid == null ? -1 : gid;
+    }
+
+    public static int joinSingleGroup(User user, int groupId) {
         String username = user.getUsername();
-        java.util.Set<Integer> set = joinedGroupsByUser.get(username);
-        if (set == null) {
-            set = new java.util.HashSet<>();
-            joinedGroupsByUser.put(username, set);
+
+        Integer current = groupByUser.get(username);
+        if (current != null) {
+            if (current == groupId) return 0;
+            return -2;
         }
 
-        if (set.contains(groupId)) return 0;
+        groupByUser.put(username, groupId);
 
-        set.add(groupId);
+        java.util.Set<String> members = membersByGroup.get(groupId);
+        if (members == null) {
+            members = new java.util.HashSet<>();
+            membersByGroup.put(groupId, members);
+        }
+        members.add(username);
+
         return 1;
     }
 
+    public static List<edu.upc.dsa.services.dto.GroupUser> getGroupMembers(int groupId) {
+        java.util.Set<String> members = membersByGroup.get(groupId);
+        List<edu.upc.dsa.services.dto.GroupUser> res = new ArrayList<>();
+        if (members == null) return res;
+
+        for (String u : members) {
+            res.add(new edu.upc.dsa.services.dto.GroupUser(u));
+        }
+        return res;
+    }
 }
