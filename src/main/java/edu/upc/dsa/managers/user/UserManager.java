@@ -2,6 +2,7 @@ package edu.upc.dsa.managers.user;
 
 import edu.upc.dsa.managers.shop.BoughtFishingRod;
 import edu.upc.dsa.models.FishingRod;
+import edu.upc.dsa.models.Team;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.orm.*;
 
@@ -44,10 +45,109 @@ public class UserManager {
         params.put("username", username);
         User user = null;
         List<Object> result = session.get(User.class, params);
+        session.close();
         if (!result.isEmpty()) {
             user = (User) result.get(0);
         }
         return user;
+    }
+
+    public static void updateAvatarUrl(User user, String avatarUrl) {
+        user.setAvatarUrl(avatarUrl);
+        Session session = FactorySession.openSession();
+        session.update(user);
+        session.close();
+    }
+
+    public static int creatTeam(String name)
+    {
+        if (getTeam(name) != null) return -1;
+        Session session = FactorySession.openSession();
+        Team team = new Team();
+        team.setName(name);
+        session.save(team);
+        session.close();
+        return 1;
+    }
+
+    public static Team getTeam(String name)
+    {
+        Session session = FactorySession.openSession();
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("name", name);
+        Team team = null;
+        List<Object> result = session.get(Team.class, params);
+        session.close();
+        if (!result.isEmpty()) {
+            team = (Team) result.get(0);
+        }
+        return team;
+    }
+
+    public static Team getTeam(int id)
+    {
+        Session session = FactorySession.openSession();
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("id", id);
+        Team team = null;
+        List<Object> result = session.get(Team.class, params);
+        session.close();
+        if (!result.isEmpty()) {
+            team = (Team) result.get(0);
+        }
+        return team;
+    }
+
+    public static int joinTeam(User user, String teamName)
+    {
+        Team team = getTeam(teamName);
+        if (team == null) return -1; //team does not exist
+        user.setTeamId(team.getId());
+        Session session = FactorySession.openSession();
+        session.update(user);
+        session.close();
+        return 1; //user joined team successfully
+    }
+
+    public static int leaveTeam(User user)
+    {
+        if (user.getTeamId() == -1) return -1; //user is not in a team
+        user.setTeamId(-1);
+        Session session = FactorySession.openSession();
+        session.update(user);
+        session.close();
+        return 1; //user left team successfully
+    }
+
+    public static List<User> getTeamMembers(String name)
+    {
+        Session session = FactorySession.openSession();
+        Team team = getTeam(name);
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("teamId", team.getId());
+        List<Object> result = session.get(User.class, params);
+        List<User> teamMembers = new  ArrayList<>();
+        session.close();
+        if (!result.isEmpty()) {
+            for (Object obj : result)
+            {
+                User user = (User) obj;
+                teamMembers.add(user);
+            }
+        }
+        return teamMembers;
+    }
+
+    public static List<Team> getAllTeams() {
+        Session session = FactorySession.openSession();
+        HashMap<String, Object> params = new HashMap<>();
+        List<Object> result = session.get(Team.class, params);
+        session.close();
+        List<Team> teams = new ArrayList<>();
+        for (Object o : result) {
+            teams.add((Team) o);
+        }
+        return teams;
     }
 
     public static void deleteUser(User user) {

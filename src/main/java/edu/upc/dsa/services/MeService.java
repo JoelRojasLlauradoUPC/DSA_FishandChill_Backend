@@ -39,6 +39,80 @@ public class MeService {
     }
 
     @GET
+    @Path("/change_avatar")
+    @ApiOperation(value = "Change my avatar")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Avatar changed", response = edu.upc.dsa.services.dto.User.class) ,
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 400, message = "Bad request")
+    })
+    public Response changeAvatar(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
+        User u = SystemManager.authenticate(auth);
+        if (u == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        String baseAvatarUrl = "https://api.dicebear.com/9.x/avataaars/svg?seed=";
+        int randomNum = (int)(Math.random() * 10000);
+        String avatarUrl = baseAvatarUrl + randomNum;
+        SystemManager.updateAvatarUrl(u, avatarUrl);
+        u.setAvatarUrl(avatarUrl);
+        edu.upc.dsa.services.dto.User user = SystemManager.getUser(u.getUsername());
+        return Response.ok(avatarUrl).build();
+    }
+
+    @POST
+    @Path("/teams/{teamName}/create")
+    @ApiOperation(value = "Create a team")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Team created"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 409, message = "Team already exists"),
+            @ApiResponse(code = 400, message = "Bad request")
+    })
+    public Response createTeam(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth,
+                               @PathParam("teamName") String teamName) {
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        int res = SystemManager.createTeam(teamName);
+        if (res == -1) return Response.status(Response.Status.CONFLICT).entity("Team already exists").build();
+        SystemManager.joinTeam(user, teamName);
+        return Response.status(Response.Status.OK).entity("Team created").build();
+    }
+
+    @GET
+    @Path("/teams/{teamName}/join")
+    @ApiOperation(value = "Join a team")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Joined team"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Team not found"),
+            @ApiResponse(code = 409, message = "Already in team")
+    })
+    public Response joinTeam(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth,
+                             @PathParam("teamName") String teamName) {
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        int res = SystemManager.joinTeam(user, teamName);
+        if (res == -1) return Response.status(Response.Status.NOT_FOUND).entity("Team not found").build();
+        else if (res == -2) return Response.status(Response.Status.CONFLICT).entity("Already in team").build();
+        return Response.status(Response.Status.OK).entity("Joined team").build();
+    }
+
+    @GET
+    @Path("/teams/leave")
+    @ApiOperation(value = "Leave a team")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Left team"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+    })
+    public Response leaveTeam(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        SystemManager.leaveTeam(user);
+        return Response.status(Response.Status.OK).entity("Left team").build();
+    }
+
+
+
+    @GET
     @Path("/captured_fishes")
     @ApiOperation(value = "Get my captured fishes")
     @ApiResponses({

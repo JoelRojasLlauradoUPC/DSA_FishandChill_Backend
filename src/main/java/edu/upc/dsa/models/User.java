@@ -11,6 +11,8 @@ public class User {
     private String email;
     private int coins;
     private int equippedFishingRodId;
+    private int teamId;
+    private String avatarUrl;
 
     public User() {
     }
@@ -22,6 +24,8 @@ public class User {
         this.email = email;
         this.coins = 0;
         this.equippedFishingRodId = 1; // Default fishing rod
+        this.teamId = -1;
+        this.avatarUrl = "https://api.dicebear.com/9.x/avataaars/svg?seed=113";
     }
 
     public int getId() { return id;   }
@@ -66,5 +70,21 @@ public class User {
 
     public void setEquippedFishingRodId(int equippedFishingRodId) {
         this.equippedFishingRodId = equippedFishingRodId;
+    }
+
+    public int getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String imageUrl) {
+        this.avatarUrl = imageUrl;
     }
 }

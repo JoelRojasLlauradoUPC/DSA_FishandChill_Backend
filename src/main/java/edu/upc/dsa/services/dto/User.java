@@ -9,15 +9,20 @@ public class User {
     private String email;
     private int coins;
     private String equippedFishingRod;
+    private String avatarUrl;
+    private String teamName;
+
 
     public User() {
     }
 
-    public User(String username, String email, int coins, String equippedFishingRod) {
+    public User(String username, String email, int coins, String equippedFishingRod, String avatarUrl, String teamName) {
         this.username = username;
         this.email = email;
         this.coins = coins;
         this.equippedFishingRod = equippedFishingRod;
+        this.avatarUrl = avatarUrl;
+        this.teamName = teamName;
     }
 
     public String getUsername() {
@@ -47,4 +52,20 @@ public class User {
     public String getEquippedFishingRod() { return equippedFishingRod; }
 
     public void setEquippedFishingRod(String equippedFishingRod) { this.equippedFishingRod = equippedFishingRod; }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
 }

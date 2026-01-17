@@ -2,11 +2,7 @@ package edu.upc.dsa.services;
 
 import edu.upc.dsa.SystemManager;
 import edu.upc.dsa.models.User;
-import edu.upc.dsa.services.dto.Faq;
-import edu.upc.dsa.services.dto.Group;
-import edu.upc.dsa.services.dto.GroupUser;
-import edu.upc.dsa.services.dto.Question;
-import edu.upc.dsa.services.dto.Video;
+import edu.upc.dsa.services.dto.*;
 import io.swagger.annotations.*;
 import org.apache.log4j.Logger;
 
@@ -120,65 +116,25 @@ public class InfoService {
     }
 
     @GET
-    @Path("/groups")
+    @Path("/teams/ranking")
+    @ApiResponse( code = 200, message = "OK", response = TeamsRanking.class)
     public Response getGroups() {
-        logger.info("Getting groups");
-        List<Group> groups = SystemManager.getAllGroups();
-        GenericEntity<List<Group>> entity = new GenericEntity<List<Group>>(groups) {};
-        return Response.ok(entity).build();
-    }
+        logger.info("Getting teams");
 
-    @POST
-    @Path("/groups/{groupId}/")
-    public Response joinGroup(@HeaderParam("Authorization") String token,
-                              @PathParam("groupId") int groupId) {
-
-        if (token == null || token.trim().isEmpty()) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity("Missing token").build();
-        }
-
-        User user = SystemManager.authenticate(token);
-        if (user == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid token").build();
-        }
-
-        if (!SystemManager.groupExists(groupId)) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Group not found").build();
-        }
-
-        int res = SystemManager.joinSingleGroup(user, groupId);
-
-        if (res == 1) {
-            return Response.ok().build();
-        } else if (res == 0) {
-            return Response.status(Response.Status.CONFLICT).entity("Already joined").build();
-        } else if (res == -2) {
-            return Response.status(Response.Status.CONFLICT).entity("Already in another group").build();
-        }
-
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error").build();
+        TeamsRanking ranking = SystemManager.getTeamsRanking();
+        return Response.ok(ranking).build();
     }
 
     @GET
-    @Path("/groups/{groupId}/users")
+    @Path("/teams/{teamName}/users")
+    @ApiResponse( code = 200, message = "OK", response = Team.class)
     public Response getGroupUsers(@HeaderParam("Authorization") String token,
-                                  @PathParam("groupId") int groupId) {
+                                  @PathParam("teamName") String teamName) {
+        logger.info("Getting team users for teamId: " + teamName);
+        Team team = SystemManager.getTeam(teamName);
+        return Response.ok(team).build();
 
-        if (token == null || token.trim().isEmpty()) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity("Missing token").build();
-        }
 
-        User user = SystemManager.authenticate(token);
-        if (user == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid token").build();
-        }
 
-        if (!SystemManager.groupExists(groupId)) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Group not found").build();
-        }
-
-        List<GroupUser> members = SystemManager.getGroupMembers(groupId);
-        GenericEntity<List<GroupUser>> entity = new GenericEntity<List<GroupUser>>(members) {};
-        return Response.ok(entity).build();
     }
 }
