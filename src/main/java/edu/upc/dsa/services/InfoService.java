@@ -26,10 +26,6 @@ public class InfoService {
 
     @GET
     @Path("/faqs")
-    @ApiOperation(value = "Get list of FAQs")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "FAQ list returned correctly")
-    })
     public Response getFaqs() {
         logger.info("Getting FAQs");
         List<Faq> faqs = new ArrayList<>();
@@ -77,11 +73,6 @@ public class InfoService {
     @POST
     @Path("/question")
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Receive a question from the app")
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Question received", response = Question.class),
-            @ApiResponse(code = 400, message = "Invalid question")
-    })
     public Response postQuestion(Question question) {
         logger.info("posting question: " + question);
 
@@ -106,10 +97,6 @@ public class InfoService {
 
     @GET
     @Path("/videos")
-    @ApiOperation(value = "Get list of videos")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Video list returned correctly")
-    })
     public Response getVideos() {
         logger.info("Getting videos");
 
@@ -134,10 +121,6 @@ public class InfoService {
 
     @GET
     @Path("/groups")
-    @ApiOperation(value = "Get list of groups")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Group list returned correctly")
-    })
     public Response getGroups() {
         logger.info("Getting groups");
         List<Group> groups = SystemManager.getAllGroups();
@@ -147,13 +130,6 @@ public class InfoService {
 
     @POST
     @Path("/groups/{groupId}/")
-    @ApiOperation(value = "Join a group (only one group per user)")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Joined successfully"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 404, message = "Group not found"),
-            @ApiResponse(code = 409, message = "Already joined or already in another group")
-    })
     public Response joinGroup(@HeaderParam("Authorization") String token,
                               @PathParam("groupId") int groupId) {
 
@@ -185,13 +161,6 @@ public class InfoService {
 
     @GET
     @Path("/groups/{groupId}/users")
-    @ApiOperation(value = "Get users of a group (only if you are member)")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Users returned correctly"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Not a member"),
-            @ApiResponse(code = 404, message = "Group not found")
-    })
     public Response getGroupUsers(@HeaderParam("Authorization") String token,
                                   @PathParam("groupId") int groupId) {
 
@@ -206,11 +175,6 @@ public class InfoService {
 
         if (!SystemManager.groupExists(groupId)) {
             return Response.status(Response.Status.NOT_FOUND).entity("Group not found").build();
-        }
-
-        int userGroup = SystemManager.getUserGroupId(user);
-        if (userGroup != groupId) {
-            return Response.status(Response.Status.FORBIDDEN).entity("Not a member").build();
         }
 
         List<GroupUser> members = SystemManager.getGroupMembers(groupId);
