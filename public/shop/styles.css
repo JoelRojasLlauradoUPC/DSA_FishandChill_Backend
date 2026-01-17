@@ -269,6 +269,8 @@ header {
     align-items: center;
     gap: 10px;
     min-width: 0;
+
+    flex-shrink: 0;
 }
 
 .brand img {
@@ -284,7 +286,7 @@ header {
     flex-direction: column;
     align-items: flex-end;
     gap: 8px;
-    margin-right: 6px; /* moved a bit left */
+    margin-right: 6px;
 }
 
 #user-info {
@@ -681,4 +683,72 @@ button.buy:disabled {
         opacity: 0;
         transform: translate(-50%, -40px);
     }
+}
+
+@font-face {
+    font-family: "PixelFont";
+    src: url("../font/pixel_font.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --ink: #ffffff;
+    --muted: rgba(255, 255, 255, .88);
+    --stats: rgba(255, 255, 255, .82);
+
+    --buy: #2a86c7;
+    --buy-hover: #2476ad;
+
+    --equip: #2a9d6f;
+    --equip-hover: #23865f;
+
+    --equipped: rgba(255, 255, 255, 0.18);
+
+    --rarity-1: #3bd671;
+    --rarity-2: #3b82f6;
+    --rarity-3: #a855f7;
+    --rarity-4: #ef4444;
+    --rarity-5: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    margin: 0;
+    font-family: "PixelFont", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: radial-gradient(1200px 800px at 20% -10%, rgba(5, 25, 50, 0.6), transparent 70%),
+    radial-gradient(1200px 800px at 120% 0%, rgba(10, 40, 70, 0.6), transparent 70%),
+    #0b2239;
+    color: var(--ink);
+    overflow-x: hidden;
+}
+
+
+
+.sell-fishes-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, .16);
+    background: rgba(0, 0, 0, 0.22);
+    color: #ffffff;
+    font-weight: 800;
+    font-family: inherit;
+    text-decoration: none;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
+    transition: transform .12s, background .12s;
+    white-space: nowrap;
+}
+
+.sell-fishes-btn:hover {
+    background: rgba(255, 255, 255, .12);
+    transform: translateY(-1px);
 }
