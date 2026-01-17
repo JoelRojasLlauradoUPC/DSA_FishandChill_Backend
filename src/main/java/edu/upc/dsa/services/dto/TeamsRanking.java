@@ -22,8 +22,5 @@ public class TeamsRanking {
         this.teamsRanking = teamsRanking;
     }
 
-    public void addTeamScore(String name, String avatar, int points) {
-        TeamScore teamScore = new TeamScore(name, avatar, points);
-        this.teamsRanking.add(teamScore);
-    }
+
 }

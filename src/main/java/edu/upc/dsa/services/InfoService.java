@@ -128,8 +128,7 @@ public class InfoService {
     @GET
     @Path("/teams/{teamName}/users")
     @ApiResponse( code = 200, message = "OK", response = Team.class)
-    public Response getGroupUsers(@HeaderParam("Authorization") String token,
-                                  @PathParam("teamName") String teamName) {
+    public Response getGroupUsers(@PathParam("teamName") String teamName) {
         logger.info("Getting team users for teamId: " + teamName);
         Team team = SystemManager.getTeam(teamName);
         return Response.ok(team).build();

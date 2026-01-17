@@ -120,15 +120,23 @@ public class SystemManager {
         TeamsRanking ranking = new TeamsRanking();
 
         List<Team> allTeams = UserManager.getAllTeams();
-
+        List<TeamScore> teamsRanking = new ArrayList<>();
+        logger.info ("getTeamsRanking: total teams=" + allTeams.size());
         for (Team team : allTeams) {
             List<User> members = UserManager.getTeamMembers(team.getName());
+            logger.info ("getTeamsRanking: members=" + members.size());
             int totalPoints = 0;
             for (User member : members) {
                 totalPoints += GameManager.getCapturedFishes(member).size();
+
             }
-            ranking.addTeamScore(team.getName(), team.getImageUrl(), totalPoints);
+
+            logger.info ("getTeamsRanking: team=" + team.getName() + ", totalPoints=" + totalPoints);
+            TeamScore tmScore = new TeamScore(team.getName(), team.getImageUrl(),totalPoints);
+            teamsRanking.add(tmScore);
         }
+
+        ranking.setTeamsRanking(teamsRanking);
 
         return ranking;
     }
