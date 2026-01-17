@@ -1,14 +1,14 @@
 package edu.upc.dsa.services.dto;
 
-public class TeamScore {
+public class TeamRanking {
     private String name;
     private String avatar;
     private int points;
 
-    public TeamScore() {
+    public TeamRanking() {
     }
 
-    public TeamScore(String name, String avatar, int points) {
+    public TeamRanking(String name, String avatar, int points) {
         this.name = name;
         this.avatar = avatar;
         this.points = points;

@@ -1,6 +1,6 @@
 package edu.upc.dsa;
 
-import edu.upc.dsa.models.*;
+import edu.upc.dsa.managers.info.InfoManager;
 import edu.upc.dsa.managers.catalog.CatalogManager;
 import edu.upc.dsa.managers.event.EventManager;
 import edu.upc.dsa.managers.game.GameManager;
@@ -116,11 +116,10 @@ public class SystemManager {
         return res;
     }
 
-    public static TeamsRanking getTeamsRanking() {
-        TeamsRanking ranking = new TeamsRanking();
+    public static List<TeamRanking> getTeamsRanking() {
 
         List<Team> allTeams = UserManager.getAllTeams();
-        List<TeamScore> teamsRanking = new ArrayList<>();
+        List<TeamRanking> teamsRanking = new ArrayList<>();
         logger.info ("getTeamsRanking: total teams=" + allTeams.size());
         for (Team team : allTeams) {
             List<User> members = UserManager.getTeamMembers(team.getName());
@@ -132,13 +131,10 @@ public class SystemManager {
             }
 
             logger.info ("getTeamsRanking: team=" + team.getName() + ", totalPoints=" + totalPoints);
-            TeamScore tmScore = new TeamScore(team.getName(), team.getImageUrl(),totalPoints);
+            TeamRanking tmScore = new TeamRanking(team.getName(), team.getImageUrl(),totalPoints);
             teamsRanking.add(tmScore);
         }
-
-        ranking.setTeamsRanking(teamsRanking);
-
-        return ranking;
+        return teamsRanking;
     }
 
 
@@ -273,10 +269,19 @@ public class SystemManager {
         return res;
     }
 
-    public static void receiveQuestion(edu.upc.dsa.services.dto.Question q) {
-        logger.info("Question received: date=" + q.getDate()
-                + ", title=" + q.getTitle()
-                + ", sender=" + q.getSender());
+    public static List<Faq> getFaqs() {
+        logger.info("Get FAQs");
+        return InfoManager.getFaqs();
+    }
+
+    public static void postFaqQuestion(edu.upc.dsa.services.dto.Question q) {
+        logger.info("Send FAQ question: " + q.getMessage());
+        InfoManager.postFaqQuestion(q.getMessage());
+    }
+
+    public static List<Video> getVideos() {
+        logger.info("Get videos");
+        return InfoManager.getVideos();
     }
 
     public static List<EventUser> getUsersRegisteredInEvent(String eventId) {
@@ -284,59 +289,6 @@ public class SystemManager {
         return EventManager.getRegisteredUsers(eventId);
     }
 
-    public static List<edu.upc.dsa.services.dto.Group> getAllGroups() {
-        List<edu.upc.dsa.services.dto.Group> groups = new ArrayList<>();
-        groups.add(new edu.upc.dsa.services.dto.Group(1, "Team Alpha"));
-        groups.add(new edu.upc.dsa.services.dto.Group(2, "Deep Sea Hunters"));
-        groups.add(new edu.upc.dsa.services.dto.Group(3, "Stormfishers"));
-        groups.add(new edu.upc.dsa.services.dto.Group(4, "Meteor Raiders"));
-        groups.add(new edu.upc.dsa.services.dto.Group(5, "Old Rod Society"));
-        return groups;
-    }
 
-    public static boolean groupExists(int groupId) {
-        List<edu.upc.dsa.services.dto.Group> groups = getAllGroups();
-        for (edu.upc.dsa.services.dto.Group g : groups) {
-            if (g.getId() == groupId) return true;
-        }
-        return false;
-    }
 
-    public static int getUserGroupId(User user) {
-        if (user == null) return -1;
-        Integer gid = groupByUser.get(user.getUsername());
-        return gid == null ? -1 : gid;
-    }
-
-    public static int joinSingleGroup(User user, int groupId) {
-        String username = user.getUsername();
-
-        Integer current = groupByUser.get(username);
-        if (current != null) {
-            if (current == groupId) return 0;
-            return -2;
-        }
-
-        groupByUser.put(username, groupId);
-
-        java.util.Set<String> members = membersByGroup.get(groupId);
-        if (members == null) {
-            members = new java.util.HashSet<>();
-            membersByGroup.put(groupId, members);
-        }
-        members.add(username);
-
-        return 1;
-    }
-
-    public static List<edu.upc.dsa.services.dto.GroupUser> getGroupMembers(int groupId) {
-        java.util.Set<String> members = membersByGroup.get(groupId);
-        List<edu.upc.dsa.services.dto.GroupUser> res = new ArrayList<>();
-        if (members == null) return res;
-
-        for (String u : members) {
-            res.add(new edu.upc.dsa.services.dto.GroupUser(u));
-        }
-        return res;
-    }
 }

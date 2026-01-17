@@ -24,43 +24,7 @@ public class InfoService {
     @Path("/faqs")
     public Response getFaqs() {
         logger.info("Getting FAQs");
-        List<Faq> faqs = new ArrayList<>();
-
-        faqs.add(new Faq(
-                "How can I catch rare or legendary fish?",
-                "Get higher level fishing rods and fish in the deep areas of the map. "
-                        + "Rare fish have a lower spawn rate, so you will need some patience."
-        ));
-
-        faqs.add(new Faq(
-                "What happens if another player eliminates me while I am fishing?",
-                "You lose the current run and any fish you haven’t sold yet, "
-                        + "but you keep all the rods and upgrades you have already bought."
-        ));
-
-        faqs.add(new Faq(
-                "How can I earn more coins?",
-                "Sell the fish you catch in the shop and complete daily missions or challenges. "
-                        + "Rare and legendary fish give you many more coins."
-        ));
-
-        faqs.add(new Faq(
-                "What are new fishing rods useful for?",
-                "Each rod increases the chance of catching more valuable fish, "
-                        + "reduces the waiting time while fishing and can increase your casting distance."
-        ));
-
-        faqs.add(new Faq(
-                "Can I lose a fishing rod that I already bought?",
-                "No. Once you buy a rod, it stays linked to your account and you won’t lose it, "
-                        + "even if other players eliminate you."
-        ));
-
-        faqs.add(new Faq(
-                "How can I avoid being eliminated so easily by other players?",
-                "Try not to stay too long in the same area, sell your fish often so you don’t risk all your earnings, "
-                        + "and upgrade your gear to have better chances to escape."
-        ));
+        List<Faq> faqs = SystemManager.getFaqs();
 
         GenericEntity<List<Faq>> entity = new GenericEntity<List<Faq>>(faqs) {};
         return Response.ok(entity).build();
@@ -86,7 +50,7 @@ public class InfoService {
             question.setDate(LocalDateTime.now().toString());
         }
 
-        SystemManager.receiveQuestion(question);
+        SystemManager.postFaqQuestion(question);
 
         return Response.status(Response.Status.CREATED).entity(question).build();
     }
@@ -96,20 +60,7 @@ public class InfoService {
     public Response getVideos() {
         logger.info("Getting videos");
 
-        List<Video> videos = new ArrayList<>();
-
-        videos.add(new Video(
-                "Getting Started with Fishing Adventure",
-                "https://www.youtube.com/watch?v=Zcb8yPEItwA"
-        ));
-        videos.add(new Video(
-                "Top 10 Tips to Catch Rare Fish",
-                "https://www.youtube.com/watch?v=EIm4HvDgQCM"
-        ));
-        videos.add(new Video(
-                "How to Upgrade Your Fishing Rods Effectively",
-                "https://www.youtube.com/watch?v=IY2AMo_yCs4"
-        ));
+        List<Video> videos = SystemManager.getVideos();
 
         GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(videos) {};
         return Response.ok(entity).build();
@@ -117,23 +68,12 @@ public class InfoService {
 
     @GET
     @Path("/teams/ranking")
-    @ApiResponse( code = 200, message = "OK", response = TeamsRanking.class)
+    @ApiResponse( code = 200, message = "OK", response = List.class)
     public Response getGroups() {
         logger.info("Getting teams");
 
-        TeamsRanking ranking = SystemManager.getTeamsRanking();
-        return Response.ok(ranking).build();
-    }
-
-    @GET
-    @Path("/teams/{teamName}/users")
-    @ApiResponse( code = 200, message = "OK", response = Team.class)
-    public Response getGroupUsers(@PathParam("teamName") String teamName) {
-        logger.info("Getting team users for teamId: " + teamName);
-        Team team = SystemManager.getTeam(teamName);
-        return Response.ok(team).build();
-
-
-
+        List<TeamRanking> ranking = SystemManager.getTeamsRanking();
+        GenericEntity<List<TeamRanking>> entity = new GenericEntity<List<TeamRanking>>(ranking) {};
+        return Response.ok(entity).build();
     }
 }

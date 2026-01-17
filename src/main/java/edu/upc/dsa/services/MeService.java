@@ -4,7 +4,9 @@ import edu.upc.dsa.SystemManager;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.services.dto.CapturedFish;
 import edu.upc.dsa.services.dto.FishingRod;
+import edu.upc.dsa.services.dto.Team;
 import io.swagger.annotations.*;
+import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -21,7 +23,7 @@ import java.util.Map;
 @Path("/me")
 @Produces(MediaType.APPLICATION_JSON)
 public class MeService {
-
+    Logger logger = Logger.getLogger(MeService.class);
 //    private final SystemManager gm = SystemManager.getInstance();
 
     @GET
@@ -108,6 +110,15 @@ public class MeService {
         if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
         SystemManager.leaveTeam(user);
         return Response.status(Response.Status.OK).entity("Left team").build();
+    }
+
+    @GET
+    @Path("/teams/members")
+    @ApiResponse( code = 200, message = "OK", response = Team.class)
+    public Response getGroupUsers(@PathParam("teamName") String teamName) {
+        logger.info("Getting team users for teamId: " + teamName);
+        Team team = SystemManager.getTeam(teamName);
+        return Response.ok(team).build();
     }
 
 
