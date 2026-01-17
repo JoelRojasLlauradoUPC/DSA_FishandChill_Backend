@@ -2,31 +2,25 @@ package edu.upc.dsa;
 
 import edu.upc.dsa.models.*;
 import edu.upc.dsa.managers.catalog.CatalogManager;
+import edu.upc.dsa.managers.event.EventManager;
 import edu.upc.dsa.managers.game.GameManager;
 import edu.upc.dsa.managers.shop.ShopManager;
 import edu.upc.dsa.managers.user.UserManager;
-import edu.upc.dsa.services.dto.Question;
-import org.apache.log4j.Logger;
-import edu.upc.dsa.managers.event.EventManager;
 import edu.upc.dsa.services.dto.EventUser;
-
-// ✅ NUEVO import (DTO leaderboard)
 import edu.upc.dsa.services.dto.LeaderboardEntry;
+import edu.upc.dsa.services.dto.Question;
 
-// ✅ NUEVOS imports
-import java.util.ArrayList;
-import java.util.Comparator;
+import org.apache.log4j.Logger;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class SystemManager {
 
     final static Logger logger = Logger.getLogger(SystemManager.class);
 
-    // ---------- USERS ----------
-
-    //AUTHENTICATION
     public static int createUser(String username, String password, String email) {
         int res = UserManager.createUser(username, password, email);
         if (res == -1) logger.warn("Username already exists: " + username );
@@ -80,7 +74,6 @@ public class SystemManager {
         }
     }
 
-    // INVENTORY
     public static List<FishingRod> getOwnedFishingRods(User user) {
         logger.info("Get owned fishing rods for user: username=" + user.getUsername());
         return ShopManager.getBoughtFishingRods(user);
@@ -92,8 +85,6 @@ public class SystemManager {
         return capturedFishes;
     }
 
-    // ---------- CATALOG declaration ----------
-    // FISH
     public static Fish getFish(String fishSpeciesName) {
         Fish fish = CatalogManager.getFish(fishSpeciesName);
         if (fish == null) {
@@ -109,7 +100,6 @@ public class SystemManager {
         return allFishes;
     }
 
-    // FISHING RODS
     public static FishingRod getFishingRod(String fishingRodName) {
         FishingRod rod = CatalogManager.getFishingRod(fishingRodName);
         if (rod == null) {
@@ -126,24 +116,23 @@ public class SystemManager {
         return allFishingRods;
     }
 
-    // ---------- SHOP ----------
     public static int buyFishingRod(User user, FishingRod fishingRod) {
 
         List<FishingRod> ownedFishingRods = getOwnedFishingRods(user);
         for (FishingRod r : ownedFishingRods) {
             if (r.getName().equals(fishingRod.getName())) {
                 logger.warn("Fishing rod already owned: " + fishingRod.getName());
-                return -1; // already owns the rod
+                return -1;
             }
         }
         int res = ShopManager.buyFishingRod(user, fishingRod);
         if (res == -1) {
             logger.warn("User has not enough coins: username=" + user.getUsername() + ", rodName=" + fishingRod.getName()+", userCoins = "+user.getCoins());
-            return -2; // not enough coins
+            return -2;
         }
 
         logger.info("User bought fishing rod: username=" + user.getUsername() + ", rodName=" + fishingRod.getName()+", userCoins = "+user.getCoins());
-        return 1; // rod bought successfully
+        return 1;
     }
 
     public static int equipFishingRod(User user, FishingRod fishingRod) {
@@ -155,7 +144,7 @@ public class SystemManager {
         }
         int res = ShopManager.equipFishingRod(user, fishingRod);
         logger.info("User equipped fishing rod: username=" + user.getUsername() + ", rodName=" + fishingRod.getName());
-        return res; // rod equipped successfully
+        return res;
     }
 
     public static void sellCapturedFish(User user, String fishSpeciesName, Timestamp captureTime, int price) {
@@ -169,17 +158,15 @@ public class SystemManager {
         }
     }
 
-    // ---------- GAME ----------
     public static void captureFish(User user, Fish fish, double weight) {
         GameManager.captureFish(user, fish, weight);
         logger.info("User captured fish: username=" + user.getUsername() + ", fishSpecies=" + fish.getSpeciesName() + ", weight=" + weight);
     }
 
-    // ✅ LEADERBOARD (SENCILLO): top por peces actuales en inventario
     public static List<LeaderboardEntry> getFishLeaderboardCurrent(int limit) {
         if (limit < 1) limit = 1;
 
-        List<User> users = UserManager.getAllUsers(); // tienes que añadir este método en UserManager
+        List<User> users = UserManager.getAllUsers();
         List<LeaderboardEntry> res = new ArrayList<>();
 
         for (User u : users) {
@@ -193,17 +180,48 @@ public class SystemManager {
         return res;
     }
 
-    // ---------- QUESTIONS ----------
     public static void receiveQuestion(Question q) {
         logger.info("Question received: date=" + q.getDate()
                 + ", title=" + q.getTitle()
                 + ", sender=" + q.getSender());
-        // solo queda registrado en logs, faltaria BBDD si lo necesitamos
     }
 
-    // ---------- EVENTS ----------
     public static List<EventUser> getUsersRegisteredInEvent(String eventId) {
         logger.info("Get users registered in event: eventId=" + eventId);
         return EventManager.getRegisteredUsers(eventId);
     }
+
+    public static List<edu.upc.dsa.services.dto.Group> getAllGroups() {
+        List<edu.upc.dsa.services.dto.Group> groups = new ArrayList<>();
+        groups.add(new edu.upc.dsa.services.dto.Group(1, "Team Alpha"));
+        groups.add(new edu.upc.dsa.services.dto.Group(2, "Deep Sea Hunters"));
+        groups.add(new edu.upc.dsa.services.dto.Group(3, "Stormfishers"));
+        groups.add(new edu.upc.dsa.services.dto.Group(4, "Meteor Raiders"));
+        groups.add(new edu.upc.dsa.services.dto.Group(5, "Old Rod Society"));
+        return groups;
+    }
+    private static final java.util.Map<String, java.util.Set<Integer>> joinedGroupsByUser = new java.util.HashMap<>();
+
+    public static boolean groupExists(int groupId) {
+        List<edu.upc.dsa.services.dto.Group> groups = getAllGroups();
+        for (edu.upc.dsa.services.dto.Group g : groups) {
+            if (g.getId() == groupId) return true;
+        }
+        return false;
+    }
+
+    public static int joinGroup(User user, int groupId) {
+        String username = user.getUsername();
+        java.util.Set<Integer> set = joinedGroupsByUser.get(username);
+        if (set == null) {
+            set = new java.util.HashSet<>();
+            joinedGroupsByUser.put(username, set);
+        }
+
+        if (set.contains(groupId)) return 0;
+
+        set.add(groupId);
+        return 1;
+    }
+
 }

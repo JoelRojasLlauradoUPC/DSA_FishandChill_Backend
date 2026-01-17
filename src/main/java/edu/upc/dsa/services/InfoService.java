@@ -1,7 +1,9 @@
 package edu.upc.dsa.services;
 
 import edu.upc.dsa.SystemManager;
+import edu.upc.dsa.models.User;
 import edu.upc.dsa.services.dto.Faq;
+import edu.upc.dsa.services.dto.Group;
 import edu.upc.dsa.services.dto.Question;
 import edu.upc.dsa.services.dto.Video;
 import io.swagger.annotations.*;
@@ -15,9 +17,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
 @Api(value = "/info", description = "Info endpoints")
 @Path("/info")
 @Produces(MediaType.APPLICATION_JSON)
@@ -26,9 +25,7 @@ public class InfoService {
 
     @GET
     @Path("/faqs")
-    @ApiOperation(
-            value = "Get list of FAQs"
-    )
+    @ApiOperation(value = "Get list of FAQs")
     @ApiResponses({
             @ApiResponse(code = 200, message = "FAQ list returned correctly")
     })
@@ -76,8 +73,6 @@ public class InfoService {
         return Response.ok(entity).build();
     }
 
-
-
     @POST
     @Path("/question")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -110,14 +105,14 @@ public class InfoService {
 
     @GET
     @Path("/videos")
-    @ApiOperation(value = "Get list of videos"    )
+    @ApiOperation(value = "Get list of videos")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Video list returned correctly")
     })
     public Response getVideos() {
         logger.info("Getting videos");
 
-        List<Video> videos = new ArrayList<Video>();
+        List<Video> videos = new ArrayList<>();
 
         videos.add(new Video(
                 "Getting Started with Fishing Adventure",
@@ -131,10 +126,58 @@ public class InfoService {
                 "How to Upgrade Your Fishing Rods Effectively",
                 "https://www.youtube.com/watch?v=IY2AMo_yCs4"
         ));
+
         GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(videos) {};
         return Response.ok(entity).build();
     }
 
+    @GET
+    @Path("/groups")
+    @ApiOperation(value = "Get list of groups")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Group list returned correctly")
+    })
+    public Response getGroups() {
+        logger.info("Getting groups");
+        List<Group> groups = SystemManager.getAllGroups();
+        GenericEntity<List<Group>> entity = new GenericEntity<List<Group>>(groups) {};
+        return Response.ok(entity).build();
+    }
 
+    @POST
+    @Path("/groups/{groupId}/")
+    @ApiOperation(value = "Join a group")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Joined successfully"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Group not found"),
+            @ApiResponse(code = 409, message = "Already joined")
+    })
+    public Response joinGroup(@HeaderParam("Authorization") String token,
+                              @PathParam("groupId") int groupId) {
 
+        if (token == null || token.trim().isEmpty()) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Missing token").build();
+        }
+
+        User user = SystemManager.authenticate(token);
+        if (user == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid token").build();
+        }
+
+        boolean exists = SystemManager.groupExists(groupId);
+        if (!exists) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Group not found").build();
+        }
+
+        int res = SystemManager.joinGroup(user, groupId);
+
+        if (res == 1) {
+            return Response.ok().build();
+        } else if (res == 0) {
+            return Response.status(Response.Status.CONFLICT).entity("Already joined").build();
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error").build();
+        }
+    }
 }
