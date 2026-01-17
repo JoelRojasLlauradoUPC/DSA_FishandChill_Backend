@@ -273,7 +273,7 @@ public class SystemManager {
         return res;
     }
 
-    public static void receiveQuestion(Question q) {
+    public static void receiveQuestion(edu.upc.dsa.services.dto.Question q) {
         logger.info("Question received: date=" + q.getDate()
                 + ", title=" + q.getTitle()
                 + ", sender=" + q.getSender());
