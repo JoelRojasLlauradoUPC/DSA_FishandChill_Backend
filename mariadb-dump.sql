@@ -70,7 +70,7 @@ CREATE TABLE `CapturedFish` (
   KEY `USERID_CF` (`userId`),
   CONSTRAINT `FISHID_CF` FOREIGN KEY (`fishId`) REFERENCES `Fish` (`id`),
   CONSTRAINT `USERID_CF` FOREIGN KEY (`userId`) REFERENCES `User` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,7 +79,61 @@ CREATE TABLE `CapturedFish` (
 
 LOCK TABLES `CapturedFish` WRITE;
 /*!40000 ALTER TABLE `CapturedFish` DISABLE KEYS */;
+INSERT INTO `CapturedFish` VALUES
+(6,1,1,1,'2026-01-17 20:43:15');
 /*!40000 ALTER TABLE `CapturedFish` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Event`
+--
+
+DROP TABLE IF EXISTS `Event`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Event` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `eventId` int(11) DEFAULT NULL,
+  `userId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Event`
+--
+
+LOCK TABLES `Event` WRITE;
+/*!40000 ALTER TABLE `Event` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Event` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Faq`
+--
+
+DROP TABLE IF EXISTS `Faq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Faq` (
+  `question` varchar(200) NOT NULL,
+  `answer` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Faq`
+--
+
+LOCK TABLES `Faq` WRITE;
+/*!40000 ALTER TABLE `Faq` DISABLE KEYS */;
+INSERT INTO `Faq` VALUES
+('How can I catch rare or legendary fish?','Get higher level fishing rods and fish in the deep areas of the map. Rare fish have a lower spawn rate, so you will need some patience.'),
+('What happens if another player eliminates me while I am fishing?','You lose the current run and any fish you haven’t sold yet, but you keep all the rods and upgrades you have already bought.'),
+('How can I earn more coins?','Sell the fish you catch in the shop and complete daily missions or challenges. Rare and legendary fish give you many more coins.'),
+('What are new fishing rods useful for?','Each rod increases the chance of catching more valuable fish, reduces the waiting time while fishing and can increase your casting distance.'),
+('Can I lose a fishing rod that I already bought?','Try not to stay too long in the same area, sell your fish often so you don’t risk all your earnings, and upgrade your gear to have better chances to escape.');
+/*!40000 ALTER TABLE `Faq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -161,6 +215,34 @@ INSERT INTO `FishingRod` VALUES
 UNLOCK TABLES;
 
 --
+-- Table structure for table `Team`
+--
+
+DROP TABLE IF EXISTS `Team`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Team` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `imageUrl` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Team`
+--
+
+LOCK TABLES `Team` WRITE;
+/*!40000 ALTER TABLE `Team` DISABLE KEYS */;
+INSERT INTO `Team` VALUES
+(1,'porxinos','https://cdn-icons-png.flaticon.com/128/4322/4322991.png'),
+(2,'hacking','https://cdn-icons-png.flaticon.com/128/924/924915.png'),
+(3,'womans','https://cdn-icons-png.flaticon.com/128/6997/6997662.png');
+/*!40000 ALTER TABLE `Team` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Token`
 --
 
@@ -176,7 +258,7 @@ CREATE TABLE `Token` (
   KEY `TOKEN` (`token`),
   KEY `Token_User_id_fk` (`userId`),
   CONSTRAINT `Token_User_id_fk` FOREIGN KEY (`userId`) REFERENCES `User` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,7 +282,15 @@ INSERT INTO `Token` VALUES
 (29,'51168466-9644-45e5-9a89-2fee2d117e3a',8,'2026-01-12 15:58:45'),
 (30,'ac1370d8-8c4d-4134-88bb-7db425318ad2',8,'2026-01-12 16:33:22'),
 (31,'925eedbb-ecc4-4b31-8b9c-bd16ffb24255',7,'2026-01-12 17:17:49'),
-(32,'ac7cdb83-24a1-4237-b591-e9202f954daa',7,'2026-01-13 09:47:23');
+(32,'ac7cdb83-24a1-4237-b591-e9202f954daa',7,'2026-01-13 09:47:23'),
+(33,'c744a16d-b857-4494-9e0a-5ef7dca85138',1,'2026-01-13 13:49:38'),
+(34,'f2d1393c-0497-45b6-963e-7b9f809a000e',1,'2026-01-17 20:13:52'),
+(35,'1f368661-d68e-4ed4-aee1-1e59fbf0b1d2',1,'2026-01-17 20:19:51'),
+(36,'11073001-942d-4555-b23b-1bc78b429a46',1,'2026-01-18 10:02:49'),
+(37,'cb99ee5a-ce56-4d79-857a-b0e27d86d40e',1,'2026-01-18 10:43:46'),
+(38,'61ee6412-19ac-45a0-9067-1e8b6d165d9f',1,'2026-01-18 12:46:14'),
+(39,'e487208c-1e6a-4c15-a0cd-a3cc99b71c5c',1,'2026-01-18 13:08:39'),
+(40,'5df3b0d5-e312-46b0-8a11-ed0c936abef1',1,'2026-01-18 13:39:55');
 /*!40000 ALTER TABLE `Token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -218,8 +308,11 @@ CREATE TABLE `User` (
   `password` varchar(50) NOT NULL,
   `coins` int(11) NOT NULL,
   `equippedFishingRodId` int(11) NOT NULL DEFAULT 1,
+  `teamId` int(11) DEFAULT NULL,
+  `avatarUrl` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `USERNAME` (`username`)
+  UNIQUE KEY `USERNAME` (`username`),
+  KEY `TEAMID_FQ` (`teamId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -230,12 +323,38 @@ CREATE TABLE `User` (
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
 INSERT INTO `User` VALUES
-(1,'root','root@root.com','root',99700,1),
-(5,'Palomo','palomo@asda','123456',1000,1),
-(6,'Jose','aa@aa','123456',1000,1),
-(7,'casa','casa@asd','CasaMala04$',250,3),
-(8,'queso','queso@gmail','QuesoQueso11&',750,2);
+(1,'root','root@root.com','root',99700,1,-1,'https://api.dicebear.com/9.x/avataaars/png?seed=12&size=200'),
+(5,'Palomo','palomo@asda','123456',1000,1,1,'https://api.dicebear.com/9.x/avataaars/png?seed=123&size=200'),
+(6,'Jose','aa@aa','123456',1000,1,1,'https://api.dicebear.com/9.x/avataaars/png?seed=124&size=200'),
+(7,'casa','casa@asd','CasaMala04$',250,3,3,'https://api.dicebear.com/9.x/avataaars/png?seed=125&size=200'),
+(8,'queso','queso@gmail','QuesoQueso11&',750,2,2,'https://api.dicebear.com/9.x/avataaars/png?seed=126&size=200');
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Video`
+--
+
+DROP TABLE IF EXISTS `Video`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Video` (
+  `title` varchar(50) DEFAULT NULL,
+  `url` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Video`
+--
+
+LOCK TABLES `Video` WRITE;
+/*!40000 ALTER TABLE `Video` DISABLE KEYS */;
+INSERT INTO `Video` VALUES
+('Getting Started with Fishing Adventure','https://www.youtube.com/watch?v=Zcb8yPEItwA'),
+('Top 10 Tips to Catch Rare Fish','https://www.youtube.com/watch?v=EIm4HvDgQCM'),
+('How to Upgrade Your Fishing Rods Effectively','https://www.youtube.com/watch?v=IY2AMo_yCs4');
+/*!40000 ALTER TABLE `Video` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -247,4 +366,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-01-13 10:17:27
+-- Dump completed on 2026-01-18 14:08:21
