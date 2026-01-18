@@ -69,16 +69,6 @@ public class SystemManager {
         logger.info("updateAvatarUrl: username=" + user.getUsername() + ", avatarUrl=" + avatarUrl);
     }
 
-    public static int createTeam(String name) {
-        logger.info("createTeam: teamName=" + name);
-        int res = UserManager.creatTeam(name);
-        if (res == -1) {
-            logger.warn("Team already exists: " + name);
-        } else {
-            logger.info("Team created: " + name);
-        }
-        return res;
-    }
 
     public static String login(String username, String password) {
         logger.info("login: username=" + username);
@@ -124,6 +114,18 @@ public class SystemManager {
         dtoTeam.setMembers(dtoMembers);
         return dtoTeam;
     }
+
+    public static int createTeam(String name, String imageUrl) {
+        logger.info("createTeam: teamName=" + name);
+        int res = UserManager.creatTeam(name, imageUrl);
+        if (res == -1) {
+            logger.warn("Team already exists: " + name);
+        } else {
+            logger.info("Team created: " + name);
+        }
+        return res;
+    }
+
 
     public static int joinTeam(User user, String teamName) {
         logger.info("joinTeam: username=" + user.getUsername() + ", teamName=" + teamName);

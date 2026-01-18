@@ -76,12 +76,13 @@ public class UserManager {
         session.close();
     }
 
-    public static int creatTeam(String name)
+    public static int creatTeam(String name, String imageUrl)
     {
         if (getTeam(name) != null) return -1;
         Session session = FactorySession.openSession();
         Team team = new Team();
         team.setName(name);
+        team.setImageUrl(imageUrl);
         session.save(team);
         session.close();
         return 1;

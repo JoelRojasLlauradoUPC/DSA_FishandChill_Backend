@@ -51,7 +51,7 @@ public class MeService {
     public Response changeAvatar(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
         User u = SystemManager.authenticate(auth);
         if (u == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        String baseAvatarUrl = "https://api.dicebear.com/9.x/avataaars/png?seed=";
+        String baseAvatarUrl = "https://api.dicebear.com/9.x/icons/png?seed=";
         int randomNum = (int)(Math.random() * 10000);
         String avatarUrl = baseAvatarUrl + randomNum + "&size=200";
         SystemManager.updateAvatarUrl(u, avatarUrl);
@@ -73,7 +73,10 @@ public class MeService {
                                @PathParam("teamName") String teamName) {
         User user = SystemManager.authenticate(auth);
         if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        int res = SystemManager.createTeam(teamName);
+        String baseImageUrl = "https://api.dicebear.com/9.x/avataaars/png?seed=";
+        int randomNum = (int)(Math.random() * 10000);
+        String imageUrl = baseImageUrl + randomNum + "&size=200";
+        int res = SystemManager.createTeam(teamName, imageUrl);
         if (res == -1) return Response.status(Response.Status.CONFLICT).entity("Team already exists").build();
         SystemManager.joinTeam(user, teamName);
         return Response.status(Response.Status.OK).entity("Team created").build();
