@@ -162,11 +162,12 @@ public class SystemManager {
                 totalPoints += GameManager.getCapturedFishes(member).size();
 
             }
-
             logger.info ("getTeamsRanking: team=" + team.getName() + ", totalPoints=" + totalPoints);
             TeamRanking tmScore = new TeamRanking(team.getName(), team.getImageUrl(),totalPoints);
             teamsRanking.add(tmScore);
         }
+
+        teamsRanking.sort(Comparator.comparingInt(TeamRanking::getPoints).reversed());
         return teamsRanking;
     }
 
