@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
@@ -69,12 +70,20 @@ public class InfoService {
     @GET
     @Path("/teams/ranking")
     @ApiResponse( code = 200, message = "OK", response = List.class)
-    public Response getGroups() {
+    public Response getTeamsRanking() {
         logger.info("Getting teams");
 
         List<TeamRanking> ranking = SystemManager.getTeamsRanking();
         GenericEntity<List<TeamRanking>> entity = new GenericEntity<List<TeamRanking>>(ranking) {};
         return Response.ok(entity).build();
+    }
+
+    @GET
+    @Path("/teams/{teamName}")
+    @ApiResponse( code = 200, message = "OK", response = Team.class)
+    public Response getTeamMembers(@PathParam("teamName") String teamName) {
+        Team team = SystemManager.getTeam(teamName);
+        return Response.ok(team).build();
     }
 
     @GET

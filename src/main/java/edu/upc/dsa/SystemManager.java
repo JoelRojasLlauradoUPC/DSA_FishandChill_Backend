@@ -105,13 +105,13 @@ public class SystemManager {
         }
     }
 
-    public static edu.upc.dsa.services.dto.Team getTeam(User user) {
-        if (user.getTeamId() == -1) {
+    public static edu.upc.dsa.services.dto.Team getTeam(String eventName) {
+        Team team = UserManager.getTeam(eventName);
+        if (team == null) {
             edu.upc.dsa.services.dto.Team res = new edu.upc.dsa.services.dto.Team();
             res.setTeam("None");
             return res;
         }
-        Team team = UserManager.getTeam(user.getTeamId());
         logger.info("getTeamMembers: teamName=" + team.getName());
         edu.upc.dsa.services.dto.Team dtoTeam = new edu.upc.dsa.services.dto.Team();
         dtoTeam.setTeam(team.getName());

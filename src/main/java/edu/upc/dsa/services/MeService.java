@@ -112,15 +112,7 @@ public class MeService {
         return Response.status(Response.Status.OK).entity("Left team").build();
     }
 
-    @GET
-    @Path("/teams/members")
-    @ApiResponse( code = 200, message = "OK", response = Team.class)
-    public Response getGroupUsers(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
-        User user = SystemManager.authenticate(auth);
-        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        Team team = SystemManager.getTeam(user);
-        return Response.ok(team).build();
-    }
+
 
     @POST
     @Path("events/{eventId}/subscribe")

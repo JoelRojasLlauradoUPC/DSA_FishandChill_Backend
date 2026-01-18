@@ -98,6 +98,7 @@ public class UserManager {
         if (!result.isEmpty()) {
             team = (Team) result.get(0);
         }
+        else return null;
         return team;
     }
 
