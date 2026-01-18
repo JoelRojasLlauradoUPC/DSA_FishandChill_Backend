@@ -47,18 +47,13 @@
             color: #ffffff;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
+        .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
         .brand img {
             width: 180px;
             height: auto;
             display: block;
-            filter: drop-shadow(0 10px 18px rgba(0,0,0,.55));
+            filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .55));
             image-rendering: pixelated;
         }
 
@@ -72,10 +67,10 @@
         .coins-badge {
             padding: 8px 12px;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,.16);
-            background: rgba(0,0,0,.35);
+            border: 1px solid rgba(255, 255, 255, .16);
+            background: rgba(0, 0, 0, 0.35);
             font-weight: 900;
-            text-shadow: 0 2px 10px rgba(0,0,0,.45);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
             box-shadow: 0 10px 28px rgba(0,0,0,.25);
             display: inline-flex;
             align-items: center;
@@ -87,33 +82,33 @@
         .nav-btn {
             padding: 8px 12px;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,.16);
-            background: rgba(0,0,0,.22);
-            color: #fff;
+            border: 1px solid rgba(255, 255, 255, .16);
+            background: rgba(0, 0, 0, 0.22);
+            color: #ffffff;
             font-weight: 900;
             cursor: pointer;
             font-family: inherit;
-            text-shadow: 0 2px 10px rgba(0,0,0,.45);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
             transition: transform .12s, background .12s;
             width: fit-content;
         }
 
         .nav-btn:hover {
-            background: rgba(255,255,255,.12);
+            background: rgba(255, 255, 255, .12);
             transform: translateY(-1px);
         }
 
         main { max-width: 980px; margin: 20px auto; padding: 0 20px; }
 
-        .card {
+        .page-card {
             background: url("../webResources/pixel_wood_bg.png");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             border-radius: 16px;
             padding: 18px;
-            box-shadow: 0 10px 28px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.10) inset;
-            border: 1px solid rgba(255,255,255,.18);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, .35), 0 0 0 1px rgba(255, 255, 255, .10) inset;
+            border: 1px solid rgba(255, 255, 255, .18);
             color: #ffffff;
         }
 
@@ -126,35 +121,59 @@
             letter-spacing: 0.5px;
         }
 
-        .muted { color: var(--stats); font-weight: 800; }
-
-        .stack-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .empty-msg {
+            display: none;
+            text-align: center;
+            font-weight: 900;
+            font-size: 16px;
+            color: var(--stats);
+            text-shadow: 0 2px 10px rgba(0,0,0,.45);
+            padding: 30px 0;
         }
 
-        .fish-layout {
-            display: flex;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 14px;
+        }
+
+        .card {
+            background: url("../webResources/pixel_wood_bg.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, .30), 0 0 0 1px rgba(255, 255, 255, .10) inset;
+            border: 1px solid rgba(255, 255, 255, .18);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card-top {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 12px;
             align-items: stretch;
         }
 
-        .fish-image-box {
-            width: 180px;
+        .img-box {
             border-radius: 16px;
             border: 1px solid rgba(255,255,255,.16);
             background: rgba(0,0,0,.22);
             box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset;
             padding: 10px;
+            position: relative;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
+            min-height: 120px;
         }
 
-        .img-rarity-overlay {
+        .img-overlay {
             position: absolute;
             inset: 0;
             border-radius: 16px;
@@ -167,7 +186,7 @@
         .overlay-2 { background: var(--rar2); }
         .overlay-3 { background: var(--rar3); }
 
-        .fish-image-box img {
+        .img-box img {
             width: 100%;
             height: auto;
             display: block;
@@ -177,16 +196,33 @@
             z-index: 1;
         }
 
-        .fish-data {
-            flex: 1;
+        .data {
             border-radius: 16px;
             border: 1px solid rgba(255,255,255,.16);
             background: rgba(0,0,0,.18);
             box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset;
-            padding: 14px;
-            min-height: 170px;
-            position: relative;
+            padding: 12px;
+            min-height: 120px;
             overflow: hidden;
+        }
+
+        .line {
+            margin: 6px 0;
+            font-weight: 900;
+            text-shadow: 0 2px 10px rgba(0,0,0,.45);
+            line-height: 1.15;
+            word-break: break-word;
+        }
+
+        .muted { color: var(--stats); font-weight: 800; }
+
+        .top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
         }
 
         .rarity-badge {
@@ -203,7 +239,7 @@
             white-space: nowrap;
         }
 
-        .badge-dot {
+        .dot {
             width: 10px;
             height: 10px;
             border-radius: 999px;
@@ -215,38 +251,9 @@
         .dot-2 { background: var(--rar2); }
         .dot-3 { background: var(--rar3); }
 
-        .rarity-text-1 { color: var(--rar1); }
-        .rarity-text-2 { color: var(--rar2); }
-        .rarity-text-3 { color: var(--rar3); }
-
-        .fish-line {
-            margin: 8px 0;
-            font-weight: 900;
-            text-shadow: 0 2px 10px rgba(0,0,0,.45);
-            line-height: 1.2;
-            position: relative;
-            z-index: 1;
-        }
-
-        .top-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-
-        .empty-msg {
-            display: none;
-            text-align: center;
-            font-weight: 900;
-            font-size: 16px;
-            color: var(--stats);
-            text-shadow: 0 2px 10px rgba(0,0,0,.45);
-            padding: 28px 0;
-        }
+        .rt-1 { color: var(--rar1); }
+        .rt-2 { color: var(--rar2); }
+        .rt-3 { color: var(--rar3); }
 
         .price-row {
             display: flex;
@@ -275,13 +282,10 @@
             gap: 8px;
         }
 
-        .coin-icon {
-            display: inline-block;
-            transform: translateY(1px);
-        }
+        .coin-icon { display: inline-block; transform: translateY(1px); }
 
         .price-row input {
-            width: 160px;
+            width: 140px;
             padding: 10px 12px;
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,.16);
@@ -300,7 +304,7 @@
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .arrow-btn {
@@ -354,9 +358,9 @@
             transform: none;
         }
 
-        @media (max-width: 680px) {
-            .fish-layout { flex-direction: column; }
-            .fish-image-box { width: 100%; }
+        @media (max-width: 860px) {
+            .grid { grid-template-columns: 1fr; }
+            .card-top { grid-template-columns: 160px 1fr; }
         }
     </style>
 </head>
@@ -371,88 +375,45 @@
         <div class="coins-badge">
             🪙 Coins: <span id="coinsValue">...</span>
         </div>
-        <button class="nav-btn" onclick="location.href='../shop'">Go back to shop</button>
-        <button class="nav-btn" onclick="logout()">Log out</button>
+        <button class="nav-btn" id="backBtn" type="button">Go back to shop</button>
+        <button class="nav-btn" id="logoutBtn" type="button">Log Out</button>
     </div>
 </header>
 
 <main>
-    <div class="card">
+    <div class="page-card">
         <p class="title">WELCOME TO THE FISH SHOP</p>
 
         <p class="empty-msg" id="emptyMsg">You don’t have any fish to sell.</p>
 
-        <div class="stack-wrap" id="fishContent">
-            <div class="fish-layout">
-                <div class="fish-image-box">
-                    <div id="imgOverlay" class="img-rarity-overlay overlay-1"></div>
-                    <img id="fishImg" alt="Fish">
-                </div>
-
-                <div class="fish-data">
-                    <div class="top-row">
-                        <p class="fish-line" style="margin:0;">Fish <span class="muted" id="fishIndex"></span></p>
-                        <span class="rarity-badge">
-              <span class="badge-dot dot-1" id="rarityDot"></span>
-              <span id="rarityText" class="rarity-text-1">Common</span>
-            </span>
-                    </div>
-
-                    <p class="fish-line">Species: <span class="muted" id="fishSpecies"></span></p>
-                    <p class="fish-line">Weight: <span class="muted" id="fishWeight"></span></p>
-                    <p class="fish-line">Capture time: <span class="muted" id="fishTime"></span></p>
-                </div>
-            </div>
-
-            <div class="price-row">
-                <label for="priceInput"><span class="coin-icon">🪙</span>Sell price (coins)</label>
-                <div class="price-right">
-                    <span class="coin-icon">🪙</span>
-                    <input id="priceInput" type="number" min="0" step="1" value="0" />
-                </div>
-            </div>
-
-            <div class="controls">
-                <button class="arrow-btn" id="prevBtn" onclick="prevFish()">◀</button>
-                <button class="sell-btn" id="sellBtn" onclick="sellFish()">SELL</button>
-                <button class="arrow-btn" id="nextBtn" onclick="nextFish()">▶</button>
-            </div>
-        </div>
+        <div class="grid" id="grid"></div>
     </div>
 </main>
 
 <script>
-    let fishes = [];
-    let idx = 0;
+    document.getElementById('backBtn').addEventListener('click', () => {
+        window.location.href = '../shop';
+    });
 
-    const fishImg = document.getElementById('fishImg');
-    const fishIndex = document.getElementById('fishIndex');
-    const fishSpecies = document.getElementById('fishSpecies');
-    const fishWeight = document.getElementById('fishWeight');
-    const fishTime = document.getElementById('fishTime');
-    const coinsValue = document.getElementById('coinsValue');
-    const priceInput = document.getElementById('priceInput');
-
-    const emptyMsg = document.getElementById('emptyMsg');
-    const fishContent = document.getElementById('fishContent');
-
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const sellBtn = document.getElementById('sellBtn');
-
-    const rarityDot = document.getElementById('rarityDot');
-    const rarityText = document.getElementById('rarityText');
-    const imgOverlay = document.getElementById('imgOverlay');
-
-    function logout() {
+    document.getElementById('logoutBtn').addEventListener('click', () => {
         localStorage.removeItem('authToken');
-        location.href = '../index.html';
-    }
+        window.location.href = '../index.html';
+    });
 
-    function auth() {
-        const t = localStorage.getItem('authToken');
-        if (!t) location.href = '../index.html';
-        return t;
+    const coinsValue = document.getElementById('coinsValue');
+    const emptyMsg = document.getElementById('emptyMsg');
+    const grid = document.getElementById('grid');
+
+    let groups = new Map();
+    let indices = new Map();
+
+    function requireAuth() {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = '../index.html';
+            return null;
+        }
+        return token;
     }
 
     function getSpeciesName(s) {
@@ -476,122 +437,286 @@
         return 1;
     }
 
-    function applyRarityUI(r) {
-        rarityDot.className = `badge-dot dot-${r}`;
-        rarityText.className = `rarity-text-${r}`;
-        imgOverlay.className = `img-rarity-overlay overlay-${r}`;
+    function rarityLabel(r) {
+        if (r === 2) return 'Rare';
+        if (r === 3) return 'Legendary';
+        return 'Common';
+    }
 
-        if (r === 1) rarityText.textContent = 'Common';
-        if (r === 2) rarityText.textContent = 'Rare';
-        if (r === 3) rarityText.textContent = 'Legendary';
+    function formatCaptureTime(isoString) {
+        if (!isoString) return '-';
+        const d = new Date(isoString);
+
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mm = String(d.getMinutes()).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const MM = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+
+        return `${hh}:${mm} - ${dd}/${MM}/${yyyy}`;
     }
 
     async function loadCoins() {
-        const res = await fetch('/api/me', { headers:{ Authorization: auth() }});
+        const token = requireAuth();
+        if (!token) return;
+
+        const res = await fetch('/api/me', { method: 'GET', headers: { 'Authorization': token } });
+        if (!res.ok) {
+            localStorage.removeItem('authToken');
+            window.location.href = '../index.html';
+            return;
+        }
+
         const user = await res.json();
-        coinsValue.textContent = user.coins;
+        coinsValue.textContent = String(user.coins ?? 0);
     }
 
-    async function loadFishes() {
-        const res = await fetch('/api/me/captured_fishes', { headers:{ Authorization: auth() }});
-        fishes = await res.json();
-        idx = 0;
-        renderFish();
+    async function loadCapturedFishes() {
+        const token = requireAuth();
+        if (!token) return;
+
+        const res = await fetch('/api/me/captured_fishes', { method: 'GET', headers: { 'Authorization': token } });
+        if (!res.ok) return;
+
+        const list = await res.json();
+        buildGroups(Array.isArray(list) ? list : []);
+        renderGrid();
+    }
+
+    function buildGroups(list) {
+        groups = new Map();
+        indices = new Map();
+
+        for (const f of list) {
+            const species = getSpeciesName(f.fishSpecies) ?? getSpeciesName(f.fishSpeciesName) ?? '';
+            if (!species) continue;
+
+            if (!groups.has(species)) groups.set(species, []);
+            groups.get(species).push(f);
+        }
+
+        for (const [species] of groups) {
+            indices.set(species, 0);
+        }
     }
 
     function setEmptyState() {
-        fishContent.style.display = 'none';
+        grid.innerHTML = '';
         emptyMsg.style.display = 'block';
     }
 
     function setNonEmptyState() {
-        fishContent.style.display = 'flex';
-        fishContent.style.flexDirection = 'column';
         emptyMsg.style.display = 'none';
     }
 
-    function renderFish() {
-        if (!Array.isArray(fishes) || fishes.length === 0) {
+    function suggestedPrice(weight) {
+        return Math.round(Number(weight || 0) * 20);
+    }
+
+    function renderGrid() {
+        if (!groups || groups.size === 0) {
             setEmptyState();
             return;
         }
-
-        if (idx < 0) idx = 0;
-        if (idx >= fishes.length) idx = fishes.length - 1;
 
         setNonEmptyState();
+        grid.innerHTML = '';
 
-        const f = fishes[idx];
-        const speciesName = getSpeciesName(f.fishSpecies) ?? getSpeciesName(f.fishSpeciesName) ?? null;
-
-        fishIndex.textContent = `${idx+1}/${fishes.length}`;
-        fishSpecies.textContent = speciesName ?? '-';
-        fishWeight.textContent = f.weight ?? '-';
-        fishTime.textContent = f.captureTime ?? '-';
-
-        if (speciesName) {
-            fishImg.src = `../img/fishes/${encodeURIComponent(speciesName)}.png`;
-            fishImg.onerror = () => { fishImg.onerror = null; fishImg.removeAttribute('src'); };
-        } else {
-            fishImg.removeAttribute('src');
-        }
-
-        applyRarityUI(getRarityFromFish(f));
-
-        priceInput.value = String(Math.round(Number(f.weight || 0) * 20));
-
-        prevBtn.disabled = (idx <= 0);
-        nextBtn.disabled = (idx >= fishes.length - 1);
-        sellBtn.disabled = false;
-        priceInput.disabled = false;
-    }
-
-    function nextFish() {
-        if (idx < fishes.length - 1) idx++;
-        renderFish();
-    }
-
-    function prevFish() {
-        if (idx > 0) idx--;
-        renderFish();
-    }
-
-    async function sellFish() {
-        if (!Array.isArray(fishes) || fishes.length === 0) {
-            setEmptyState();
-            return;
-        }
-
-        const f = fishes[idx];
-        const speciesName = getSpeciesName(f.fishSpecies) ?? getSpeciesName(f.fishSpeciesName) ?? null;
-        if (!speciesName) return;
-
-        const price = Number(priceInput.value || 0);
-
-        await fetch('/api/shop/captured_fishes/sell', {
-            method:'POST',
-            headers:{
-                Authorization:auth(),
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                fishSpeciesName: speciesName,
-                captureTime: f.captureTime,
-                price: price
-            })
+        const speciesNames = Array.from(groups.keys()).sort((a, b) => {
+            const ra = getRarityFromFish((groups.get(a) || [])[0]);
+            const rb = getRarityFromFish((groups.get(b) || [])[0]);
+            if (ra !== rb) return ra - rb;
+            return a.localeCompare(b);
         });
 
-        fishes.splice(idx, 1);
-        if (idx >= fishes.length) idx = fishes.length - 1;
+        for (const species of speciesNames) {
+            const stack = groups.get(species);
+            if (!stack || stack.length === 0) continue;
 
-        renderFish();
-        loadCoins();
+            const i = Math.max(0, Math.min(indices.get(species) ?? 0, stack.length - 1));
+            indices.set(species, i);
+
+            const f = stack[i];
+            const rarity = getRarityFromFish(f);
+
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const top = document.createElement('div');
+            top.className = 'card-top';
+
+            const imgBox = document.createElement('div');
+            imgBox.className = 'img-box';
+
+            const overlay = document.createElement('div');
+            overlay.className = `img-overlay overlay-${rarity}`;
+
+            const img = document.createElement('img');
+            img.alt = species;
+            img.src = `../img/fishes/${encodeURIComponent(species)}.png`;
+            img.onerror = () => { img.removeAttribute('src'); };
+
+            imgBox.appendChild(overlay);
+            imgBox.appendChild(img);
+
+            const data = document.createElement('div');
+            data.className = 'data';
+
+            const topRow = document.createElement('div');
+            topRow.className = 'top-row';
+
+            const fishIdxLine = document.createElement('p');
+            fishIdxLine.className = 'line';
+            fishIdxLine.style.margin = '0';
+            fishIdxLine.innerHTML = `Fish <span class="muted">${i + 1}/${stack.length}</span>`;
+
+            const badge = document.createElement('span');
+            badge.className = 'rarity-badge';
+            badge.innerHTML = `<span class="dot dot-${rarity}"></span><span class="rt-${rarity}">${rarityLabel(rarity)}</span>`;
+
+            topRow.appendChild(fishIdxLine);
+            topRow.appendChild(badge);
+
+            const l1 = document.createElement('p');
+            l1.className = 'line';
+            l1.innerHTML = `Species: <span class="muted">${species}</span>`;
+
+            const l2 = document.createElement('p');
+            l2.className = 'line';
+            l2.innerHTML = `Weight: <span class="muted">${(f.weight ?? '-')}</span>`;
+
+            const l3 = document.createElement('p');
+            l3.className = 'line';
+            l3.innerHTML = `Capture time: <span class="muted">${formatCaptureTime(f.captureTime)}</span>`;
+
+            data.appendChild(topRow);
+            data.appendChild(l1);
+            data.appendChild(l2);
+            data.appendChild(l3);
+
+            top.appendChild(imgBox);
+            top.appendChild(data);
+
+            const priceRow = document.createElement('div');
+            priceRow.className = 'price-row';
+
+            const priceLabel = document.createElement('label');
+            priceLabel.innerHTML = `<span class="coin-icon">🪙</span>Sell price (coins)`;
+
+            const priceRight = document.createElement('div');
+            priceRight.className = 'price-right';
+
+            const coin2 = document.createElement('span');
+            coin2.className = 'coin-icon';
+            coin2.textContent = '🪙';
+
+            const priceInput = document.createElement('input');
+            priceInput.type = 'number';
+            priceInput.min = '0';
+            priceInput.step = '1';
+            priceInput.value = String(suggestedPrice(f.weight));
+
+            priceRight.appendChild(coin2);
+            priceRight.appendChild(priceInput);
+
+            priceRow.appendChild(priceLabel);
+            priceRow.appendChild(priceRight);
+
+            const controls = document.createElement('div');
+            controls.className = 'controls';
+
+            const prev = document.createElement('button');
+            prev.className = 'arrow-btn';
+            prev.type = 'button';
+            prev.textContent = '◀';
+            prev.disabled = (i === 0);
+
+            const sell = document.createElement('button');
+            sell.className = 'sell-btn';
+            sell.type = 'button';
+            sell.textContent = 'SELL';
+
+            const next = document.createElement('button');
+            next.className = 'arrow-btn';
+            next.type = 'button';
+            next.textContent = '▶';
+            next.disabled = (i === stack.length - 1);
+
+            prev.addEventListener('click', () => {
+                const cur = indices.get(species) ?? 0;
+                if (cur > 0) indices.set(species, cur - 1);
+                renderGrid();
+            });
+
+            next.addEventListener('click', () => {
+                const cur = indices.get(species) ?? 0;
+                if (cur < stack.length - 1) indices.set(species, cur + 1);
+                renderGrid();
+            });
+
+            sell.addEventListener('click', async () => {
+                const token = requireAuth();
+                if (!token) return;
+
+                const curIdx = indices.get(species) ?? 0;
+                const arr = groups.get(species) || [];
+                if (arr.length === 0) return;
+
+                const fish = arr[Math.max(0, Math.min(curIdx, arr.length - 1))];
+                const price = Number(priceInput.value || 0);
+
+                sell.disabled = true;
+
+                const res = await fetch('/api/shop/captured_fishes/sell', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fishSpeciesName: species,
+                        captureTime: fish.captureTime,
+                        price: price
+                    })
+                });
+
+                sell.disabled = false;
+
+                if (!res.ok) return;
+
+                arr.splice(curIdx, 1);
+
+                if (arr.length === 0) {
+                    groups.delete(species);
+                    indices.delete(species);
+                } else {
+                    const newIdx = Math.min(curIdx, arr.length - 1);
+                    indices.set(species, newIdx);
+                }
+
+                renderGrid();
+                loadCoins();
+            });
+
+            controls.appendChild(prev);
+            controls.appendChild(sell);
+            controls.appendChild(next);
+
+            card.appendChild(top);
+            card.appendChild(priceRow);
+            card.appendChild(controls);
+
+            grid.appendChild(card);
+        }
+
+        if (grid.children.length === 0) setEmptyState();
     }
 
-    document.addEventListener('DOMContentLoaded', ()=>{
-        loadCoins();
-        loadFishes();
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadCoins();
+        await loadCapturedFishes();
     });
 </script>
+
 </body>
 </html>
