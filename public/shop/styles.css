@@ -438,7 +438,6 @@ main {
     overflow: hidden;
 }
 
-/* Right column: name at top, stats in middle, coins at bottom */
 .rod-right {
     display: flex;
     flex-direction: column;
