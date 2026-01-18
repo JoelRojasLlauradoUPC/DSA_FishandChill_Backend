@@ -2,7 +2,6 @@ package edu.upc.dsa;
 
 import edu.upc.dsa.managers.info.InfoManager;
 import edu.upc.dsa.managers.catalog.CatalogManager;
-import edu.upc.dsa.managers.event.EventManager;
 import edu.upc.dsa.managers.game.GameManager;
 import edu.upc.dsa.managers.shop.ShopManager;
 import edu.upc.dsa.managers.user.UserManager;
@@ -81,14 +80,40 @@ public class SystemManager {
         return res;
     }
 
-    public static edu.upc.dsa.services.dto.Team getTeam(String teamName) {
-        logger.info("getTeamMembers: teamName=" + teamName);
-        edu.upc.dsa.services.dto.Team dtoTeam = new edu.upc.dsa.services.dto.Team();
-        Team team = UserManager.getTeam(teamName);
-        if (team == null) {
-            logger.warn("Team not found: " + teamName);
-            return null;
+    public static String login(String username, String password) {
+        logger.info("login: username=" + username);
+        String token = UserManager.login(username, password);
+        if (token == null) logger.warn("Login failed for user: " + username);
+        else logger.info("Login ok: " + username);
+        return token;
+    }
+
+    public static User authenticate(String token) {
+        User user = UserManager.authenticate(token);
+        if (user == null) logger.warn("Authentication failed for token: " + token);
+        else logger.info("Authentication ok: username=" + user.getUsername());
+        return user;
+    }
+
+    public static void logout(String token) {
+        User user = UserManager.authenticate(token);
+        if (user != null) {
+            UserManager.logout(token);
+            logger.info("logout: username=" + user.getUsername());
+        } else {
+            logger.warn("Logout failed for token: " + token);
         }
+    }
+
+    public static edu.upc.dsa.services.dto.Team getTeam(User user) {
+        if (user.getTeamId() == -1) {
+            edu.upc.dsa.services.dto.Team res = new edu.upc.dsa.services.dto.Team();
+            res.setTeam("None");
+            return res;
+        }
+        Team team = UserManager.getTeam(user.getTeamId());
+        logger.info("getTeamMembers: teamName=" + team.getName());
+        edu.upc.dsa.services.dto.Team dtoTeam = new edu.upc.dsa.services.dto.Team();
         dtoTeam.setTeam(team.getName());
         List<User> members = UserManager.getTeamMembers(team.getName());
         List<TeamMember> dtoMembers = new ArrayList<>();
@@ -143,31 +168,9 @@ public class SystemManager {
         return teamsRanking;
     }
 
-
-
-    public static String login(String username, String password) {
-        logger.info("login: username=" + username);
-        String token = UserManager.login(username, password);
-        if (token == null) logger.warn("Login failed for user: " + username);
-        else logger.info("Login ok: " + username);
-        return token;
-    }
-
-    public static User authenticate(String token) {
-        User user = UserManager.authenticate(token);
-        if (user == null) logger.warn("Authentication failed for token: " + token);
-        else logger.info("Authentication ok: username=" + user.getUsername());
-        return user;
-    }
-
-    public static void logout(String token) {
-        User user = UserManager.authenticate(token);
-        if (user != null) {
-            UserManager.logout(token);
-            logger.info("logout: username=" + user.getUsername());
-        } else {
-            logger.warn("Logout failed for token: " + token);
-        }
+    public static void subscribeToEvent(User user, int eventId) {
+        UserManager.subscribeToEvent(user, eventId);
+        logger.info("subscribeToEvent: username=" + user.getUsername() + ", eventId=" + eventId);
     }
 
     public static List<FishingRod> getOwnedFishingRods(User user) {
@@ -258,8 +261,7 @@ public class SystemManager {
         logger.info("User captured fish: username=" + user.getUsername() + ", fishSpecies=" + fish.getSpeciesName() + ", weight=" + weight);
     }
 
-    public static List<LeaderboardEntry> getFishLeaderboardCurrent(int limit) {
-        if (limit < 1) limit = 1;
+    public static List<LeaderboardEntry> getFishLeaderboardCurrent() {
 
         List<User> users = UserManager.getAllUsers();
         List<LeaderboardEntry> res = new ArrayList<>();
@@ -271,7 +273,6 @@ public class SystemManager {
 
         res.sort(Comparator.comparingInt(LeaderboardEntry::getTotalFishes).reversed());
 
-        if (res.size() > limit) return res.subList(0, limit);
         return res;
     }
 
@@ -290,9 +291,14 @@ public class SystemManager {
         return InfoManager.getVideos();
     }
 
-    public static List<EventUser> getUsersRegisteredInEvent(String eventId) {
+    public static List<EventUser> getUsersRegisteredInEvent(int eventId) {
         logger.info("Get users registered in event: eventId=" + eventId);
-        return EventManager.getRegisteredUsers(eventId);
+        List<User> users = InfoManager.getUsersInEvent(eventId);
+        List<EventUser> res = new ArrayList<>();
+        for (User u : users) {
+            res.add(new EventUser(u.getUsername(), u.getAvatarUrl()));
+        }
+        return res;
     }
 
 

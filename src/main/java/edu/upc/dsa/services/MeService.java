@@ -115,10 +115,25 @@ public class MeService {
     @GET
     @Path("/teams/members")
     @ApiResponse( code = 200, message = "OK", response = Team.class)
-    public Response getGroupUsers(@PathParam("teamName") String teamName) {
-        logger.info("Getting team users for teamId: " + teamName);
-        Team team = SystemManager.getTeam(teamName);
+    public Response getGroupUsers(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        Team team = SystemManager.getTeam(user);
         return Response.ok(team).build();
+    }
+
+    @POST
+    @Path("events/{eventId}/subscribe")
+    @ApiOperation(value = "Subscribe to an event")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Subscribed to event")
+    })
+    public Response subscribeToEvent(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth,
+                                     @PathParam("eventId") int eventId) {
+        User user = SystemManager.authenticate(auth);
+        if (user == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        SystemManager.subscribeToEvent(user, eventId);
+        return Response.status(Response.Status.OK).entity("Subscribed to event").build();
     }
 
 

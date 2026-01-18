@@ -76,4 +76,32 @@ public class InfoService {
         GenericEntity<List<TeamRanking>> entity = new GenericEntity<List<TeamRanking>>(ranking) {};
         return Response.ok(entity).build();
     }
+
+    @GET
+    @Path("/leaderboard")
+    @ApiOperation(value = "Get leaderboard by fishes currently captured")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = LeaderboardEntry.class, responseContainer = "List")
+    })
+    public Response getLeaderboard() {
+        List<LeaderboardEntry> top = SystemManager.getFishLeaderboardCurrent();
+        return Response.ok(new GenericEntity<List<LeaderboardEntry>>(top) {}).build();
+    }
+
+    @GET
+    @Path("/events/{eventId}")
+    @ApiOperation(value = "Get users registered in an event")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = EventUser.class, responseContainer = "List"),
+            @ApiResponse(code = 400, message = "Bad Request")
+    })
+    public Response getRegisteredUsers(
+            @ApiParam(value = "Event ID", required = true, example = "1")
+            @PathParam("eventId") int eventId
+    ) {
+        List<EventUser> users = SystemManager.getUsersRegisteredInEvent(eventId);
+
+        return Response.ok(new GenericEntity<List<EventUser>>(users) {}).build();
+    }
+
 }
