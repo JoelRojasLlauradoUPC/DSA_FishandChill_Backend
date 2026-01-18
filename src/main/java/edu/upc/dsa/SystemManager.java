@@ -39,7 +39,13 @@ public class SystemManager {
         logger.info("getUser: username=" + username);
         User user = UserManager.getUser(username);
         FishingRod fishingRod = CatalogManager.getFishingRod(user.getEquippedFishingRodId());
-        Team team = UserManager.getTeam(user.getTeamId());
+
+        String teamName = "None";
+        if (user.getTeamId() !=-1) {
+            Team team = UserManager.getTeam(user.getTeamId()) ;
+            teamName = team.getName();
+        }
+
 
         edu.upc.dsa.services.dto.User dtoUser = new edu.upc.dsa.services.dto.User(
                 user.getUsername(),
@@ -47,7 +53,7 @@ public class SystemManager {
                 user.getCoins(),
                 fishingRod != null ? fishingRod.getName() : null,
                 user.getAvatarUrl(),
-                team.getName()
+                teamName
         );
         return dtoUser;
     }
