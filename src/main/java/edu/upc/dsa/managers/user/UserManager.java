@@ -260,6 +260,16 @@ public class UserManager {
 
     public static void subscribeToEvent(User user, int eventId) {
         Session session = FactorySession.openSession();
+        // Check if already subscribed
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("eventId", eventId);
+        params.put("userId", user.getId());
+        List<Object> result = session.get(Event.class, params);
+        if (!result.isEmpty()) {
+            session.close();
+            out.println("User " + user.getId() + " is already subscribed to event " + eventId);
+            return; // already subscribed
+        }
         out.println("Subscribing user " + user.getId() + " to event " + eventId);
         Event eventUser = new Event(eventId, user.getId());
 

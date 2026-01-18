@@ -32,7 +32,6 @@ public class SessionImpl implements Session {
                 pstm.setObject(i, ObjectHelper.getter(entity, field));
                 i++;
             }
-            System.out.println("insert query: "+pstm.toString());
             // Execute the query
             pstm.executeQuery();
         } catch (SQLException e) {

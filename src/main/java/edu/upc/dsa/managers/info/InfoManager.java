@@ -56,7 +56,7 @@ public class InfoManager {
         Session session = FactorySession.openSession();
         List<Event> eventUsers = new ArrayList<>();
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("id", eventId);
+        params.put("eventId", eventId);
         List<Object> result = session.get(Event.class, params);
         session.close();
         List<User> users = new ArrayList<>();
