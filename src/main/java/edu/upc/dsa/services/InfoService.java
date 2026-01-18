@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
@@ -69,11 +70,47 @@ public class InfoService {
     @GET
     @Path("/teams/ranking")
     @ApiResponse( code = 200, message = "OK", response = List.class)
-    public Response getGroups() {
+    public Response getTeamsRanking() {
         logger.info("Getting teams");
 
         List<TeamRanking> ranking = SystemManager.getTeamsRanking();
         GenericEntity<List<TeamRanking>> entity = new GenericEntity<List<TeamRanking>>(ranking) {};
         return Response.ok(entity).build();
     }
+
+    @GET
+    @Path("/teams/{teamName}")
+    @ApiResponse( code = 200, message = "OK", response = Team.class)
+    public Response getTeamMembers(@PathParam("teamName") String teamName) {
+        Team team = SystemManager.getTeam(teamName);
+        return Response.ok(team).build();
+    }
+
+    @GET
+    @Path("/leaderboard")
+    @ApiOperation(value = "Get leaderboard by fishes currently captured")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = LeaderboardEntry.class, responseContainer = "List")
+    })
+    public Response getLeaderboard() {
+        List<LeaderboardEntry> top = SystemManager.getFishLeaderboardCurrent();
+        return Response.ok(new GenericEntity<List<LeaderboardEntry>>(top) {}).build();
+    }
+
+    @GET
+    @Path("/events/{eventId}")
+    @ApiOperation(value = "Get users registered in an event")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = EventUser.class, responseContainer = "List"),
+            @ApiResponse(code = 400, message = "Bad Request")
+    })
+    public Response getRegisteredUsers(
+            @ApiParam(value = "Event ID", required = true, example = "1")
+            @PathParam("eventId") int eventId
+    ) {
+        List<EventUser> users = SystemManager.getUsersRegisteredInEvent(eventId);
+
+        return Response.ok(new GenericEntity<List<EventUser>>(users) {}).build();
+    }
+
 }

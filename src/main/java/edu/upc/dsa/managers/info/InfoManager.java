@@ -1,7 +1,9 @@
 package edu.upc.dsa.managers.info;
+import edu.upc.dsa.managers.user.UserManager;
 import edu.upc.dsa.services.dto.Faq;
 import edu.upc.dsa.services.dto.Video;
-
+import edu.upc.dsa.models.User;
+import edu.upc.dsa.models.Event;
 
 import edu.upc.dsa.orm.*;
 import org.eclipse.persistence.sessions.factories.SessionFactory;
@@ -50,6 +52,23 @@ public class InfoManager {
         return videos;
     }
 
+    public static List<User>  getUsersInEvent(int eventId) {
+        Session session = FactorySession.openSession();
+        List<Event> eventUsers = new ArrayList<>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("id", eventId);
+        List<Object> result = session.get(Event.class, params);
+        session.close();
+        List<User> users = new ArrayList<>();
+        for (Object o : result) {
+            Event eu = (Event) o;
+            User user = UserManager.getUser(eu.getUserId());
+            if (user != null) {
+                users.add(user);
+            }
+        }
+        return users;
+    }
 
 }
 

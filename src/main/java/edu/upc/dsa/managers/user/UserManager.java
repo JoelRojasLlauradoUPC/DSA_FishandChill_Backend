@@ -1,17 +1,21 @@
 package edu.upc.dsa.managers.user;
 
 import edu.upc.dsa.managers.shop.BoughtFishingRod;
+import edu.upc.dsa.models.Event;
 import edu.upc.dsa.models.FishingRod;
 import edu.upc.dsa.models.Team;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.orm.*;
 
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
+
+import static java.lang.System.out;
 
 
 public class UserManager {
@@ -52,6 +56,19 @@ public class UserManager {
         return user;
     }
 
+    public static User getUser(int userId) {
+        Session session = FactorySession.openSession();
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("id", userId);
+        User user = null;
+        List<Object> result = session.get(User.class, params);
+        session.close();
+        if (!result.isEmpty()) {
+            user = (User) result.get(0);
+        }
+        return user;
+    }
+
     public static void updateAvatarUrl(User user, String avatarUrl) {
         user.setAvatarUrl(avatarUrl);
         Session session = FactorySession.openSession();
@@ -81,6 +98,7 @@ public class UserManager {
         if (!result.isEmpty()) {
             team = (Team) result.get(0);
         }
+        else return null;
         return team;
     }
 
@@ -238,6 +256,15 @@ public class UserManager {
             users.add((User) o);
         }
         return users;
+    }
+
+    public static void subscribeToEvent(User user, int eventId) {
+        Session session = FactorySession.openSession();
+        out.println("Subscribing user " + user.getId() + " to event " + eventId);
+        Event eventUser = new Event(eventId, user.getId());
+
+        session.save(eventUser);
+        session.close();
     }
 }
 

@@ -3,48 +3,33 @@ package edu.upc.dsa.services.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "EventUser", description = "User registered in an event")
 public class EventUser {
 
-    @ApiModelProperty(value = "Name", example = "Juan")
-    private String name;
+    private String username;
 
-    @ApiModelProperty(value = "Surnames", example = "Pérez García")
-    private String surnames;
-
-    @ApiModelProperty(value = "Avatar image URL")
-    private String avatar;
+    private String avatarUrl;
 
     public EventUser() {
     }
 
-    public EventUser(String name, String surnames, String avatar) {
-        this.name = name;
-        this.surnames = surnames;
-        this.avatar = avatar;
+    public EventUser(String username, String avatarUrl) {
+        this.username = username;
+        this.avatarUrl = avatarUrl;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public String getSurnames() {
-        return surnames;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setSurnames(String surnames) {
-        this.surnames = surnames;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }
