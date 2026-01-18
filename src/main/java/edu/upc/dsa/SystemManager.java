@@ -40,7 +40,7 @@ public class SystemManager {
         User user = UserManager.getUser(username);
         FishingRod fishingRod = CatalogManager.getFishingRod(user.getEquippedFishingRodId());
 
-        String teamName = "None";
+        String teamName = "Non";
         if (user.getTeamId() !=-1) {
             Team team = UserManager.getTeam(user.getTeamId()) ;
             teamName = team.getName();
