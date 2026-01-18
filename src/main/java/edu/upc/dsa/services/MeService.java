@@ -51,9 +51,9 @@ public class MeService {
     public Response changeAvatar(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth) {
         User u = SystemManager.authenticate(auth);
         if (u == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        String baseAvatarUrl = "https://api.dicebear.com/9.x/avataaars/svg?seed=";
+        String baseAvatarUrl = "https://api.dicebear.com/9.x/avataaars/png?seed=";
         int randomNum = (int)(Math.random() * 10000);
-        String avatarUrl = baseAvatarUrl + randomNum;
+        String avatarUrl = baseAvatarUrl + randomNum + "&size=200";
         SystemManager.updateAvatarUrl(u, avatarUrl);
         u.setAvatarUrl(avatarUrl);
         edu.upc.dsa.services.dto.User user = SystemManager.getUser(u.getUsername());
