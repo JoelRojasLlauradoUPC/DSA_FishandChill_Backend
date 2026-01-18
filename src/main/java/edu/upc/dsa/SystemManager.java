@@ -270,7 +270,7 @@ public class SystemManager {
 
         for (User u : users) {
             int count = GameManager.getCapturedFishes(u).size();
-            res.add(new LeaderboardEntry(u.getUsername(), count));
+            res.add(new LeaderboardEntry(u.getUsername(), count, u.getAvatarUrl()));
         }
 
         res.sort(Comparator.comparingInt(LeaderboardEntry::getTotalFishes).reversed());
