@@ -1,70 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <title>My Profile</title>
+document.getElementById('backToShopBtn').addEventListener('click', () => {
+window.location.href = '../shop';
+});
 
-    <link rel="stylesheet" href="styles.css">
-</head>
+document.getElementById('logoutBtn').addEventListener('click', () => {
+localStorage.removeItem('authToken');
+window.location.href = '../index.html';
+});
 
-<body>
+async function loadMe() {
+const token = localStorage.getItem('authToken');
 
-<header>
-    <div class="brand">
-        <img src="../webResources/mainlogo.png" alt="Fish & Chill">
-    </div>
+if (!token) {
+window.location.href = '../index.html';
+return;
+}
 
-    <div class="header-right">
-        <button class="nav-btn" id="backToShopBtn" type="button">Go back to shop</button>
-        <button class="nav-btn" id="logoutBtn" type="button">Log Out</button>
-    </div>
-</header>
+const res = await fetch('/api/me', {
+method: 'GET',
+headers: { 'Authorization': token }
+});
 
-<main>
-    <div class="card">
-        <p class="profile-title">Your profile</p>
+if (!res.ok) {
+localStorage.removeItem('authToken');
+window.location.href = '../index.html';
+return;
+}
 
-        <p class="profile-line" id="profile-username">Username: <span class="muted">Loading...</span></p>
-        <p class="profile-line" id="profile-email">Email: <span class="muted">Loading...</span></p>
-        <p class="profile-line" id="profile-coins">Coins: <span class="muted">Loading...</span></p>
+const user = await res.json();
 
-        <div class="danger-wrap">
-            <button class="danger-btn" id="openDeleteModalBtn" type="button">DELETE ACCOUNT</button>
-        </div>
-    </div>
-</main>
+document.getElementById('profile-username').innerHTML = `Username: <span class="muted">${user.username}</span>`;
+document.getElementById('profile-email').innerHTML = `Email: <span class="muted">${user.email}</span>`;
+document.getElementById('profile-coins').innerHTML = `Coins: <span class="muted">${user.coins}</span>`;
+}
 
-<!-- Delete confirm modal -->
-<div class="modal-backdrop" id="deleteModalBackdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
-        <p id="deleteTitle">
-            In order to delete your account, please, write: <code>DELETE MY ACCOUNT</code>.
-        </p>
+const deleteBackdrop = document.getElementById('deleteModalBackdrop');
+const openDeleteModalBtn = document.getElementById('openDeleteModalBtn');
+const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+const deleteConfirmInput = document.getElementById('deleteConfirmInput');
+const deleteError = document.getElementById('deleteError');
 
-        <input id="deleteConfirmInput" type="text" placeholder='Type: DELETE MY ACCOUNT' autocomplete="off"/>
+const goodbyeBackdrop = document.getElementById('goodbyeBackdrop');
+const byeBtn = document.getElementById('byeBtn');
 
-        <div class="modal-actions">
-            <button class="nav-btn" id="cancelDeleteBtn" type="button">Cancel</button>
-            <button class="danger-btn" id="confirmDeleteBtn" type="button" disabled>DELETE</button>
-        </div>
+function openDeleteModal() {
+deleteError.style.display = 'none';
+deleteError.textContent = '';
+deleteConfirmInput.value = '';
+confirmDeleteBtn.disabled = true;
+deleteBackdrop.style.display = 'flex';
+deleteBackdrop.setAttribute('aria-hidden', 'false');
+setTimeout(() => deleteConfirmInput.focus(), 0);
+}
 
-        <div class="modal-error" id="deleteError"></div>
-    </div>
-</div>
+function closeDeleteModal() {
+deleteBackdrop.style.display = 'none';
+deleteBackdrop.setAttribute('aria-hidden', 'true');
+}
 
-<div class="modal-backdrop" id="goodbyeBackdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-        <p class="goodbye-title">Account deleted</p>
-        <p>
-            We’re sad to see you go 💔 --- Thank you for playing Fish &amp; Chill.
-            We hope you enjoyed your time fishing with us.
-        </p>
-        <div class="goodbye-actions">
-            <button class="danger-btn" id="byeBtn" type="button">BYE</button>
-        </div>
-    </div>
-</div>
+function openGoodbyeModal() {
+goodbyeBackdrop.style.display = 'flex';
+goodbyeBackdrop.setAttribute('aria-hidden', 'false');
+}
 
-<script src="script.js"></script>
-</body>
-</html>
+openDeleteModalBtn.addEventListener('click', openDeleteModal);
+cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+
+deleteBackdrop.addEventListener('click', (e) => {
+if (e.target === deleteBackdrop) closeDeleteModal();
+});
+
+deleteConfirmInput.addEventListener('input', () => {
+confirmDeleteBtn.disabled = (deleteConfirmInput.value !== 'DELETE MY ACCOUNT');
+deleteError.style.display = 'none';
+deleteError.textContent = '';
+});
+
+async function deleteAccount() {
+const token = localStorage.getItem('authToken');
+if (!token) {
+window.location.href = '../index.html';
+return;
+}
+
+confirmDeleteBtn.disabled = true;
+deleteError.style.display = 'none';
+deleteError.textContent = '';
+
+const res = await fetch('/api/me', {
+method: 'DELETE',
+headers: { 'Authorization': token }
+});
+
+if (!res.ok) {
+const text = await res.text().catch(() => 'Delete failed');
+deleteError.textContent = "❌ " + text;
+deleteError.style.display = 'block';
+confirmDeleteBtn.disabled = false;
+return;
+}
+
+closeDeleteModal();
+localStorage.removeItem('authToken');
+openGoodbyeModal();
+}
+
+confirmDeleteBtn.addEventListener('click', deleteAccount);
+
+byeBtn.addEventListener('click', () => {
+window.location.href = '../register';
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+loadMe();
+});
